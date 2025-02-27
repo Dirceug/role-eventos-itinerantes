@@ -10,23 +10,6 @@ const cardapioSchema = new mongoose.Schema({
   status: String,
 });
 
-const pedidoSchema = new mongoose.Schema({
-  id: String,
-  numero: Number,
-  senha: String,
-  produtos: [
-    {
-      idProduto: String,
-      quantidade: Number,
-    },
-  ],
-  hora: Date,
-  status: String,
-  cliente: {
-    nome: String,
-  },
-});
-
 const barracaSchema = new mongoose.Schema({
   nome: String,
   descricao: String,
