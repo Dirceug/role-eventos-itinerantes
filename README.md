@@ -30,3 +30,4 @@ cd client
 npm i
 npm run dev
 npm install firebase
+npm install react-router-dom
