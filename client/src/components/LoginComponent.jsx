@@ -6,6 +6,8 @@ import './LoginComponent.css';
 import googleIcon from '../img/icones/google.png';
 import facebookIcon from '../img/icones/facebook.png';
 
+import ButtonGrande from './ButtonGrande';
+
 function LoginComponent() {
   const navigate = useNavigate();
 
@@ -47,23 +49,25 @@ function LoginComponent() {
   };
 
   const navigateToSignup = () => {
-    navigate('/signup');
+    navigate('/logincomemail');
   };
 
   return (
     <div className="login">
-      <button onClick={handleGoogleLogin} className="social-button">
+      <ButtonGrande onClick={handleGoogleLogin} className="social-button">
         Entrar com Google
-      </button>
-      <button onClick={handleFacebookLogin} className="social-button">
+      </ButtonGrande>
+      <ButtonGrande onClick={handleFacebookLogin} className="social-button">
         Entrar com Facebook
-      </button>
+      </ButtonGrande>
       {/*<form onSubmit={handleEmailLogin}>
         <input type="email" name="email" placeholder="Email" required />
         <input type="password" name="password" placeholder="Password" required />
         <button type="submit">Login com e-mail</button>
       </form>*/}
-        <button onClick={navigateToSignup} className="social-button">Entrar com e-mail</button>
+      <ButtonGrande onClick={navigateToSignup} className="social-button">
+        Entrar com e-mail
+      </ButtonGrande>
     </div>
   );
 }
