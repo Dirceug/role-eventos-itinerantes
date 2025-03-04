@@ -1,33 +1,15 @@
-## Rolê eventos Irinerantes
+# Rolê Eventos Itinerantes
 
-Projeto com as tecnologias MERN para desenvolver uma página e uma API que prestem serviços nuem eventos itinerantes
+## Projeto com as tecnologias MERN para desenvolver uma página e uma API que prestem serviços nuem eventos itinerantes
 
 ### Estrutura
-Mongo
-Express
-React
-Node
+- *M*ongo
+- *E*xpress
+- *R*eact
+- *N*ode
 
-Back-end -> Hospedado no Hostinger
-Front-end -> Hospedado no Firebase
-Banco dados -> Mongo Atlas
+## Serviços
 
-
-Principais Rotas:
-- http://localhost:5000/api/events
-- http://localhost:5000/api/users
-- http://localhost:5000/api/transactions
+Controle de de pedidos e vendas em eventos itinerantes
 
 
-Comandos: node server.js (dentro do mern/server) para iniciar o back
-
-### Front-end
-
-Comandos
-criação projeto
-npm create vite@latest client --template react
-cd client
-npm i
-npm run dev
-npm install firebase
-npm install react-router-dom

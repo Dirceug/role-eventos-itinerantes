@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import './LoginComponent.css';
 import googleIcon from '../img/icones/google.png';
 import facebookIcon from '../img/icones/facebook.png';
-
+import '../components/LoginComponent.css'
 import ButtonGrande from './ButtonGrande';
 
 function LoginComponent() {

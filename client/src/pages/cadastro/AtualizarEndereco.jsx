@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LabelInput from '../../components/LabelInput';
+import ButtonGrande from '../../components/ButtonGrande';
+import '../../App.css'
+import '../Pages.css'
+
 
 function AtualizarEndereco() {
   const navigate = useNavigate();
@@ -28,57 +33,21 @@ function AtualizarEndereco() {
   };
 
   return (
-    <div>
+    <div className='paginaCadastro'>
       <h1>Atualizar Endereço</h1>
-      <div>
-        <label>
-          Tipo:
-          <input type="text" name="tipo" value={address.tipo} onChange={handleChange} />
-        </label>
+      <div className='cinquentaPorCento'>
+      <LabelInput label="Endereço:" type="text" placeholder="Nome" value={address.tipo} onChange={(e) => setDisplayName(e.target.value)} />
+      <LabelInput label="CEP:" type="text" placeholder="00.000-000" value={address.cep} onChange={(e) => setDisplayName(e.target.value)} />
+      <LabelInput label="Rua:" type="text" placeholder="nome da rua ou avenida" value={address.rua} onChange={(e) => setDisplayName(e.target.value)} />
+      <LabelInput label="Número:" type="text" placeholder="000" value={address.numero} onChange={(e) => setDisplayName(e.target.value)} />
+      <LabelInput label="Complemento:" type="text" placeholder="Ap 12 Bloco 7" value={address.complemento} onChange={(e) => setDisplayName(e.target.value)} />
+      <LabelInput label="Bairro:" type="text" placeholder="nome do bairro" value={address.bairro} onChange={(e) => setDisplayName(e.target.value)} />
+      <LabelInput label="Cidade:" type="text" placeholder="Franca" value={address.cidade} onChange={(e) => setDisplayName(e.target.value)} />  
+      <LabelInput label="Estado:" type="text" placeholder="São Paulo" value={address.estado} onChange={(e) => setDisplayName(e.target.value)} />  
       </div>
-      <div>
-        <label>
-          CEP:
-          <input type="text" name="cep" value={address.cep} onChange={handleChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Rua:
-          <input type="text" name="rua" value={address.rua} onChange={handleChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Número:
-          <input type="text" name="numero" value={address.numero} onChange={handleChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Complemento:
-          <input type="text" name="complemento" value={address.complemento} onChange={handleChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Bairro:
-          <input type="text" name="bairro" value={address.bairro} onChange={handleChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Cidade:
-          <input type="text" name="cidade" value={address.cidade} onChange={handleChange} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Estado:
-          <input type="text" name="estado" value={address.estado} onChange={handleChange} />
-        </label>
-      </div>
-      <button onClick={handleNext}>Próximo</button>
+      <ButtonGrande onClick={handleNext} className='invertido'>
+      Enviar Endereço
+      </ButtonGrande>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import './ButonGrande.css';
 
 function ButonGrande({ onClick, className, children }) {
   return (
-    <button onClick={onClick} className={className}>
+    <button onClick={onClick} className={`button-grande ${className}`}>
       {children}
     </button>
   );

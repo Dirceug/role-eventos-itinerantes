@@ -1,4 +1,4 @@
-button {
+.button-grande {
   background-color: white;
   justify-content: center;
   color: #EE7F43;
@@ -8,12 +8,25 @@ button {
   cursor: pointer;
   border-radius: 25px;
   margin: 5px;
+  margin-top: 25px;
   width: 250px;
 }
 
-button:hover {
+.button-grande:hover {
   background-color: #EE7F43;
   color: white;
+  border: 1px, solid, white;
+}
+
+.button-grande.invertido {
+  background-color:  #EE7F43;
+  color: white;
+  border-color: #EE7F43;
+}
+
+.button-grande.invertido:hover {
+  background-color: white;
+  color: #EE7F43;
 }
 
 .social-button {

@@ -8,7 +8,7 @@ function Login() {
   return (
     <div className='paginaLogin'>
       <img src={dancing} alt=""  className='dancing'/>
-      <h1 className='tituloLogin'>Rolê</h1>
+      <h1 className='role'>Rolê</h1>
       <LoginComponent />
       {/* Conteúdo do Login */}
     </div>
