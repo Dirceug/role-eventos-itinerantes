@@ -19,11 +19,10 @@ const saldoSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-  uid: String,
+  firebaseUid: { type: String, required: true, unique: true }, // Adiciona o campo firebaseUid
   displayName: String,
-  email: String,
+  email: { type: String, required: true, unique: true },
   photoURL: String,
-  hash: String,
   cpf: String,
   status: String,
   endereco: {

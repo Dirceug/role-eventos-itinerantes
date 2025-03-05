@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
@@ -31,7 +31,6 @@ app.use('/api/events', eventRoutes);
 app.use('/api/events/:eventId/barracas', barracaRoutes);
 app.use('/api/events/:eventId/barracas/:barracaId/cardapios', cardapioRoutes);
 app.use('/api/pedidos', pedidoRoutes);
-
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
