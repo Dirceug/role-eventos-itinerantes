@@ -1,6 +1,9 @@
 # Ignore node_modules
 node_modules/
 
+# Ignorar a pasta security-notes
+securityNotes/
+
 # Ignore environment variables
 .env
 
@@ -19,7 +22,6 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Ignorar a pasta security-notes
-security-notes/
+
 
 # Ignore any other sensitive files

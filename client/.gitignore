@@ -1,24 +1,25 @@
-# Logs
-logs
+# Ignore node_modules
+node_modules/
+
+# Ignore environment variables
+.env
+
+# Ignore build directories
+client/build/
+dist/
+
+# Ignore logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Ignore OS generated files
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+
+# Ignorar a pasta securityNotes
+securityNotes/
+
+# Ignore any other sensitive files
