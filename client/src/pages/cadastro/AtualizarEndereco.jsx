@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Joi from 'joi';
 import LabelInput from '../../components/LabelInput';
@@ -13,10 +13,8 @@ const schema = Joi.object({
     'string.empty': '{#label} não pode estar vazio.',
     'any.required': '{#label} é obrigatório.'
   }),
-  cep: Joi.string().pattern(/^\d{2}.\d{3}-\d{3}$/).required().min(10).max(10).label('CEP').messages({
-    'string.min': '{#label} deve ter pelo menos 8 caracteres.',
-    'string.max': '{#label} deve ter no máximo 8 caracteres.',
-    'string.pattern.base': '{#label} deve estar no formato 00000-000.',
+  cep: Joi.string().pattern(/^\d{2}.\d{3}-\d{3}$/).required().label('CEP').messages({
+    'string.pattern.base': '{#label} deve estar no formato 00.000-000.',
     'string.empty': '{#label} não pode estar vazio.',
     'any.required': '{#label} é obrigatório.'
   }),
@@ -29,7 +27,7 @@ const schema = Joi.object({
     'any.required': '{#label} é obrigatório.'
   }),
   complemento: Joi.string().allow('').label('Complemento'),
-  referencia: Joi.string().allow('').label('Referencia'),
+  referencia: Joi.string().allow('').label('Referência'),
   bairro: Joi.string().required().label('Bairro').messages({
     'string.empty': '{#label} não pode estar vazio.',
     'any.required': '{#label} é obrigatório.'
@@ -46,6 +44,7 @@ const schema = Joi.object({
 
 function AtualizarEndereco() {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
   const [address, setAddress] = useState({
     tipo: 'Casa',
     cep: '',
@@ -91,7 +90,7 @@ function AtualizarEndereco() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(address)
+        body: JSON.stringify({ email: user.email, ...address }) // Incluindo o email do usuário
       });
       if (response.ok) {
         navigate('/cadastro/dadosbancarios');
@@ -106,8 +105,7 @@ function AtualizarEndereco() {
   const maskCEP = (value) => {
     return value
       .replace(/\D/g, '') // Remove caracteres não numéricos
-      .replace(/(\d{5})(\d)/, '$1-$2') // Adiciona traço após os cinco primeiros dígitos
-      .replace(/(\d{2})(\d)/, '$1.$2'); // Adiciona ponto após os dois primeiros dígitos
+      .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona traço após os cinco primeiros dígitos
   };
 
   return (
@@ -115,7 +113,7 @@ function AtualizarEndereco() {
       <h1>Atualizar Endereço</h1>
       <div className='cinquentaPorCento'>
         <LabelInput 
-          label="Endereço:" 
+          label="Tipo:" 
           type="text" 
           placeholder="Tipo" 
           name="tipo" 
@@ -138,7 +136,7 @@ function AtualizarEndereco() {
         <LabelInput 
           label="Rua:" 
           type="text" 
-          placeholder="nome da rua ou avenida" 
+          placeholder="Nome da Rua ou Avenida" 
           name="rua" 
           value={address.rua} 
           onChange={handleChange} 
@@ -163,7 +161,7 @@ function AtualizarEndereco() {
           error={errors.complemento} 
         />
         <LabelInput 
-          label="Ponto Referência:" 
+          label="Ponto de Referência:" 
           type="text" 
           placeholder="Perto de ****" 
           name="referencia" 
@@ -174,7 +172,7 @@ function AtualizarEndereco() {
         <LabelInput 
           label="Bairro:" 
           type="text" 
-          placeholder="nome do bairro" 
+          placeholder="Nome do Bairro" 
           name="bairro" 
           value={address.bairro} 
           onChange={handleChange} 

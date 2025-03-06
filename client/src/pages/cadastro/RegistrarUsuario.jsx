@@ -98,7 +98,7 @@ function RegistrarUsuario() {
   const handleNext = async () => {
     if (!validate()) return;
     try {
-      const response = await fetch('http://localhost:5000/api/users/register', { // Certifique-se de que o endpoint está correto
+      const response = await fetch('http://localhost:5000/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ function RegistrarUsuario() {
         body: JSON.stringify({ displayName, email, password, cpf, apelido })
       });
       if (response.ok) {
-        const userData = { displayName, email, cpf, apelido };
+        const userData = await response.json();
         setUser(userData);
         navigate('/cadastro/atualizarendereco');
       } else {

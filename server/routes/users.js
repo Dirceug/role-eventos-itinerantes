@@ -15,25 +15,35 @@ router.get('/', async (req, res) => {
 
 // POST create a new user (Registro)
 router.post('/register', async (req, res) => {
-  const { email, password, displayName } = req.body;
+  const { displayName, email, photoURL, firebaseUid, emailVerified, isAnonymous } = req.body;
 
   try {
-    // Cria um novo usuário no Firebase Auth
-    const userRecord = await admin.auth().createUser({
-      email: email,
-      password: password,
-      displayName: displayName
-    });
+    // Verifica se o usuário já existe no banco de dados
+    let user = await User.findOne({ email: email });
+    if (!user) {
+      // Adiciona o usuário no banco de dados MongoDB
+      user = new User({
+        displayName: displayName,
+        email: email,
+        photoURL: photoURL,
+        firebaseUid: firebaseUid,
+        emailVerified: emailVerified,
+        isAnonymous: isAnonymous
+      });
 
-    // Adiciona o usuário no banco de dados MongoDB
-    const user = new User({
-      displayName: displayName,
-      email: email,
-      firebaseUid: userRecord.uid // Armazena o UID do Firebase Auth
-    });
+      const newUser = await user.save();
+      return res.status(201).json(newUser);
+    } else {
+      // Se o usuário já existe, atualize os detalhes
+      user.displayName = displayName;
+      user.photoURL = photoURL;
+      user.firebaseUid = firebaseUid;
+      user.emailVerified = emailVerified;
+      user.isAnonymous = isAnonymous;
 
-    const newUser = await user.save();
-    res.status(201).json(newUser);
+      const updatedUser = await user.save();
+      return res.status(200).json(updatedUser);
+    }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -51,7 +61,7 @@ router.post('/updateAddress', async (req, res) => {
     }
 
     // Atualiza o endereço do usuário
-    user.endereco[tipo.toLowerCase()] = {
+    user.endereco.set(tipo.toLowerCase(), {
       apelido: tipo,
       cep: cep,
       rua: rua,
@@ -61,6 +71,31 @@ router.post('/updateAddress', async (req, res) => {
       cidade: cidade,
       estado: estado,
       status: 'active'
+    });
+
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// POST update user bank account
+router.post('/updateBankAccount', async (req, res) => {
+  const { email, banco, agencia, conta } = req.body;
+
+  try {
+    // Encontra o usuário pelo email
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    // Atualiza os dados bancários do usuário
+    user.contaBancaria = {
+      banco: banco,
+      agencia: agencia,
+      conta: conta
     };
 
     await user.save();

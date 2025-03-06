@@ -1,32 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase';
-import './ProtectedRoute.css';
+import UserContext from '../contexts/UserContext';
 
-function ProtectedRoute({ children }) {
-  const [user] = useAuthState(auth);
-
-  const handleLogout = () => {
-    auth.signOut()
-      .then(() => {
-        console.log('User signed out');
-      })
-      .catch((error) => {
-        console.error('Error signing out: ', error);
-      });
-  };
+const ProtectedRoute = ({ element }) => {
+  const { user } = useContext(UserContext);
 
   if (!user) {
+    // Se o usuário não está logado, redirecione para a página de login
     return <Navigate to="/login" />;
   }
 
-  return (
-    <div className="protected-route">
-      {children}
-      <button onClick={handleLogout} className="logout-button">Logout</button>
-    </div>
-  );
-}
+  // Se o usuário está logado, renderize o componente desejado
+  return element;
+};
 
 export default ProtectedRoute;

@@ -18,22 +18,26 @@ const saldoSchema = new mongoose.Schema({
   carteiraId: String,
 });
 
+const contaBancariaSchema = new mongoose.Schema({
+  banco: String,
+  agencia: String,
+  conta: String,
+});
+
 const userSchema = new mongoose.Schema({
-  firebaseUid: { type: String, required: true, unique: true }, // Adiciona o campo firebaseUid
+  firebaseUid: { type: String, required: true, unique: true },
   displayName: String,
   email: { type: String, required: true, unique: true },
   photoURL: String,
+  emailVerified: Boolean,
+  isAnonymous: Boolean,
   cpf: String,
   status: String,
   endereco: {
-    casa: enderecoSchema,
-    trabalho: enderecoSchema,
+    type: Map,
+    of: enderecoSchema
   },
-  contaBancaria: {
-    banco: String,
-    agencia: String,
-    conta: String,
-  },
+  contaBancaria: contaBancariaSchema,
   chavePIX: String,
   saldo: saldoSchema,
   favoritos: [
