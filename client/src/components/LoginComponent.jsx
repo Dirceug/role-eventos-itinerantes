@@ -19,6 +19,11 @@ function LoginComponent() {
         const user = result.user;
         console.log('User information:', user);
 
+        const idToken = await user.getIdToken();
+
+        // Armazenar o token no localStorage
+        localStorage.setItem('token', idToken);
+
         // Enviar requisição para salvar o usuário no backend
         const response = await fetch('http://localhost:5000/api/users/register', {
           method: 'POST',
@@ -35,15 +40,10 @@ function LoginComponent() {
           })
         });
 
-        // Log the response status and data
         const data = await response.json();
-        console.log('Response status:', response.status);
-        console.log('Response data:', data);
 
-        // Check if the user was successfully saved
         if (response.ok) {
-          console.log('User saved successfully:', data);
-          setUser(user);  // Update the context with user data
+          setUser(user);  // Atualizar o contexto com os dados do usuário
           navigate('/usuarios');
         } else {
           console.error('Error saving user:', data);
@@ -56,10 +56,16 @@ function LoginComponent() {
 
   const handleFacebookLogin = () => {
     signInWithPopup(auth, facebookProvider)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
         console.log('User information:', user);
-        setUser(user);  // Update the context with user data
+
+        const idToken = await user.getIdToken();
+
+        // Armazenar o token no localStorage
+        localStorage.setItem('token', idToken);
+
+        setUser(user);  // Atualizar o contexto com os dados do usuário
         navigate('/usuarios');
       })
       .catch((error) => {
@@ -73,10 +79,16 @@ function LoginComponent() {
     const password = e.target.password.value;
 
     signInWithEmailAndPassword(auth, email, password)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
         console.log('User information:', user);
-        setUser(user);  // Update the context with user data
+
+        const idToken = await user.getIdToken();
+
+        // Armazenar o token no localStorage
+        localStorage.setItem('token', idToken);
+
+        setUser(user);  // Atualizar o contexto com os dados do usuário
         navigate('/events');
       })
       .catch((error) => {

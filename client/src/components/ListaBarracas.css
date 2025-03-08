@@ -1,0 +1,37 @@
+.barracas-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f0f0f0;
+  height: calc(100vh - 60px); /* Ajuste conforme necessário para compensar a altura do Navbar */
+  overflow-y: auto;
+}
+
+.barraca-button {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  height: 100px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.barraca-button h2 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.barraca-button p {
+  margin: 5px 0;
+}

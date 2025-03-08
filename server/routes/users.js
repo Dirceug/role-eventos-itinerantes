@@ -3,13 +3,43 @@ const admin = require('../firebase'); // Importando a inicialização do Firebas
 const router = express.Router();
 const User = require('../models/user');
 
-// GET all users
+// Middleware para verificar o token JWT
+const verifyToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) {
+    return res.status(403).json({ message: 'No token provided.' });
+  }
+
+  admin.auth().verifyIdToken(token)
+    .then((decodedToken) => {
+      req.uid = decodedToken.uid;
+      next();
+    })
+    .catch((error) => {
+      res.status(401).json({ message: 'Failed to authenticate token.', error });
+    });
+};
+
+// GET all users (This route should be protected, but for the example it's open)
 router.get('/', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+// GET user information
+router.get('/me', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ firebaseUid: req.uid });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user data', error });
   }
 });
 
@@ -50,12 +80,12 @@ router.post('/register', async (req, res) => {
 });
 
 // POST update user address
-router.post('/updateAddress', async (req, res) => {
-  const { email, tipo, cep, rua, numero, complemento, bairro, cidade, estado } = req.body;
+router.post('/updateAddress', verifyToken, async (req, res) => {
+  const { tipo, cep, rua, numero, complemento, bairro, cidade, estado } = req.body;
 
   try {
-    // Encontra o usuário pelo email
-    const user = await User.findOne({ email: email });
+    // Encontra o usuário pelo UID do Firebase
+    const user = await User.findOne({ firebaseUid: req.uid });
     if (!user) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
@@ -81,12 +111,12 @@ router.post('/updateAddress', async (req, res) => {
 });
 
 // POST update user bank account
-router.post('/updateBankAccount', async (req, res) => {
-  const { email, banco, agencia, conta } = req.body;
+router.post('/updateBankAccount', verifyToken, async (req, res) => {
+  const { banco, agencia, conta } = req.body;
 
   try {
-    // Encontra o usuário pelo email
-    const user = await User.findOne({ email: email });
+    // Encontra o usuário pelo UID do Firebase
+    const user = await User.findOne({ firebaseUid: req.uid });
     if (!user) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }

@@ -7,6 +7,8 @@ import LoginComEmail from './pages/LoginComEmail';
 import RegistrarUsuario from './pages/cadastro/RegistrarUsuario';
 import AtualizarEndereco from './pages/cadastro/AtualizarEndereco';
 import DadosBancarios from './pages/cadastro/DadosBancarios';
+import ListaEventos from './components/ListaEventos';
+import ListaBarracas from './components/ListaBarracas';
 import { UserProvider } from './contexts/UserContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary'; // Importando o ErrorBoundary
@@ -19,6 +21,7 @@ function App() {
       <Router>
         <ErrorBoundary>
           <Routes>
+            <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
             <Route path="/usuarios/*" element={<ProtectedRoute element={<Usuarios />} />} />
             <Route path="/servico/*" element={<ProtectedRoute element={<Servico />} />} />
@@ -26,6 +29,8 @@ function App() {
             <Route path="/cadastro/registrarusuario" element={<RegistrarUsuario />} />
             <Route path="/cadastro/atualizarendereco" element={<AtualizarEndereco />} />
             <Route path="/cadastro/dadosbancarios" element={<DadosBancarios />} />
+            <Route path="/upcoming-events" element={<ListaEventos />} />
+            <Route path="/event/:eventId/barracas" element={<ListaBarracas />} />
           </Routes>
         </ErrorBoundary>
       </Router>

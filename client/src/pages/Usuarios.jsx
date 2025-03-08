@@ -5,11 +5,15 @@ import Comandas from '../components/usuarios/Comandas';
 import CarteiraVirtual from '../components/usuarios/CarteiraVirtual';
 import Logout from '../components/Logout';
 import Navbar from '../components/Navbar'
+import ListaEventos from '../components/ListaEventos'
+
+
 
 function Usuarios() {
   return (
     <div>
         <Navbar />
+        <ListaEventos />
         <Eventos />
         <Logout />
       <nav>
