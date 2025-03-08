@@ -1,23 +1,26 @@
 .upcoming-events-container {
   display: flex;
   justify-content: center;
+  align-content: flex-start;
   flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px;
+  padding: 10px;
   background-color: #f0f0f0;
+  width: 100%;
+  height: 90%;
 }
 
 .event-button {
   position: relative;
-  width: 100%;
-  max-width: 300px;
+  width: 90%;
+  margin: 5px; /* Reduzido o margin para 5px para aproximar os botões */
+  max-width: 400px;
   height: 200px;
   background-size: cover;
   background-position: center;
   border: none;
   cursor: pointer;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 .event-overlay {
@@ -30,27 +33,85 @@
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  justify-content: flex-start; /* Alinhamento ao topo */
+  align-items: flex-start; /* Alinhamento à esquerda */
+  text-align: left; /* Texto alinhado à esquerda */
   padding: 10px;
 }
 
+.event-overlay:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
 .event-overlay h2 {
-  margin: 0;
+  margin: 10px 10px 5px 0; /* Ajuste das margens */
   font-size: 1.5em;
 }
 
 .event-overlay p {
-  margin: 5px 0;
+  margin: 5px 10px;
+  font-size: 1em;
+  max-width: 100%; /* Limitar a largura para evitar quebra de linha */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limitar a 3 linhas */
+  -webkit-box-orient: vertical;
+  white-space: normal; /* Permitir quebra de linha */
 }
 
 .event-details {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
+  width: 360px;
+  position: absolute;
+  bottom: 20px;
 }
 
-.event-details p {
+.event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  justify-content: center;
+  margin: 5px;
+}
+
+.event-date:hover {
+  background-color: rgba(0, 0, 0, 1);
+  font-weight: bold;
+}
+
+.event-date .date {
+  font-size: 1.2em;
+}
+
+.event-date .time {
+  font-size: 0.8em;
   margin: 0;
+}
+
+.event-likes {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  position: absolute;
+  top: 10px;
+  right: 40px;
+}
+
+.heart {
+  color: red;
+  font-size: 1.5em;
+  margin-right: 5px;
+}
+
+.likes {
+  font-size: 1.2em;
 }

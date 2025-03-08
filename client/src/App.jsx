@@ -8,10 +8,10 @@ import RegistrarUsuario from './pages/cadastro/RegistrarUsuario';
 import AtualizarEndereco from './pages/cadastro/AtualizarEndereco';
 import DadosBancarios from './pages/cadastro/DadosBancarios';
 import ListaEventos from './components/ListaEventos';
-import ListaBarracas from './components/ListaBarracas';
+import DetalheEvento from './components/DetalheEvento';
 import { UserProvider } from './contexts/UserContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import ErrorBoundary from './components/ErrorBoundary'; // Importando o ErrorBoundary
+import ErrorBoundary from './components/ErrorBoundary';
 
 import './App.css';
 
@@ -30,7 +30,7 @@ function App() {
             <Route path="/cadastro/atualizarendereco" element={<AtualizarEndereco />} />
             <Route path="/cadastro/dadosbancarios" element={<DadosBancarios />} />
             <Route path="/upcoming-events" element={<ListaEventos />} />
-            <Route path="/event/:eventId/barracas" element={<ListaBarracas />} />
+            <Route path="/event/:eventId/details" element={<DetalheEvento />} />
           </Routes>
         </ErrorBoundary>
       </Router>

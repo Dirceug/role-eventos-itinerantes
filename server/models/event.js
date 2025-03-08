@@ -13,10 +13,34 @@ const cardapioSchema = new mongoose.Schema({
 const barracaSchema = new mongoose.Schema({
   nome: String,
   descricao: String,
-  responsavel: Map,
+  responsavel: {
+    nome: String,
+    contato: String
+  },
   funcionarios: Map,
   cardapio: [cardapioSchema],
   pedidos: Map,
+});
+
+const enderecoSchema = new mongoose.Schema({
+  apelido: String,
+  cep: String,
+  logradouro: String,
+  numero: String,
+  complemento: String,
+  bairro: String,
+  cidade: String,
+  estado: String,
+  pontoReferencia: String,
+  status: String,
+  _id: String
+});
+
+const dataEventoSchema = new mongoose.Schema({
+  dataAbertura: Date,
+  horaAbertura: String,
+  dataFechamento: Date,
+  horaFechamento: String
 });
 
 const eventSchema = new mongoose.Schema({
@@ -24,6 +48,16 @@ const eventSchema = new mongoose.Schema({
   descricao: String,
   data: Date,
   barracas: Map,
+  organizadores: [
+    {
+      id: String,
+      nome: String
+    }
+  ],
+  fotoUrl: String,
+  dataEvento: [dataEventoSchema],
+  numeroFavoritos: Number,
+  endereco: enderecoSchema
 });
 
 module.exports = mongoose.model('Event', eventSchema);

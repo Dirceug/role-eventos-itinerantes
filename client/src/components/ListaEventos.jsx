@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ListaEventos.css';
+import eventoBase from '../img/eventoBase.jpeg';
+import Navbar from './Navbar';
 
 const ListaEventos = () => {
   const [events, setEvents] = useState([]);
@@ -21,29 +23,41 @@ const ListaEventos = () => {
   }, []);
 
   const handleEventClick = (eventId) => {
-    navigate(`/event/${eventId}/barracas`);
+    navigate(`/event/${eventId}/details`);
   };
 
   return (
+    <>
+    
     <div className="upcoming-events-container">
       {events.map(event => (
         <button
           key={event._id}
           className="event-button"
-          style={{ backgroundImage: `url(${event.imagem || 'https://imgur.com/gallery/this-dude-brought-his-hermit-crab-to-music-festival-a5lKqbm'})` }}
+          style={{ backgroundImage: `url(${event.fotoUrl || eventoBase})` }}
           onClick={() => handleEventClick(event._id)}
         >
           <div className="event-overlay">
             <h2>{event.nome}</h2>
-            <p>{event.descricao}</p>
+            <p>{event.descricao.length > 244 ? `${event.descricao.substring(0, 241)}...` : event.descricao}</p>
             <div className="event-details">
-              <p>{new Date(event.data).toLocaleDateString()}</p>
-              <p>{new Date(event.data).toLocaleTimeString()}</p>
+              {event.dataEvento && event.dataEvento.map((data, index) => (
+                <div key={index} className="event-date">
+                  <p className="date">{new Date(data.dataAbertura).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</p>
+                  <p className="time">{data.horaAbertura}</p>
+                  <p className="time">{data.horaFechamento}</p>
+                </div>
+              ))}
+            </div>
+            <div className="event-likes">
+              <span className="heart">❤️</span>
+              <span className="likes">{event.numeroFavoritos}</span>
             </div>
           </div>
         </button>
       ))}
     </div>
+    </>
   );
 };
 
