@@ -7,10 +7,11 @@ const cardapioSchema = new mongoose.Schema({
   valor: Number,
   imagem: String,
   estoque: Number,
-  status: String,
+  status: { type: String, default: "ativo" },
 });
 
 const barracaSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
   nome: String,
   descricao: String,
   responsavel: {
@@ -20,6 +21,7 @@ const barracaSchema = new mongoose.Schema({
   funcionarios: Map,
   cardapio: [cardapioSchema],
   pedidos: Map,
+  status: { type: String, default: "ativo" },
 });
 
 const enderecoSchema = new mongoose.Schema({
@@ -47,7 +49,7 @@ const eventSchema = new mongoose.Schema({
   nome: String,
   descricao: String,
   data: Date,
-  barracas: Map,
+  barracas: [barracaSchema],
   organizadores: [
     {
       id: String,
@@ -57,7 +59,8 @@ const eventSchema = new mongoose.Schema({
   fotoUrl: String,
   dataEvento: [dataEventoSchema],
   numeroFavoritos: Number,
-  endereco: enderecoSchema
+  endereco: enderecoSchema,
+  status: { type: String, default: "ativo" },
 });
 
 module.exports = mongoose.model('Event', eventSchema);

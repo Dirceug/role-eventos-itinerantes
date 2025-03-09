@@ -43,47 +43,49 @@ const DetalheEvento = () => {
   };
 
   return (
-    <>
+    <div className="container">
       <Navbar />
-    <div className="detalhe-evento-container">
-      <div className="detalhe-evento-header">
-        <button onClick={handleBackClick} className="back-button">←</button>
-        <button onClick={handleLikeClick} className="like-button">❤️ {event.numeroFavoritos}</button>
-      </div>
-      <div className="detalhe-evento-foto">
-        <img src={event.fotoUrl} alt={event.nome} />
-      </div>
-      <div className="detalhe-evento-info">
-        <h2>{event.nome}</h2>
-        <p>{new Date(event.data).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} - {new Date(event.data).toLocaleDateString('pt-BR', { weekday: 'long' })}</p>
-        <p>{event.descricao}</p>
-        {event.dataEvento && event.dataEvento.map((data, index) => (
-          <div key={index} className="data-detalhada">
-            <p>{new Date(data.dataAbertura).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} - {new Date(data.dataAbertura).toLocaleDateString('pt-BR', { weekday: 'long' })}</p>
-            <br/>
-            <p>Abertura: {data.horaAbertura}</p>
-            <p>Fechamento: {data.horaFechamento}</p>
-          </div>
-        ))}
-      </div>
-      <div className="detalhe-evento-footer">
-        <div className="social-buttons">
-          <button onClick={() => handleShareClick('Instagram')}>
-            <img src="./img/icones/instagram.png" alt="Instagram" />
-          </button>
-          <button onClick={() => handleShareClick('Facebook')}>
-            <img src="./img/icones/facebook.png" alt="Facebook" />
-          </button>
-          <button onClick={() => handleShareClick('WhatsApp')}>
-            <img src="./img/icones/whatsapp.png" alt="WhatsApp" />
-          </button>
+      <div className="detalhe-evento-container">
+        <div className="detalhe-evento-header">
+          <button onClick={handleBackClick} className="back-button">←</button>
+          <button onClick={handleLikeClick} className="like-button">❤️ {event.numeroFavoritos}</button>
         </div>
-        <div className="cardapio-button">
-          <button onClick={handleCardapioClick}>Cardápio</button>
+        <div className="detalhe-evento-foto">
+          <img src={event.fotoUrl} alt={event.nome} />
+        </div>
+        <div className="detalhe-evento-info">
+          <h2>{event.nome}</h2>
+          <p>{new Date(event.data).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} - {new Date(event.data).toLocaleDateString('pt-BR', { weekday: 'long' })}</p>
+          <p>{event.descricao}</p>
+          <div className="data-detalhada-container">
+            {event.dataEvento && event.dataEvento.map((data, index) => (
+              <div key={index} className="data-detalhada">
+                <p>{new Date(data.dataAbertura).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} - {new Date(data.dataAbertura).toLocaleDateString('pt-BR', { weekday: 'long' })}</p>
+                <br/>
+                <p>Abertura: {data.horaAbertura}</p>
+                <p>Fechamento: {data.horaFechamento}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="detalhe-evento-footer">
+          <div className="social-buttons">
+            <button onClick={() => handleShareClick('Instagram')}>
+              <img src="./img/icones/instagram.png" alt="Instagram" />
+            </button>
+            <button onClick={() => handleShareClick('Facebook')}>
+              <img src="../img/icones/facebook.png" alt="Facebook" />
+            </button>
+            <button onClick={() => handleShareClick('WhatsApp')}>
+              <img src="./img/icones/whatsapp.png" alt="WhatsApp" />
+            </button>
+          </div>
+          <div className="cardapio-button">
+            <button onClick={handleCardapioClick}>Cardápio</button>
+          </div>
         </div>
       </div>
     </div>
-    </>
   );
 };
 

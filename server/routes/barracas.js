@@ -1,17 +1,63 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const mongoose = require('mongoose');
 const Event = require('../models/event');
 
-// Criar uma nova barraca
-router.post('/', async (req, res) => {
+// GET all barracas for a specific event
+router.get('/barracas', async (req, res) => {
   try {
-    const event = await Event.findById(req.params.eventId);
-    event.barracas.set(new mongoose.Types.ObjectId().toString(), req.body);
-    await event.save();
-    res.status(201).json(event);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    const { eventId } = req.params;
+    const event = await Event.findById(eventId).select('barracas');
+    if (!event) {
+      console.log(`Event not found for ID: ${eventId}`);
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    res.json(event.barracas);
+  } catch (error) {
+    console.error(`Error retrieving event: ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// GET a specific barraca by ID
+router.get('/barracas/:barracaId', async (req, res) => {
+  try {
+    const { eventId, barracaId } = req.params;
+    const event = await Event.findById(eventId);
+    if (!event) {
+      console.log(`Event not found for ID: ${eventId}`);
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    const barraca = event.barracas.id(barracaId);
+    if (!barraca) {
+      console.log(`Barraca not found for ID: ${barracaId}`);
+      return res.status(404).json({ message: 'Barraca not found' });
+    }
+    res.json(barraca);
+  } catch (error) {
+    console.error(`Error retrieving barraca: ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// GET a specific barraca by title
+router.get('/barracas/search', async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const { title } = req.query;
+    const event = await Event.findById(eventId);
+    if (!event) {
+      console.log(`Event not found for ID: ${eventId}`);
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    const barraca = event.barracas.find(b => b.nome && b.nome.toLowerCase().includes(title.toLowerCase()));
+    if (!barraca) {
+      console.log(`Barraca not found with title: ${title}`);
+      return res.status(404).json({ message: 'Barraca not found' });
+    }
+    res.json(barraca);
+  } catch (error) {
+    console.error(`Error retrieving barraca: ${error.message}`);
+    res.status(500).json({ message: error.message });
   }
 });
 

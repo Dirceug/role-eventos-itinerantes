@@ -34,8 +34,8 @@
   display: none;
   position: absolute;
   right: 0;
-  background-color: #fff;
-  color: #000;
+  background-color: #EE7F43; /* Fundo laranja */
+  color: white; /* Texto branco */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
@@ -45,14 +45,16 @@
 }
 
 .navbar-menu-content a {
-  color: #000;
+  color: white; /* Texto branco */
   padding: 12px 16px;
   text-decoration: none;
   display: block;
+  background-color: #EE7F43;
 }
 
 .navbar-menu-content a:hover {
-  background-color: #ddd;
+  background-color: white;
+  color: #EE7F43; /* Texto laranja ao passar o mouse */
 }
 
 .hamburger-menu {
@@ -60,6 +62,8 @@
   flex-direction: column;
   cursor: pointer;
   gap: 4px;
+  background: none;
+  border: none;
 }
 
 .hamburger-menu div {
@@ -71,24 +75,27 @@
 .hamburger-menu-content {
   display: none;
   position: absolute;
+  top: 50px; /* Ajuste conforme necessário */
   left: 0;
-  background-color: #fff;
-  color: #000;
+  background-color: #EE7F43; /* Fundo laranja */
+  color: white; /* Texto branco */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
-.hamburger-menu:hover .hamburger-menu-content {
-  display: block;
-}
-
 .hamburger-menu-content a {
-  color: #000;
+  color: white; /* Texto branco */
   padding: 12px 16px;
   text-decoration: none;
   display: block;
 }
 
 .hamburger-menu-content a:hover {
-  background-color: #ddd;
+  background-color: white;
+  color: #EE7F43; /* Texto laranja ao passar o mouse */
+}
+
+.hamburger-menu:focus + .hamburger-menu-content,
+.hamburger-menu-content:hover {
+  display: block;
 }

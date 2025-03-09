@@ -31,20 +31,19 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="hamburger-menu" onClick={toggleHamburgerMenu}>
+      <button className="hamburger-menu" onClick={toggleHamburgerMenu}>
         <div></div>
         <div></div>
         <div></div>
-        {isHamburgerMenuOpen && (
-          <div className="hamburger-menu-content">
-            <Link to="/events">Eventos</Link>
-            <Link to="/comandas">Comandas</Link>
-            <Link to="/carteira-virtual">Carteira Virtual</Link>
-            <Link to="/cadastrar-eventos">Cadastrar Eventos</Link>
-          </div>
-        )}
-      </div>
-      {/*<h1>Role Eventos Itinerantes</h1>*/}
+      </button>
+      {isHamburgerMenuOpen && (
+        <div className="hamburger-menu-content">
+          <Link to="/events">Eventos</Link>
+          <Link to="/comandas">Comandas</Link>
+          <Link to="/carteira-virtual">Carteira Virtual</Link>
+          <Link to="/cadastrar-eventos">Cadastrar Eventos</Link>
+        </div>
+      )}
       <ul>
         <li><Link to="/events">Eventos</Link></li>
         <li><Link to="/comandas">Comandas</Link></li>

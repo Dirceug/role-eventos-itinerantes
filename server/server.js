@@ -28,8 +28,8 @@ const pedidoRoutes = require('./routes/pedidos');
 app.use('/api/users', userRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/events', eventRoutes);
-app.use('/api/events/:eventId/barracas', barracaRoutes);
-app.use('/api/events/:eventId/barracas/:barracaId/cardapios', cardapioRoutes);
+app.use('/api/events/:eventId', barracaRoutes); // Alteração aqui
+app.use('/api/events/:eventId/barracas/:barracaId', cardapioRoutes); // Alteração aqui
 app.use('/api/pedidos', pedidoRoutes);
 
 app.listen(port, () => {

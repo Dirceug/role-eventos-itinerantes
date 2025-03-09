@@ -1,3 +1,9 @@
+.container {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
 .detalhe-evento-container {
   display: flex;
   flex-direction: column;
@@ -16,12 +22,12 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  position: fixed;
+  position: absolute;
   top: 60px; /* Ajuste para acomodar a altura da Navbar */
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0); /* Fundo transparente */
   padding: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  /*box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);*/
+  z-index: 500; /* Menor do que a Navbar */
 }
 
 .back-button {
@@ -30,6 +36,7 @@
   cursor: pointer;
   font-size: 3.5em;
   color: #EE7F43;
+
 }
 
 .like-button {
@@ -38,10 +45,11 @@
   cursor: pointer;
   font-size: 1.5em;
   color: #EE7F43;
+
 }
 
 .detalhe-evento-foto {
-  margin-top: 140px; /* Espaço para a header fixa e Navbar */
+  margin-top: 30px; /* Espaço para a header fixa e Navbar */
 }
 
 .detalhe-evento-foto img {
@@ -56,11 +64,34 @@
 .detalhe-evento-info {
   text-align: left;
   margin: 20px; /* Adiciona margem ao redor do texto */
+
 }
 
 .detalhe-evento-info p {
   line-height: 1.5; /* Define o espaçamento entre linhas */
   margin-bottom: 1em; /* Espaçamento entre parágrafos */
+  width: 100%;
+}
+
+.data-detalhada-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 100px;
+}
+
+.data-detalhada {
+  background-color: #EE7F43;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  /*width: calc(33% - 10px); /* Três itens por linha com espaçamento */
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.data-detalhada p {
+  margin: 5px 0;
 }
 
 .detalhe-evento-footer {
@@ -89,16 +120,4 @@
   background-color: white;
   color: #EE7F43;
   border: solid #EE7F43;
-}
-
-.data-detalhada {
-  background-color: #EE7F43;
-  border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 10px;
-  color: white;
-}
-
-.data-detalhada p {
-  margin: 5px 0;
 }

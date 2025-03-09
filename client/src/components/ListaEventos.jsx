@@ -28,7 +28,7 @@ const ListaEventos = () => {
 
   return (
     <>
-    
+    <Navbar />
     <div className="upcoming-events-container">
       {events.map(event => (
         <button
