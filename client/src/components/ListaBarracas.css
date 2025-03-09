@@ -1,37 +1,104 @@
-.barracas-container {
+html, body, .container {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Remove a barra de rolagem horizontal */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f0f0;
+}
+
+.lista-barracas-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  margin: 20px auto;
+  width: 100%;
+  overflow-y: auto; /* Permitir rolagem vertical para o conteúdo */
+}
+
+.back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 3.5em;
+  color: #EE7F43;
+  position: absolute;
+  top: 60px;
+  left: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.barracas-list {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 20px;
-  background-color: #f0f0f0;
-  height: calc(100vh - 60px); /* Ajuste conforme necessário para compensar a altura do Navbar */
-  overflow-y: auto;
-}
-
-.barraca-button {
-  position: relative;
-  width: 100%;
-  max-width: 300px;
-  height: 100px;
-  background-color: #fff;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  cursor: pointer;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
-.barraca-button h2 {
-  margin: 0;
-  font-size: 1.2em;
+.barraca-card {
+  background-color: #EE7F43;
+  border-radius: 10px;
+  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5); /* Sombra forte */
+  padding: 20px;
+  width: 300px;
+  cursor: pointer;
+  border: none;
+  position: relative; /* Adicionado para posicionamento do status */
 }
 
-.barraca-button p {
-  margin: 5px 0;
+.barraca-card:hover {
+  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.7); /* Sombra forte */
+}
+
+.barraca-card h2 {
+  margin-top: 0;
+  color: white;
+}
+
+.barraca-card h3 {
+  color: white;
+  text-align: left;
+}
+
+.responsavel {
+  margin-top: 10px;
+  color: white;
+}
+
+.cardapio-list {
+  margin-top: 10px;
+  list-style-type: none;
+  padding: 0;
+  text-align: left; /* Alinhar a lista à esquerda */
+}
+
+.cardapio-list li {
+  margin-bottom: 5px;
+  color: white;
+}
+
+.status {
+  margin-top: 10px;
+  color: white;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.no-hover:hover {
+  background: none;
+  box-shadow: none;
+  border: none;
 }

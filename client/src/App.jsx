@@ -1,5 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { UserProvider } from './contexts/UserContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import ErrorBoundary from './components/ErrorBoundary';
+
 import Login from './pages/Login';
 import Usuarios from './pages/Usuarios';
 import Servico from './pages/Servico';
@@ -9,9 +13,8 @@ import AtualizarEndereco from './pages/cadastro/AtualizarEndereco';
 import DadosBancarios from './pages/cadastro/DadosBancarios';
 import ListaEventos from './components/ListaEventos';
 import DetalheEvento from './components/DetalheEvento';
-import { UserProvider } from './contexts/UserContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import ErrorBoundary from './components/ErrorBoundary';
+import ListaBarracas from './components/ListaBarracas';
+import DetalheCardapio from './components/DetalheCardapio';
 
 import './App.css';
 
@@ -31,6 +34,8 @@ function App() {
             <Route path="/cadastro/dadosbancarios" element={<DadosBancarios />} />
             <Route path="/upcoming-events" element={<ListaEventos />} />
             <Route path="/event/:eventId/details" element={<DetalheEvento />} />
+            <Route path="/event/:eventId/barracas" element={<ListaBarracas />} />
+            <Route path="/event/:eventId/barraca/:barracaId/cardapio" element={<DetalheCardapio />} />
           </Routes>
         </ErrorBoundary>
       </Router>
