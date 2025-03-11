@@ -12,7 +12,7 @@ import ListaEventos from '../components/ListaEventos'
 function Usuarios() {
   return (
     <div>
-        <Navbar />
+
         <ListaEventos />
         <Eventos />
         <Logout />

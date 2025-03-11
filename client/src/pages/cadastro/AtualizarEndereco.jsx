@@ -4,6 +4,7 @@ import Joi from 'joi';
 import LabelInput from '../../components/LabelInput';
 import ButtonGrande from '../../components/ButtonGrande';
 import UserContext from '../../contexts/UserContext';
+import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 import '../../App.css';
 import '../Pages.css';
 
@@ -13,8 +14,8 @@ const schema = Joi.object({
     'string.empty': '{#label} não pode estar vazio.',
     'any.required': '{#label} é obrigatório.'
   }),
-  cep: Joi.string().pattern(/^\d{2}.\d{3}-\d{3}$/).required().label('CEP').messages({
-    'string.pattern.base': '{#label} deve estar no formato 00.000-000.',
+  cep: Joi.string().pattern(/^\d{5}-\d{3}$/).required().label('CEP').messages({
+    'string.pattern.base': '{#label} deve estar no formato 00000-000.',
     'string.empty': '{#label} não pode estar vazio.',
     'any.required': '{#label} é obrigatório.'
   }),
@@ -85,10 +86,12 @@ function AtualizarEndereco() {
     if (!validate()) return;
 
     try {
+      const token = Cookies.get('authToken'); // Obter o token de autenticação dos cookies
       const response = await fetch('http://localhost:5000/api/users/updateAddress', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Adicionar o token de autenticação ao cabeçalho da requisição
         },
         body: JSON.stringify({ email: user.email, ...address }) // Incluindo o email do usuário
       });
@@ -100,12 +103,6 @@ function AtualizarEndereco() {
     } catch (error) {
       console.error('Erro ao atualizar endereço:', error);
     }
-  };
-
-  const maskCEP = (value) => {
-    return value
-      .replace(/\D/g, '') // Remove caracteres não numéricos
-      .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona traço após os cinco primeiros dígitos
   };
 
   return (
@@ -124,11 +121,11 @@ function AtualizarEndereco() {
         <LabelInput 
           label="CEP:" 
           type="text" 
-          placeholder="00.000-000" 
+          placeholder="00000-000" 
           name="cep" 
           value={address.cep} 
           onChange={(e) => {
-            const maskedValue = maskCEP(e.target.value);
+            const maskedValue = e.target.value.replace(/\D/g, '').replace(/(\d{5})(\d)/, '$1-$2'); // Adicionar traço após os cinco primeiros dígitos
             handleChange({ target: { name: 'cep', value: maskedValue } });
           }} 
           error={errors.cep} 

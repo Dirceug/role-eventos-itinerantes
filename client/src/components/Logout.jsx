@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
+import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 import './LoginComponent.css';
 
 function Logout() {
@@ -13,6 +14,7 @@ function Logout() {
       alert("Gostei de você, volte sempre 😉");
       try {
         await signOut(auth);
+        Cookies.remove('authToken'); // Remover o token dos cookies
         navigate('/login');
       } catch (error) {
         console.error('Erro ao fazer logout:', error);

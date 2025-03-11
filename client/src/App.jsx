@@ -29,13 +29,13 @@ function App() {
             <Route path="/usuarios/*" element={<ProtectedRoute element={<Usuarios />} />} />
             <Route path="/servico/*" element={<ProtectedRoute element={<Servico />} />} />
             <Route path="/logincomemail" element={<LoginComEmail />} />
-            <Route path="/cadastro/registrarusuario" element={<RegistrarUsuario />} />
-            <Route path="/cadastro/atualizarendereco" element={<AtualizarEndereco />} />
-            <Route path="/cadastro/dadosbancarios" element={<DadosBancarios />} />
-            <Route path="/upcoming-events" element={<ListaEventos />} />
-            <Route path="/event/:eventId/details" element={<DetalheEvento />} />
-            <Route path="/event/:eventId/barracas" element={<ListaBarracas />} />
-            <Route path="/event/:eventId/barraca/:barracaId/cardapio" element={<DetalheCardapio />} />
+            <Route path="/cadastro/registrarusuario" element={<ProtectedRoute element={<RegistrarUsuario />} />} />
+            <Route path="/cadastro/atualizarendereco" element={<ProtectedRoute element={<AtualizarEndereco />} />} />
+            <Route path="/cadastro/dadosbancarios" element={<ProtectedRoute element={<DadosBancarios />} />} />
+            <Route path="/upcoming-events" element={<ProtectedRoute element={<ListaEventos />} />} />
+            <Route path="/event/:eventId/details" element={<ProtectedRoute element={<DetalheEvento />} />} />
+            <Route path="/event/:eventId/barracas" element={<ProtectedRoute element={<ListaBarracas />} />} />
+            <Route path="/event/:eventId/barraca/:barracaId/cardapio" element={<ProtectedRoute element={<DetalheCardapio />} />} />
           </Routes>
         </ErrorBoundary>
       </Router>

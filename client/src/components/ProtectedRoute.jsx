@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import UserContext from '../contexts/UserContext';
+import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 
 const ProtectedRoute = ({ element }) => {
   const { user } = useContext(UserContext);
@@ -8,7 +9,7 @@ const ProtectedRoute = ({ element }) => {
 
   useEffect(() => {
     const verifyUser = async () => {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('authToken');
       if (!token) {
         console.error('No token found');
         setIsLoading(false);

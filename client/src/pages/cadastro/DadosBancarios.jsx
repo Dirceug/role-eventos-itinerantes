@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LabelInput from '../../components/LabelInput';
 import ButtonGrande from '../../components/ButtonGrande';
-import '../../App.css'
-import '../Pages.css'
+import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
+import '../../App.css';
+import '../Pages.css';
 
 function AtualizarDadosBancarios() {
   const navigate = useNavigate();
@@ -26,9 +27,25 @@ function AtualizarDadosBancarios() {
     }));
   };
 
-  const handleNext = () => {
-    // Implementar lógica para armazenar os dados bancários no estado global ou contexto
-    navigate('/cadastro/confirmacao');
+  const handleNext = async () => {
+    try {
+      const token = Cookies.get('authToken'); // Obter o token de autenticação dos cookies
+      const response = await fetch('http://localhost:5000/api/users/updateBankDetails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Adicionar o token de autenticação ao cabeçalho da requisição
+        },
+        body: JSON.stringify(banco)
+      });
+      if (response.ok) {
+        navigate('/cadastro/confirmacao');
+      } else {
+        console.error('Erro ao atualizar dados bancários');
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar dados bancários:', error);
+    }
   };
 
   return (

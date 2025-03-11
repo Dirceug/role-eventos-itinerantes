@@ -3,6 +3,7 @@ import { auth, googleProvider, facebookProvider } from '../firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../contexts/UserContext';
+import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 import './LoginComponent.css';
 import googleIcon from '../img/icones/google.png';
 import facebookIcon from '../img/icones/facebook.png';
@@ -21,8 +22,8 @@ function LoginComponent() {
 
         const idToken = await user.getIdToken();
 
-        // Armazenar o token no localStorage
-        localStorage.setItem('token', idToken);
+        // Armazenar o token no cookie
+        Cookies.set('authToken', idToken);
 
         // Enviar requisição para salvar o usuário no backend
         const response = await fetch('http://localhost:5000/api/users/register', {
@@ -62,8 +63,8 @@ function LoginComponent() {
 
         const idToken = await user.getIdToken();
 
-        // Armazenar o token no localStorage
-        localStorage.setItem('token', idToken);
+        // Armazenar o token no cookie
+        Cookies.set('authToken', idToken);
 
         setUser(user);  // Atualizar o contexto com os dados do usuário
         navigate('/usuarios');
@@ -85,8 +86,8 @@ function LoginComponent() {
 
         const idToken = await user.getIdToken();
 
-        // Armazenar o token no localStorage
-        localStorage.setItem('token', idToken);
+        // Armazenar o token no cookie
+        Cookies.set('authToken', idToken);
 
         setUser(user);  // Atualizar o contexto com os dados do usuário
         navigate('/events');

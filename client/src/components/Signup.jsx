@@ -2,6 +2,7 @@ import React from 'react';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 import './Signup.css';
 
 function Signup() {
@@ -13,8 +14,10 @@ function Signup() {
     const password = e.target.password.value;
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((result) => {
+      .then(async (result) => {
         console.log(result.user);
+        const idToken = await result.user.getIdToken();
+        Cookies.set('authToken', idToken); // Armazenar o token no cookie
         navigate('/events');
       })
       .catch((error) => {
