@@ -5,9 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import UserContext from '../contexts/UserContext';
 import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 import './LoginComponent.css';
-import googleIcon from '../img/icones/google.png';
-import facebookIcon from '../img/icones/facebook.png';
-import '../components/LoginComponent.css';
 import ButtonGrande from './ButtonGrande';
 
 function LoginComponent() {
@@ -26,6 +23,7 @@ function LoginComponent() {
         Cookies.set('authToken', idToken);
 
         // Enviar requisição para salvar o usuário no backend
+        console.log('Registering user with token:', idToken);
         const response = await fetch('http://localhost:5000/api/users/register', {
           method: 'POST',
           headers: {
@@ -41,9 +39,11 @@ function LoginComponent() {
           })
         });
 
+        console.log('Response status:', response.status);
         const data = await response.json();
 
         if (response.ok) {
+          console.log('User registered successfully:', data);
           setUser(user);  // Atualizar o contexto com os dados do usuário
           navigate('/usuarios');
         } else {
@@ -66,6 +66,7 @@ function LoginComponent() {
         // Armazenar o token no cookie
         Cookies.set('authToken', idToken);
 
+        console.log('Registering user with token:', idToken);
         setUser(user);  // Atualizar o contexto com os dados do usuário
         navigate('/usuarios');
       })
@@ -89,6 +90,7 @@ function LoginComponent() {
         // Armazenar o token no cookie
         Cookies.set('authToken', idToken);
 
+        console.log('Registering user with token:', idToken);
         setUser(user);  // Atualizar o contexto com os dados do usuário
         navigate('/events');
       })

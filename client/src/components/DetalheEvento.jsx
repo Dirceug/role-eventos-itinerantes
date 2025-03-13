@@ -1,18 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './DetalheEvento.css';
 import Navbar from './Navbar';
+import Cookies from 'js-cookie';
+import UserContext from '../contexts/UserContext';
 
 const DetalheEvento = (props) => {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const fetchEvent = async () => {
+      const token = Cookies.get('authToken');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
       try {
-        const response = await fetch(`http://localhost:5000/api/events/${eventId}`);
+        console.log('Fetching event with ID:', eventId, 'using token:', token);
+        const response = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        console.log('Response status:', response.status);
         const data = await response.json();
+        console.log('Event data fetched:', data);
         setEvent(data);
       } catch (error) {
         console.error('Error fetching event:', error);
@@ -34,8 +52,37 @@ const DetalheEvento = (props) => {
     navigate('/upcoming-events');
   };
 
-  const handleLikeClick = () => {
-    alert(`Você curtiu o evento ${event.nome}`);
+  const handleLikeClick = async () => {
+    const token = Cookies.get('authToken');
+    if (!token) {
+      alert('Você precisa estar logado para curtir um evento.');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      console.log('Liking event with ID:', eventId, 'by user with token:', token);
+      const response = await fetch(`http://localhost:5000/api/events/${eventId}/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ userId: user.firebaseUid })
+      });
+      console.log('Response status:', response.status);
+      if (response.ok) {
+        const updatedEvent = await response.json();
+        console.log('Event liked successfully:', updatedEvent);
+        setEvent(updatedEvent);
+        alert(`Você curtiu o evento ${event.nome}`);
+      } else {
+        const errorData = await response.json();
+        console.error('Erro ao curtir o evento:', errorData);
+      }
+    } catch (error) {
+      console.error('Erro ao curtir o evento:', error);
+    }
   };
 
   const handleShareClick = (socialMedia) => {

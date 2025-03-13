@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './DetalheCardapio.css';
 import Navbar from './Navbar';
+import Cookies from 'js-cookie';
 
 const DetalheCardapio = () => {
   const { eventId, barracaId } = useParams();
@@ -10,9 +11,24 @@ const DetalheCardapio = () => {
 
   useEffect(() => {
     const fetchBarraca = async () => {
+      const token = Cookies.get('authToken');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
       try {
-        const response = await fetch(`http://localhost:5000/api/events/${eventId}/barracas/${barracaId}`);
+        console.log('Fetching barraca with eventId:', eventId, 'and barracaId:', barracaId, 'using token:', token);
+        const response = await fetch(`http://localhost:5000/api/events/${eventId}/barracas/${barracaId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        console.log('Response status:', response.status);
         const data = await response.json();
+        console.log('Barraca data fetched:', data);
         setBarraca(data);
       } catch (error) {
         console.error('Error fetching barraca:', error);

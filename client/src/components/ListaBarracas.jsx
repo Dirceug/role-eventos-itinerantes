@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ListaBarracas.css';
 import Navbar from './Navbar';
+import Cookies from 'js-cookie';
 
 const ListaBarracas = () => {
   const { eventId } = useParams();
@@ -11,9 +12,24 @@ const ListaBarracas = () => {
 
   useEffect(() => {
     const fetchEvent = async () => {
+      const token = Cookies.get('authToken');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
       try {
-        const response = await fetch(`http://localhost:5000/api/events/${eventId}`);
+        console.log('Fetching event with ID:', eventId, 'using token:', token);
+        const response = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        console.log('Response status:', response.status);
         const data = await response.json();
+        console.log('Event data fetched:', data);
         setEvent(data);
         setBarracas(data.barracas.filter(barraca => barraca.status === 'ativo'));
       } catch (error) {

@@ -4,7 +4,7 @@ import UserContext from '../contexts/UserContext';
 import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 
 const ProtectedRoute = ({ element }) => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -17,6 +17,7 @@ const ProtectedRoute = ({ element }) => {
       }
 
       try {
+        console.log('Verifying user with token:', token);
         const response = await fetch('http://localhost:5000/api/users/me', {
           method: 'GET',
           headers: {
@@ -24,14 +25,20 @@ const ProtectedRoute = ({ element }) => {
             'Authorization': `Bearer ${token}`
           }
         });
+
+        console.log('Response status:', response.status);
         if (!response.ok) {
           setIsLoading(false);
           if (response.status === 401) {
             console.error('Unauthorized access - Invalid token');
+            Cookies.remove('authToken'); // Remover token inválido
           } else {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
         } else {
+          const userData = await response.json();
+          console.log('User data verified:', userData);
+          setUser(userData); // Atualizar o contexto com os dados do usuário
           setIsLoading(false);
         }
       } catch (error) {
@@ -41,7 +48,7 @@ const ProtectedRoute = ({ element }) => {
     };
 
     verifyUser();
-  }, []);
+  }, [setUser]);
 
   if (isLoading) {
     return <div>Loading...</div>;
