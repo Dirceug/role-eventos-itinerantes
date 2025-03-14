@@ -9,16 +9,15 @@
   height: 90%;
 }
 
-.event-button {
+.event {
   position: relative;
   width: 90%;
-  margin: 5px; /* Reduzido o margin para 5px para aproximar os botões */
+  margin: 5px;
   max-width: 400px;
-  height: 200px;
+  height: 250px;
   background-size: cover;
   background-position: center;
   border: none;
-  cursor: pointer;
   overflow: hidden;
   border-radius: 20px;
 }
@@ -33,9 +32,9 @@
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Alinhamento ao topo */
-  align-items: flex-start; /* Alinhamento à esquerda */
-  text-align: left; /* Texto alinhado à esquerda */
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
   padding: 10px;
 }
 
@@ -43,31 +42,43 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.event-overlay h2 {
-  margin: 10px 10px 5px 0; /* Ajuste das margens */
-  font-size: 1.5em;
+.event-button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  text-align: left;
+  padding: 5px;
 }
 
-.event-overlay p {
-  margin: 5px 10px;
+.event-title h2 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.event-description p {
+  margin: 0;
   font-size: 1em;
-  max-width: 100%; /* Limitar a largura para evitar quebra de linha */
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Limitar a 3 linhas */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  white-space: normal; /* Permitir quebra de linha */
+  white-space: normal;
 }
 
 .event-details {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  width: 360px;
+  width: 100%;
   position: absolute;
-  bottom: 20px;
+  bottom: 30px;
+  left: 10px;
 }
 
 .event-date {
@@ -77,10 +88,13 @@
   background-color: rgba(0, 0, 0, 0.5);
   color: #fff;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   justify-content: center;
   margin: 5px;
+  padding: 5px;
+  border: none;
+  cursor: pointer;
 }
 
 .event-date:hover {
@@ -89,7 +103,7 @@
 }
 
 .event-date .date {
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 .event-date .time {
@@ -97,13 +111,28 @@
   margin: 0;
 }
 
+.event-barracas {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 50px;
+  right: 30px;
+}
+
+.event-barracas .cardapio-button {
+  font-size: 0.8em;
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
 .event-likes {
   display: flex;
   align-items: center;
-  margin-top: 10px;
   position: absolute;
   top: 10px;
-  right: 40px;
+  right: 10px;
 }
 
 .heart {

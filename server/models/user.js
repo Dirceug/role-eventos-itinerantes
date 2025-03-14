@@ -24,6 +24,24 @@ const contaBancariaSchema = new mongoose.Schema({
   conta: String,
 });
 
+const favoritosSchema = new mongoose.Schema({
+  eventoId: String,
+  titulo: String,
+  data: String,
+  tipo: String,
+});
+
+const curtidaSchema = new mongoose.Schema({
+  usuarioId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  eventoId: { type: mongoose.Schema.Types.ObjectId, ref: 'Event' }
+});
+
+const amizadeSchema = new mongoose.Schema({
+  usuarioId1: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  usuarioId2: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  status: { type: String, enum: ['pendente', 'aceito', 'superAmigo', 'cancelado'] }
+});
+
 const userSchema = new mongoose.Schema({
   firebaseUid: { type: String, required: true, unique: true },
   displayName: String,
@@ -40,18 +58,15 @@ const userSchema = new mongoose.Schema({
   contaBancaria: contaBancariaSchema,
   chavePIX: String,
   saldo: saldoSchema,
-  favoritos: [
-    {
-      eventoId: String,
-      titulo: String,
-      data: String,
-      tipo: String,
-    },
-  ],
+  favoritos: [favoritosSchema],
   conexoes: {
     amigos: Map,
     familiares: Map,
   },
 });
 
-module.exports = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
+const Curtida = mongoose.model('Curtida', curtidaSchema);
+const Amizade = mongoose.model('Amizade', amizadeSchema);
+
+module.exports = { User, Curtida, Amizade };

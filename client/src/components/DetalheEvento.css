@@ -28,12 +28,13 @@ html, body, .container {
 
 .detalhe-evento-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  /*align-items: center; /* Garantir que os elementos estejam alinhados verticalmente */
   width: 100%;
-  position: absolute;
-  top: 60px; /* Ajuste para acomodar a altura da Navbar */
-  background-color: rgba(255, 255, 255, 0); /* Fundo transparente */
   padding: 10px;
+  position: fixed;
+  top: 60px; /* Ajuste para acomodar a altura da Navbar */
+  background-color: white; /* Fundo semi-transparente para destacar os botões */
   z-index: 500; /* Menor do que a Navbar */
 }
 
@@ -53,7 +54,6 @@ html, body, .container {
   color: #EE7F43;
   margin-right: 15px;
 }
-
 
 .detalhe-evento-foto img {
   max-width: 100%;
@@ -136,10 +136,6 @@ html, body, .container {
 
   .detalhe-evento-info {
     margin: 10px;
-  }
-
-  .back-button, .like-button {
-    font-size: 2em;
   }
 
   .detalhe-evento-footer {

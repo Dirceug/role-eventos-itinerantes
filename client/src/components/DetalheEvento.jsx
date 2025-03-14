@@ -4,6 +4,8 @@ import './DetalheEvento.css';
 import Navbar from './Navbar';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
+import CurtidasButton from './CurtidasButton';
+import BackButton from './BackButton';
 
 const DetalheEvento = (props) => {
   const { eventId } = useParams();
@@ -48,43 +50,6 @@ const DetalheEvento = (props) => {
     return <div>Loading...</div>;
   }
 
-  const handleBackClick = () => {
-    navigate('/upcoming-events');
-  };
-
-  const handleLikeClick = async () => {
-    const token = Cookies.get('authToken');
-    if (!token) {
-      alert('Você precisa estar logado para curtir um evento.');
-      navigate('/login');
-      return;
-    }
-
-    try {
-      console.log('Liking event with ID:', eventId, 'by user with token:', token);
-      const response = await fetch(`http://localhost:5000/api/events/${eventId}/like`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ userId: user.firebaseUid })
-      });
-      console.log('Response status:', response.status);
-      if (response.ok) {
-        const updatedEvent = await response.json();
-        console.log('Event liked successfully:', updatedEvent);
-        setEvent(updatedEvent);
-        alert(`Você curtiu o evento ${event.nome}`);
-      } else {
-        const errorData = await response.json();
-        console.error('Erro ao curtir o evento:', errorData);
-      }
-    } catch (error) {
-      console.error('Erro ao curtir o evento:', error);
-    }
-  };
-
   const handleShareClick = (socialMedia) => {
     alert(`Compartilhado com ${socialMedia}`);
   };
@@ -98,8 +63,8 @@ const DetalheEvento = (props) => {
       <Navbar />
       <div className="detalhe-evento-container">
         <div className="detalhe-evento-header">
-          <button onClick={handleBackClick} className="back-button no-hover">←</button>
-          <button onClick={handleLikeClick} className="like-button">❤️ {event.numeroFavoritos}</button>
+          <BackButton to="/upcoming-events" />
+          <CurtidasButton eventId={eventId} initialLikesCount={event.numeroFavoritos} />
         </div>
         <div className="detalhe-evento-foto">
           <img src={event.fotoUrl} alt={event.nome} />

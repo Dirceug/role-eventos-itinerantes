@@ -5,6 +5,8 @@ import eventoBase from '../img/eventoBase.jpeg';
 import Navbar from './Navbar';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
+import CurtidasButton from './CurtidasButton';
+import CardapioButton from './CardapioButton';
 
 const ListaEventos = () => {
   const [events, setEvents] = useState([]);
@@ -50,30 +52,45 @@ const ListaEventos = () => {
       <Navbar />
       <div className="upcoming-events-container">
         {events.map(event => (
-          <button
+          <div
             key={event._id}
-            className="event-button"
+            className="event"
             style={{ backgroundImage: `url(${event.fotoUrl || eventoBase})` }}
-            onClick={() => handleEventClick(event._id)}
           >
             <div className="event-overlay">
-              <h2>{event.nome}</h2>
-              <p>{event.descricao.length > 244 ? `${event.descricao.substring(0, 241)}...` : event.descricao}</p>
+              <button
+                className="event-button event-title"
+                onClick={() => handleEventClick(event._id)}
+              >
+                <h2>{event.nome}</h2>
+              </button>
+              <button
+                className="event-button event-description"
+                onClick={() => handleEventClick(event._id)}
+              >
+                <p>{event.descricao.length > 244 ? `${event.descricao.substring(0, 241)}...` : event.descricao}</p>
+              </button>
               <div className="event-details">
                 {event.dataEvento && event.dataEvento.map((data, index) => (
-                  <div key={index} className="event-date">
+                  <button
+                    key={index}
+                    className="event-date"
+                    onClick={() => handleEventClick(event._id)}
+                  >
                     <p className="date">{new Date(data.dataAbertura).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</p>
                     <p className="time">{data.horaAbertura}</p>
                     <p className="time">{data.horaFechamento}</p>
-                  </div>
+                  </button>
                 ))}
               </div>
               <div className="event-likes">
-                <span className="heart">❤️</span>
-                <span className="likes">{event.numeroFavoritos}</span>
+                <CurtidasButton eventId={event._id} initialLikesCount={event.numeroFavoritos} />
+              </div>
+              <div className="event-barracas">
+                <CardapioButton label="Ver Barracas" eventId={event._id} size="40px" />
               </div>
             </div>
-          </button>
+          </div>
         ))}
       </div>
     </>

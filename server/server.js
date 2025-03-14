@@ -31,6 +31,8 @@ const eventRoutes = require('./routes/events');
 const barracaRoutes = require('./routes/barracas');
 const cardapioRoutes = require('./routes/cardapios');
 const pedidoRoutes = require('./routes/pedidos');
+const curtidasRoutes = require('./routes/curtidas'); // Nova rota para curtidas
+const amizadesRoutes = require('./routes/amizades'); // Nova rota para amizades
 
 app.use('/api/users', userRoutes); // A rota de usuários já tem tratamento específico
 app.use('/api/transactions', verifyToken, transactionRoutes);
@@ -38,6 +40,8 @@ app.use('/api/events', verifyToken, eventRoutes);
 app.use('/api/events/:eventId', verifyToken, barracaRoutes); // Proteger a rota
 app.use('/api/events/:eventId/barracas/:barracaId', verifyToken, cardapioRoutes); // Proteger a rota
 app.use('/api/pedidos', verifyToken, pedidoRoutes); // Proteger a rota
+app.use('/api/curtidas', verifyToken, curtidasRoutes); // Nova rota para curtidas
+app.use('/api/amizades', verifyToken, amizadesRoutes); // Nova rota para amizades
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

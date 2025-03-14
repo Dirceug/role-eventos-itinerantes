@@ -51,38 +51,4 @@ router.post('/', verifyToken, async (req, res) => {
   }
 });
 
-// POST like an event
-router.post('/:id/like', verifyToken, async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
-    const { userId } = req.body;
-    console.log('Liking event ID:', req.params.id, 'by user ID:', userId);
-    const event = await Event.findById(req.params.id).session(session);
-
-    if (!event) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(404).json({ message: 'Event not found' });
-    }
-
-    // Adicionar a lógica para verificar se o usuário já curtiu o evento aqui, se necessário
-
-    event.numeroFavoritos += 1;
-    await event.save({ session });
-
-    await session.commitTransaction();
-    session.endSession();
-
-    console.log('Event liked:', event);
-    res.status(200).json(event);
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    console.error('Error liking event:', error);
-    res.status(500).json({ message: 'Error liking event', error });
-  }
-});
-
 module.exports = router;

@@ -1,7 +1,7 @@
 const express = require('express');
 const admin = require('../firebase'); // Importando a inicialização do Firebase
 const router = express.Router();
-const User = require('../models/user');
+const { User } = require('../models/user'); // Importando o modelo User corretamente
 const verifyToken = require('../middleware/authenticateToken'); // Importar o middleware de autenticação
 
 // Middleware para logar todas as requisições
@@ -161,6 +161,51 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Error logging in user:', error);
     res.status(401).json({ message: 'Token inválido', error: error.message });
+  }
+});
+
+// POST like an event (Proteger a rota)
+router.post('/likeEvent', verifyToken, async (req, res) => {
+  const { eventoId, titulo, data, tipo } = req.body;
+
+  try {
+    console.log('Liking event for UID:', req.uid);
+    const user = await User.findOne({ firebaseUid: req.uid });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    // Verifica se o evento já está nos favoritos
+    const eventExists = user.favoritos.some(fav => fav.eventoId === eventoId);
+    if (eventExists) {
+      return res.status(400).json({ message: 'Evento já está nos favoritos' });
+    }
+
+    // Adiciona o evento aos favoritos
+    user.favoritos.push({ eventoId, titulo, data, tipo });
+    await user.save();
+
+    console.log('Event liked:', user.favoritos);
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error liking event:', error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// GET all friends of a user (Proteger a rota)
+router.get('/friends', verifyToken, async (req, res) => {
+  try {
+    console.log('Fetching friends for UID:', req.uid);
+    const user = await User.findOne({ firebaseUid: req.uid });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    res.json(user.conexoes.amigos);
+  } catch (error) {
+    console.error('Error fetching friends:', error);
+    res.status(500).json({ message: 'Error fetching friends', error });
   }
 });
 
