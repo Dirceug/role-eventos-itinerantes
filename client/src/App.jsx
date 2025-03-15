@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { UserProvider } from './contexts/UserContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -19,6 +19,18 @@ import DetalheCardapio from './components/DetalheCardapio';
 import './App.css';
 
 function App() {
+  const [showAdicionarSaldo, setShowAdicionarSaldo] = useState(false);
+  const [user, setUser] = useState(null);
+
+  const handleShowAdicionarSaldo = (user) => {
+    setUser(user);
+    setShowAdicionarSaldo(true);
+  };
+
+  const handleCloseAdicionarSaldo = () => {
+    setShowAdicionarSaldo(false);
+  };
+
   return (
     <UserProvider>
       <Router>

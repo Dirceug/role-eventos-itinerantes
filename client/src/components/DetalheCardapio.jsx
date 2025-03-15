@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './DetalheCardapio.css';
 import Navbar from './Navbar';
 import Cookies from 'js-cookie';
+import Comprar from './Comprar';
+import UserContext from '../contexts/UserContext'; // Importando o contexto do usuário
+import BackButton from './BackButton'; // Importando o BackButton
 
 const DetalheCardapio = () => {
   const { eventId, barracaId } = useParams();
   const navigate = useNavigate();
   const [barraca, setBarraca] = useState(null);
+  const [pratoSelecionado, setPratoSelecionado] = useState(null); // Estado para o prato selecionado
+  const { user } = useContext(UserContext); // Obtendo o usuário logado do contexto
 
   useEffect(() => {
     const fetchBarraca = async () => {
@@ -46,19 +51,19 @@ const DetalheCardapio = () => {
     return <div>Loading...</div>;
   }
 
-  const handleBackClick = () => {
-    navigate(-1); // Retorna para a última página
+  const handleCompraClick = (prato) => {
+    setPratoSelecionado(prato); // Define o prato selecionado e exibe o componente Comprar
   };
 
-  const handleCompraClick = (pratoNome) => {
-    alert(`${pratoNome} comprado. Parabéns pela compra.`);
-  };
+  if (pratoSelecionado) {
+    return <Comprar user={user} prato={pratoSelecionado} eventId={eventId} barracaId={barracaId} barracaNome={barraca.nome} />;
+  }
 
   return (
     <div className="container">
-      <Navbar />
+      <Navbar eventId={eventId} />
       <div className="detalhe-cardapio-container">
-        <button onClick={handleBackClick} className="back-button no-hover">←</button>
+        <BackButton />
         <h1>{barraca.nome}</h1>
         <div className="pratos-list">
           {barraca.cardapio.filter(prato => prato.status === 'ativo').sort((a, b) => a.nome.localeCompare(b.nome)).map(prato => (
@@ -69,7 +74,7 @@ const DetalheCardapio = () => {
                 <p className="prato-ingredientes">{prato.ingredientes}</p>
                 <div className="prato-bottom">
                   <h3 className="prato-valor">R$ {prato.valor}</h3>
-                  <button onClick={() => handleCompraClick(prato.nome)}>Comprar</button>
+                  <button onClick={() => handleCompraClick(prato)}>Comprar</button>
                 </div>
               </div>
             </div>

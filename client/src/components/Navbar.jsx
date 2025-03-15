@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserContext from '../contexts/UserContext';
 import './Navbar.css';
+import CardapioButtonBranco from './CardapioButtonBranco';
 
-function Navbar() {
+function Navbar({ eventId, onShowAdicionarSaldo }) {
   const { user } = useContext(UserContext);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
@@ -29,6 +30,10 @@ function Navbar() {
     setIsHamburgerMenuOpen(!isHamburgerMenuOpen);
   };
 
+  const handleCarteiraClick = () => {
+    onShowAdicionarSaldo(user);
+  };
+
   return (
     <nav className="navbar">
       <button className="hamburger-menu" onClick={toggleHamburgerMenu}>
@@ -49,6 +54,7 @@ function Navbar() {
         <li><Link to="/comandas">Comandas</Link></li>
         <li><Link to="/signup">Signup</Link></li>
       </ul>
+      {eventId && <CardapioButtonBranco eventId={eventId} label="Cardápio" />}
       {user && (
         <div className="navbar-menu">
           <img

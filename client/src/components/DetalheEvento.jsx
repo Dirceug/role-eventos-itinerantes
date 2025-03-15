@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './DetalheEvento.css';
 import Navbar from './Navbar';
 import Cookies from 'js-cookie';
@@ -60,10 +60,10 @@ const DetalheEvento = (props) => {
 
   return (
     <div className="container">
-      <Navbar />
+      <Navbar eventId={eventId} />
       <div className="detalhe-evento-container">
         <div className="detalhe-evento-header">
-          <BackButton to="/upcoming-events" />
+          <BackButton />
           <CurtidasButton eventId={eventId} initialLikesCount={event.numeroFavoritos} />
         </div>
         <div className="detalhe-evento-foto">

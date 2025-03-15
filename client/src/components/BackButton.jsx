@@ -2,11 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './BackButton.css';
 
-const BackButton = ({ to }) => {
+const BackButton = () => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
-    navigate(to);
+    navigate(-1); // Volta para a última página
   };
 
   return (

@@ -1,26 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const Transaction = require('../models/transaction');
+const { obterTransacoes, criarTransacao, obterSaldoUsuario } = require('../controllers/transactionController');
 
 // GET all transactions
-router.get('/', async (req, res) => {
-  try {
-    const transactions = await Transaction.find();
-    res.json(transactions);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+router.get('/', obterTransacoes);
+
+// GET user saldo
+router.get('/saldo/:usuarioId', obterSaldoUsuario);
 
 // POST create a new transaction
-router.post('/', async (req, res) => {
-  const transaction = new Transaction(req.body);
-  try {
-    const newTransaction = await transaction.save();
-    res.status(201).json(newTransaction);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
+router.post('/', criarTransacao);
 
 module.exports = router;

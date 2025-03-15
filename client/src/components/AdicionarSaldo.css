@@ -1,0 +1,66 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.adicionar-saldo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border: 2px solid #EE7F43;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+  margin-top: 20px;
+}
+
+.username {
+  color: white;
+  background-color: #EE7F43;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  text-align: center;
+}
+
+.saldo {
+  color: white;
+  background-color: #EE7F43;
+  padding: 20px;
+  border-radius: 5px;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.input-container label {
+  margin-bottom: 5px;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.input-container button {
+  background-color: #EE7F43;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
