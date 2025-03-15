@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './ListaBarracas.css';
 import Navbar from './Navbar';
 import Cookies from 'js-cookie';
-import BackButton from './BackButton';
+import BackButton from './buttons/BackButton';
 
 const ListaBarracas = () => {
-  const { eventId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
+  const { eventId, userId } = location.state || {};
   const [event, setEvent] = useState(null);
   const [barracas, setBarracas] = useState([]);
 
@@ -35,7 +36,9 @@ const ListaBarracas = () => {
       }
     };
 
-    fetchEvent();
+    if (eventId) {
+      fetchEvent();
+    }
   }, [eventId]);
 
   if (!event) {
@@ -71,7 +74,7 @@ const ListaBarracas = () => {
         </div>
       </div>
     </div>
-    </>
+                  </>
   );
 };
 

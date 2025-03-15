@@ -48,6 +48,7 @@ function App() {
             <Route path="/event/:eventId/details" element={<ProtectedRoute element={<DetalheEvento />} />} />
             <Route path="/event/:eventId/barracas" element={<ProtectedRoute element={<ListaBarracas />} />} />
             <Route path="/event/:eventId/barraca/:barracaId/cardapio" element={<ProtectedRoute element={<DetalheCardapio />} />} />
+            <Route path="/lista-barracas" element={<ProtectedRoute element={<ListaBarracas />} />} /> {/* Adicionando a nova rota */}
           </Routes>
         </ErrorBoundary>
       </Router>

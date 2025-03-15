@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import CoracaoPreenchido from '../img/icones/coracaoPreenchido.png';
-import CoracaoVazado from '../img/icones/coracaoVazado.png'
+import CoracaoPreenchido from '../../img/icones/coracaoPreenchido.png';
+import CoracaoVazado from '../../img/icones/coracaoVazado.png'
 import './CurtidasButton.css';
-import UserContext from '../contexts/UserContext';
+import UserContext from '../../contexts/UserContext';
 
 const CurtidasButton = ({ eventId, initialLikesCount }) => {
   const [liked, setLiked] = useState(false);

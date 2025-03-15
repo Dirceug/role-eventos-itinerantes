@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 import Cookies from 'js-cookie';
 import Comprar from './Comprar';
 import UserContext from '../contexts/UserContext';
-import BackButton from './BackButton';
+import BackButton from './buttons/BackButton';
 
 const DetalheCardapio = () => {
   const { eventId, barracaId } = useParams();
@@ -53,8 +53,9 @@ const DetalheCardapio = () => {
   }
 
   return (
-    <div className="container">
+    <>
       <Navbar eventId={eventId} />
+    <div className="container">
       <div className="detalhe-cardapio-container">
         <BackButton />
         <h1>{barraca.nome}</h1>
@@ -75,6 +76,7 @@ const DetalheCardapio = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

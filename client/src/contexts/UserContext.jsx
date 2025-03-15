@@ -15,7 +15,6 @@ export const UserProvider = ({ children }) => {
       }
 
       try {
-        console.log('Fetching user with token:', token);
         const response = await fetch('http://localhost:5000/api/users/me', {
           method: 'GET',
           headers: {
@@ -23,7 +22,6 @@ export const UserProvider = ({ children }) => {
             'Authorization': `Bearer ${token}`
           }
         });
-        console.log('Response status:', response.status);
         if (!response.ok) {
           if (response.status === 404) {
             console.error('User not found');
@@ -34,7 +32,6 @@ export const UserProvider = ({ children }) => {
           }
         } else {
           const data = await response.json();
-          console.log('User data fetched:', data);
           setUser(data);
         }
       } catch (error) {

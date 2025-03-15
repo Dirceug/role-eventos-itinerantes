@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LabelInput from '../../components/LabelInput';
-import ButtonGrande from '../../components/ButtonGrande';
+import ButtonGrande from '../../components/buttons/ButtonGrande';
 import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 import '../../App.css';
 import '../Pages.css';

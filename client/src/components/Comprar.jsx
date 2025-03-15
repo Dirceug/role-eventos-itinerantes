@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
 import './Comprar.css';
-import BackButton from './BackButton';
+import BackButton from './buttons/BackButton';
 
 const Comprar = ({ user, prato, eventId, barracaId, barracaNome }) => {
   const [quantidade, setQuantidade] = useState(1); // Inicializar com 1 unidade
@@ -24,8 +24,9 @@ const Comprar = ({ user, prato, eventId, barracaId, barracaNome }) => {
   };
 
   return (
-    <div className="container">
+    <>
       <Navbar eventId={eventId} />
+    <div className="container">
       <div className="comprar-container">
         <BackButton />
         <img src={prato.imagem} alt={prato.nome} className="prato-imagem" />
@@ -56,6 +57,7 @@ const Comprar = ({ user, prato, eventId, barracaId, barracaNome }) => {
         <button className="pedido-button" onClick={handlePedido}>Realizar Pedido</button>
       </div>
     </div>
+    </>
   );
 };
 

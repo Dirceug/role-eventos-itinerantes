@@ -5,8 +5,8 @@ import eventoBase from '../img/eventoBase.jpeg';
 import Navbar from './Navbar';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
-import CurtidasButton from './CurtidasButton';
-import CardapioButton from './CardapioButton';
+import CurtidasButton from './buttons/CurtidasButton';
+import CardapioButton from './buttons/CardapioButton';
 
 const ListaEventos = () => {
   const [events, setEvents] = useState([]);

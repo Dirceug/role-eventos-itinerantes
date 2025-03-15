@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Joi from 'joi';
 import LabelInput from '../../components/LabelInput';
-import ButtonGrande from '../../components/ButtonGrande';
+import ButtonGrande from '../../components/buttons/ButtonGrande';
 import UserContext from '../../contexts/UserContext';
 import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 import '../../App.css';

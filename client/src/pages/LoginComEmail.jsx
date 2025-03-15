@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ButtonGrande from '../components/ButtonGrande';
-import './Pages.css'
-import '../components/LoginComponent.css';  // Certifique-se de importar os estilos do LoginComponent
-import LabelInput from '../components/LabelInput'
-
-
+import ButtonGrande from '../components/buttons/ButtonGrande';
+import './Pages.css';
+import '../components/LoginComponent.css'; // Certifique-se de importar os estilos do LoginComponent
+import LabelInput from '../components/LabelInput';
+import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 
 function AuthEmailPassword() {
   const navigate = useNavigate();
@@ -20,6 +19,7 @@ function AuthEmailPassword() {
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
+        Cookies.set('authToken', result.user.accessToken); // Definir o cookie de autenticação
         navigate('/usuarios');
       })
       .catch((error) => {
@@ -34,16 +34,6 @@ function AuthEmailPassword() {
       <LabelInput label="E-mail: " type="text" placeholder="nome@email.com" value={email} onChange={(e) => setEmail(e.target.value)} />
       <LabelInput label="Senha: " type="password" placeholder="**********" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
-      {/*<div>
-        <label>
-          Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
-        <label>
-          Senha:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
-      </div>*/}
       <ButtonGrande onClick={handleEmailLogin} className="invertido">
       Login
       </ButtonGrande>

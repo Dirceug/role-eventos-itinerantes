@@ -4,8 +4,8 @@ import './DetalheEvento.css';
 import Navbar from './Navbar';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
-import CurtidasButton from './CurtidasButton';
-import BackButton from './BackButton';
+import CurtidasButton from './buttons/CurtidasButton';
+import BackButton from './buttons/BackButton';
 
 const DetalheEvento = (props) => {
   const { eventId } = useParams();
@@ -90,9 +90,7 @@ const DetalheEvento = (props) => {
               <img src="/img/icones/whatsapp.png" alt="WhatsApp" />
             </button>
           </div>
-          <div className="cardapio-button">
-            <button onClick={handleCardapioClick}>Ver Barracas</button>
-          </div>
+
         </div>
       </div>
     </div>
