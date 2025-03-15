@@ -29,13 +29,12 @@ html, body, .container {
 .detalhe-evento-header {
   display: flex;
   justify-content: flex-end;
-  /*align-items: center; /* Garantir que os elementos estejam alinhados verticalmente */
   width: 100%;
   padding: 10px;
   position: fixed;
-  top: 60px; /* Ajuste para acomodar a altura da Navbar */
-  background-color: white; /* Fundo semi-transparente para destacar os botões */
-  z-index: 500; /* Menor do que a Navbar */
+  top: 60px; 
+  background-color: none; 
+  z-index: 500;
 }
 
 .back-button {
@@ -70,8 +69,8 @@ html, body, .container {
 }
 
 .detalhe-evento-info p {
-  line-height: 1.5; /* Define o espaçamento entre linhas */
-  margin-bottom: 1em; /* Espaçamento entre parágrafos */
+  line-height: 1.5;
+  margin-bottom: 1em;
   width: 100%;
 }
 

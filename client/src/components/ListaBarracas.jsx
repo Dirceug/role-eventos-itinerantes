@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './ListaBarracas.css';
 import Navbar from './Navbar';
 import Cookies from 'js-cookie';
+import BackButton from './BackButton';
 
 const ListaBarracas = () => {
   const { eventId } = useParams();
@@ -19,7 +20,6 @@ const ListaBarracas = () => {
       }
 
       try {
-        console.log('Fetching event with ID:', eventId, 'using token:', token);
         const response = await fetch(`http://localhost:5000/api/events/${eventId}`, {
           method: 'GET',
           headers: {
@@ -27,9 +27,7 @@ const ListaBarracas = () => {
             'Authorization': `Bearer ${token}`
           }
         });
-        console.log('Response status:', response.status);
         const data = await response.json();
-        console.log('Event data fetched:', data);
         setEvent(data);
         setBarracas(data.barracas.filter(barraca => barraca.status === 'ativo'));
       } catch (error) {
@@ -44,19 +42,16 @@ const ListaBarracas = () => {
     return <div>Loading...</div>;
   }
 
-  const handleBackClick = () => {
-    navigate(-1); // Retorna para a última página
-  };
-
   const handleCardapioClick = (barracaId) => {
     navigate(`/event/${eventId}/barraca/${barracaId}/cardapio`);
   };
 
   return (
-    <div className="container">
+    <>
       <Navbar />
+    <div className="container">
       <div className="lista-barracas-container">
-        <button onClick={handleBackClick} className="back-button no-hover">←</button>
+        <BackButton />
         <h1>{event.nome}</h1>
         <div className="barracas-list">
           {barracas.map(barraca => (
@@ -76,6 +71,7 @@ const ListaBarracas = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

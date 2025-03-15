@@ -22,7 +22,6 @@ const ListaEventos = () => {
       }
 
       try {
-        console.log('Fetching events from API with token:', token);
         const response = await fetch('http://localhost:5000/api/events', {
           method: 'GET',
           headers: {
@@ -30,9 +29,7 @@ const ListaEventos = () => {
             'Authorization': `Bearer ${token}`
           }
         });
-        console.log('Response status:', response.status);
         const data = await response.json();
-        console.log('Events fetched:', data);
         setEvents(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Error fetching events:', error);
@@ -43,7 +40,6 @@ const ListaEventos = () => {
   }, []);
 
   const handleEventClick = (eventId) => {
-    console.log('Navigating to event details for event ID:', eventId);
     navigate(`/event/${eventId}/details`);
   };
 

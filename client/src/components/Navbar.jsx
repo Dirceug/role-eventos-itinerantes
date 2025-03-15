@@ -10,15 +10,8 @@ function Navbar({ eventId, onShowAdicionarSaldo }) {
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      console.log('User in Navbar:', user);
-      if (user.photoURL) {
-        console.log('User photoURL:', user.photoURL);
-      } else {
-        console.log('User does not have a photoURL');
-      }
-    } else {
-      console.log('No user logged in');
+    if (!user) {
+      console.error('No user logged in');
     }
   }, [user]);
 

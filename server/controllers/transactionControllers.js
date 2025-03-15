@@ -63,6 +63,16 @@ const criarTransacao = async (req, res) => {
   }
 };
 
+// Obter todas as transações
+const obterTransacoes = async (req, res) => {
+  try {
+    const transacoes = await Transaction.find();
+    res.json(transacoes);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   obterTransacoes,
   criarTransacao,

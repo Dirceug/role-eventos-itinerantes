@@ -6,14 +6,12 @@ const verifyToken = require('../middleware/authenticateToken'); // Importar o mi
 
 // Middleware para logar todas as requisições
 router.use((req, res, next) => {
-  console.log(`${req.method} ${req.url} - Body:`, req.body);
   next();
 });
 
 // GET all users (Proteger a rota)
 router.get('/', verifyToken, async (req, res) => {
   try {
-    console.log('Fetching all users');
     const users = await User.find();
     res.json(users);
   } catch (err) {
@@ -25,7 +23,6 @@ router.get('/', verifyToken, async (req, res) => {
 // GET user information (Proteger a rota)
 router.get('/me', verifyToken, async (req, res) => {
   try {
-    console.log('Fetching user info for UID:', req.uid);
     const user = await User.findOne({ firebaseUid: req.uid });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -42,7 +39,6 @@ router.post('/register', async (req, res) => {
   const { displayName, email, photoURL, firebaseUid, emailVerified, isAnonymous } = req.body;
 
   try {
-    console.log('Registering new user:', req.body);
     // Verifica se o usuário já existe no banco de dados
     let user = await User.findOne({ email: email });
     if (!user) {
@@ -57,7 +53,6 @@ router.post('/register', async (req, res) => {
       });
 
       const newUser = await user.save();
-      console.log('User registered:', newUser);
       return res.status(201).json(newUser);
     } else {
       // Se o usuário já existe, atualize os detalhes
@@ -68,7 +63,6 @@ router.post('/register', async (req, res) => {
       user.isAnonymous = isAnonymous;
 
       const updatedUser = await user.save();
-      console.log('User updated:', updatedUser);
       return res.status(200).json(updatedUser);
     }
   } catch (error) {
@@ -82,7 +76,6 @@ router.post('/updateAddress', verifyToken, async (req, res) => {
   const { tipo, cep, rua, numero, complemento, bairro, cidade, estado } = req.body;
 
   try {
-    console.log('Updating address for UID:', req.uid);
     // Encontra o usuário pelo UID do Firebase
     const user = await User.findOne({ firebaseUid: req.uid });
     if (!user) {
@@ -103,7 +96,6 @@ router.post('/updateAddress', verifyToken, async (req, res) => {
     });
 
     await user.save();
-    console.log('Address updated:', user.endereco);
     res.status(200).json(user);
   } catch (error) {
     console.error('Error updating address:', error);
@@ -116,7 +108,6 @@ router.post('/updateBankAccount', verifyToken, async (req, res) => {
   const { banco, agencia, conta } = req.body;
 
   try {
-    console.log('Updating bank account for UID:', req.uid);
     // Encontra o usuário pelo UID do Firebase
     const user = await User.findOne({ firebaseUid: req.uid });
     if (!user) {
@@ -131,7 +122,6 @@ router.post('/updateBankAccount', verifyToken, async (req, res) => {
     };
 
     await user.save();
-    console.log('Bank account updated:', user.contaBancaria);
     res.status(200).json(user);
   } catch (error) {
     console.error('Error updating bank account:', error);
@@ -144,7 +134,6 @@ router.post('/login', async (req, res) => {
   const { idToken } = req.body; // Receber o idToken do frontend
 
   try {
-    console.log('Logging in user with token:', idToken);
     // Verifica o token de ID no Firebase Auth
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     const uid = decodedToken.uid;
@@ -156,7 +145,6 @@ router.post('/login', async (req, res) => {
     }
 
     // Usuário autenticado com sucesso
-    console.log('User authenticated:', user);
     res.status(200).json({ message: 'Login bem-sucedido', user: user });
   } catch (error) {
     console.error('Error logging in user:', error);
@@ -169,7 +157,6 @@ router.post('/likeEvent', verifyToken, async (req, res) => {
   const { eventoId, titulo, data, tipo } = req.body;
 
   try {
-    console.log('Liking event for UID:', req.uid);
     const user = await User.findOne({ firebaseUid: req.uid });
     if (!user) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
@@ -185,7 +172,6 @@ router.post('/likeEvent', verifyToken, async (req, res) => {
     user.favoritos.push({ eventoId, titulo, data, tipo });
     await user.save();
 
-    console.log('Event liked:', user.favoritos);
     res.status(200).json(user);
   } catch (error) {
     console.error('Error liking event:', error);
@@ -196,7 +182,6 @@ router.post('/likeEvent', verifyToken, async (req, res) => {
 // GET all friends of a user (Proteger a rota)
 router.get('/friends', verifyToken, async (req, res) => {
   try {
-    console.log('Fetching friends for UID:', req.uid);
     const user = await User.findOne({ firebaseUid: req.uid });
     if (!user) {
       return res.status(404).json({ message: 'Usuário não encontrado' });

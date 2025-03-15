@@ -4,15 +4,15 @@ import './DetalheCardapio.css';
 import Navbar from './Navbar';
 import Cookies from 'js-cookie';
 import Comprar from './Comprar';
-import UserContext from '../contexts/UserContext'; // Importando o contexto do usuário
-import BackButton from './BackButton'; // Importando o BackButton
+import UserContext from '../contexts/UserContext';
+import BackButton from './BackButton';
 
 const DetalheCardapio = () => {
   const { eventId, barracaId } = useParams();
   const navigate = useNavigate();
   const [barraca, setBarraca] = useState(null);
-  const [pratoSelecionado, setPratoSelecionado] = useState(null); // Estado para o prato selecionado
-  const { user } = useContext(UserContext); // Obtendo o usuário logado do contexto
+  const [pratoSelecionado, setPratoSelecionado] = useState(null);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const fetchBarraca = async () => {
@@ -23,7 +23,6 @@ const DetalheCardapio = () => {
       }
 
       try {
-        console.log('Fetching barraca with eventId:', eventId, 'and barracaId:', barracaId, 'using token:', token);
         const response = await fetch(`http://localhost:5000/api/events/${eventId}/barracas/${barracaId}`, {
           method: 'GET',
           headers: {
@@ -31,9 +30,7 @@ const DetalheCardapio = () => {
             'Authorization': `Bearer ${token}`
           }
         });
-        console.log('Response status:', response.status);
         const data = await response.json();
-        console.log('Barraca data fetched:', data);
         setBarraca(data);
       } catch (error) {
         console.error('Error fetching barraca:', error);
@@ -43,16 +40,12 @@ const DetalheCardapio = () => {
     fetchBarraca();
   }, [eventId, barracaId]);
 
-  useEffect(() => {
-    alert(`Props recebidas: eventId=${eventId}, barracaId=${barracaId}`);
-  }, [eventId, barracaId]);
-
   if (!barraca) {
     return <div>Loading...</div>;
   }
 
   const handleCompraClick = (prato) => {
-    setPratoSelecionado(prato); // Define o prato selecionado e exibe o componente Comprar
+    setPratoSelecionado(prato);
   };
 
   if (pratoSelecionado) {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Amizade } = require('../models/user');
 const verifyToken = require('../middleware/authenticateToken'); // Importar o middleware de autenticação
+const mongoose = require('mongoose');
 
 // Middleware para logar todas as requisições
 router.use((req, res, next) => {
@@ -23,20 +24,28 @@ router.get('/', verifyToken, async (req, res) => {
 
 // POST create a new amizade (Proteger a rota)
 router.post('/', verifyToken, async (req, res) => {
-  const { usuarioId2, status } = req.body;
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
   try {
+    const { usuarioId2, status } = req.body;
     console.log('Creating new amizade for UID:', req.uid);
+
     const newAmizade = new Amizade({
-      usuarioId1: req.userId,
+      usuarioId1: req.uid,
       usuarioId2: usuarioId2,
       status: status
     });
 
-    await newAmizade.save();
+    await newAmizade.save({ session });
+    await session.commitTransaction();
+    session.endSession();
+
     console.log('Amizade created:', newAmizade);
     res.status(201).json(newAmizade);
   } catch (err) {
+    await session.abortTransaction();
+    session.endSession();
     console.error('Error creating amizade:', err);
     res.status(400).json({ message: err.message });
   }

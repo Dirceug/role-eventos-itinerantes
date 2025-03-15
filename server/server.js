@@ -20,7 +20,6 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Middleware para logar todas as requisições
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
   next();
 });
 

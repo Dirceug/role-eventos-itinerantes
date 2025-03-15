@@ -17,7 +17,6 @@ const ProtectedRoute = ({ element }) => {
       }
 
       try {
-        console.log('Verifying user with token:', token);
         const response = await fetch('http://localhost:5000/api/users/me', {
           method: 'GET',
           headers: {
@@ -26,7 +25,6 @@ const ProtectedRoute = ({ element }) => {
           }
         });
 
-        console.log('Response status:', response.status);
         if (!response.ok) {
           setIsLoading(false);
           if (response.status === 401) {
@@ -37,7 +35,6 @@ const ProtectedRoute = ({ element }) => {
           }
         } else {
           const userData = await response.json();
-          console.log('User data verified:', userData);
           setUser(userData); // Atualizar o contexto com os dados do usuário
           setIsLoading(false);
         }

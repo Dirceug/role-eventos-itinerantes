@@ -22,7 +22,6 @@ const DetalheEvento = (props) => {
       }
 
       try {
-        console.log('Fetching event with ID:', eventId, 'using token:', token);
         const response = await fetch(`http://localhost:5000/api/events/${eventId}`, {
           method: 'GET',
           headers: {
@@ -30,9 +29,7 @@ const DetalheEvento = (props) => {
             'Authorization': `Bearer ${token}`
           }
         });
-        console.log('Response status:', response.status);
         const data = await response.json();
-        console.log('Event data fetched:', data);
         setEvent(data);
       } catch (error) {
         console.error('Error fetching event:', error);
@@ -41,10 +38,6 @@ const DetalheEvento = (props) => {
 
     fetchEvent();
   }, [eventId]);
-
-  useEffect(() => {
-    console.log('Props recebidas no DetalheEvento:', props);
-  }, [props]);
 
   if (!event) {
     return <div>Loading...</div>;
@@ -59,8 +52,9 @@ const DetalheEvento = (props) => {
   };
 
   return (
-    <div className="container">
+    <>
       <Navbar eventId={eventId} />
+    <div className="container">
       <div className="detalhe-evento-container">
         <div className="detalhe-evento-header">
           <BackButton />
@@ -102,6 +96,7 @@ const DetalheEvento = (props) => {
         </div>
       </div>
     </div>
+            </>
   );
 };
 
