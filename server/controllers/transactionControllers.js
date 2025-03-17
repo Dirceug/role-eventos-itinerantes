@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Transaction = require('../models/transaction');
-const User = require('../models/user'); // Supondo que você tenha um modelo de usuário
+const {User} = require('../models/user'); 
 
 // Função para calcular o saldo do usuário
 const calcularSaldoUsuario = async (usuarioId) => {
@@ -25,6 +25,8 @@ const criarTransacao = async (req, res) => {
   session.startTransaction();
 
   try {
+    console.log('Requisição recebida para criar transação:', req.body);
+
     const { usuarioId, eventoId, valor, tipo, descricao } = req.body;
 
     // Verificar se o usuário existe
@@ -36,7 +38,10 @@ const criarTransacao = async (req, res) => {
 
     // Verificar o saldo do usuário
     const saldoAtual = await calcularSaldoUsuario(usuarioId);
+    console.log('Saldo atual do usuário:', saldoAtual);
+
     if (saldoAtual + valor < 0) {
+      console.error('Saldo insuficiente:', { saldoAtual, valor });
       throw new Error('Saldo insuficiente');
     }
 
@@ -48,15 +53,21 @@ const criarTransacao = async (req, res) => {
       valor,
       moeda: 'BRL',
       descricao,
-      status: 'concluída'
+      status: 'pendente'
     });
 
     const novaTransacao = await transacao.save({ session });
+    console.log('Transação criada:', novaTransacao);
+
+    // Atualizar status da transação após salvar
+    novaTransacao.status = 'concluída';
+    await novaTransacao.save({ session });
 
     await session.commitTransaction();
     res.status(201).json(novaTransacao);
   } catch (err) {
     await session.abortTransaction();
+    console.error('Erro ao criar transação:', err.message);
     res.status(400).json({ message: err.message });
   } finally {
     session.endSession();

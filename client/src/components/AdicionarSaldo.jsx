@@ -1,76 +1,158 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import Modal from 'react-modal';
 import axios from 'axios';
+import { ScaleLoader } from 'react-spinners';
+import Joi from 'joi';
 import './AdicionarSaldo.css';
+import UserContext from '../contexts/UserContext';
 
-const AdicionarSaldo = ({ user, onClose }) => {
-  const [saldo, setSaldo] = useState(0.00);
+const SaldoLoader = () => (
+  <div className="loader-container">
+    <ScaleLoader color="#EE7F43" height={100} radius={15} speedMultiplier={1} width={1} />
+  </div>
+);
+
+Modal.setAppElement('#root'); // Define o elemento raiz da sua aplicação
+
+const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
+  const { loadingUser } = useContext(UserContext);
+  const [saldo, setSaldo] = useState(null);
   const [valor, setValor] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [loadingSaldo, setLoadingSaldo] = useState(true);
+  const [error, setError] = useState('');
+  const [userDisplayName, setUserDisplayName] = useState('');
 
   useEffect(() => {
+    if (!userId) {
+      console.error("User ID is undefined");
+      return;
+    }
+
     const fetchSaldo = async () => {
       try {
-        const response = await axios.get(`/api/users/${user._id}/saldo`);
-        // Verifique se o saldo é um número e defina o valor padrão se não for
-        const saldoObtido = response.data.saldo;
-        setSaldo(isNaN(saldoObtido) ? 0.00 : saldoObtido);
+        const response = await axios.get(`http://localhost:5000/api/transactions/saldo/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        setSaldo(response.data.saldo);
+        setLoadingSaldo(false);
       } catch (error) {
         console.error('Erro ao buscar saldo:', error);
-        setSaldo(0.00); // Defina o valor padrão em caso de erro
+        setLoadingSaldo(false);
+      }
+    };
+
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        setUserDisplayName(response.data.displayName);
+      } catch (error) {
+        console.error('Erro ao buscar usuário:', error);
       }
     };
 
     fetchSaldo();
-  }, [user._id]);
+    fetchUser();
+  }, [userId, token]);
 
-  const handleValorChange = (e) => {
-    const value = e.target.value.replace(/[^\d.,]/g, '').replace(',', '.');
-    setValor(value);
+  const schema = Joi.object({
+    valor: Joi.number().min(10).max(500).required()
+      .messages({
+        'number.base': 'Por favor, insira um valor válido.',
+        'number.min': 'O valor mínimo é R$10,00.',
+        'number.max': 'O valor máximo é R$500,00.'
+      })
+  });
+
+  const handleChange = (e) => {
+    const formattedValue = e.target.value.replace(/[^0-9.,]/g, '').replace(/,/g, '.');
+    setValor(formattedValue);
   };
 
-  const handleAdicionarSaldo = async () => {
-    try {
-      const novoValor = parseFloat(valor);
-      if (isNaN(novoValor) || novoValor <= 0) {
-        alert('Por favor, insira um valor válido.');
-        return;
-      }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const parsedValor = parseFloat(valor);
+    const { error } = schema.validate({ valor: parsedValor });
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    setError('');
+    setLoading(true);
 
-      await axios.post('/api/transactions', {
-        usuarioId: user._id,
-        eventoId: null,
-        tipo: 'adição de saldo',
-        valor: novoValor,
-        moeda: 'BRL',
-        descricao: 'Adição de saldo pelo usuário',
-        status: 'concluída'
+    const transactionData = {
+      usuarioId: userId,
+      eventoId: null,
+      valor: parsedValor,
+      moeda: 'BRL',
+      tipo: 'adição de saldo',
+      descricao: 'Adição de saldo via frontend',
+      status: 'pendente'
+    };
+
+    console.log('Enviando transação:', transactionData);
+
+    try {
+      await axios.post('http://localhost:5000/api/transactions', transactionData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
 
-      setSaldo(saldo + novoValor);
-      setValor('');
-      alert('Saldo adicionado com sucesso!');
+      setLoading(false);
+      onRequestClose();
     } catch (error) {
       console.error('Erro ao adicionar saldo:', error);
-      alert('Ocorreu um erro ao adicionar saldo. Tente novamente.');
+      setLoading(false);
     }
   };
 
+  if (loadingUser) {
+    return <SaldoLoader />;
+  }
+
   return (
-    <div className="adicionar-saldo-container">
-      <h3 className="username">{user.displayName}</h3>
-      <h1 className="saldo">R$ {saldo.toFixed(2)}</h1>
-      <div className="input-container">
-        <label htmlFor="valor">Valor a adicionar</label>
-        <input
-          type="text"
-          id="valor"
-          value={valor}
-          onChange={handleValorChange}
-          placeholder="R$ 0,00"
-        />
-        <button onClick={handleAdicionarSaldo}>Adicionar Saldo</button>
-        <button onClick={onClose}>Voltar</button>
-      </div>
-    </div>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      className="adicionar-saldo-modal"
+    >
+      {loadingSaldo ? (
+        <SaldoLoader />
+      ) : (
+        <div className="modal-content">
+          <button className="close-button" onClick={onRequestClose}>X</button>
+          <p className="saldo-info">Olá {userDisplayName}, seu saldo atual é de:</p>
+          <h1 className="saldo-valor">R$ {saldo}</h1>
+          <form onSubmit={handleSubmit}>
+            <label className="valor-label" htmlFor="valor">Valor a adicionar:</label>
+            <input
+              type="text"
+              id="valor"
+              className="valor-input"
+              value={valor}
+              onChange={handleChange}
+              placeholder="R$ 0,00"
+            />
+            {error && <p className="error-message">{error}</p>}
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? (
+                <ScaleLoader color="#EE7F43" height={20} radius={10} speedMultiplier={1} width={2} />
+              ) : (
+                'Adicionar saldo'
+              )}
+            </button>
+          </form>
+        </div>
+      )}
+    </Modal>
   );
 };
 

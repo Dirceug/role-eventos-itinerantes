@@ -8,12 +8,10 @@ router.get('/cardapio', async (req, res) => {
     const { eventId, barracaId } = req.params;
     const event = await Event.findById(eventId);
     if (!event) {
-      console.log(`Event not found for ID: ${eventId}`);
       return res.status(404).json({ message: 'Event not found' });
     }
     const barraca = event.barracas.id(barracaId);
     if (!barraca) {
-      console.log(`Barraca not found for ID: ${barracaId}`);
       return res.status(404).json({ message: 'Barraca not found' });
     }
     res.json(barraca.cardapio);
@@ -29,17 +27,14 @@ router.get('/cardapio/:cardapioId', async (req, res) => {
     const { eventId, barracaId, cardapioId } = req.params;
     const event = await Event.findById(eventId);
     if (!event) {
-      console.log(`Event not found for ID: ${eventId}`);
       return res.status(404).json({ message: 'Event not found' });
     }
     const barraca = event.barracas.id(barracaId);
     if (!barraca) {
-      console.log(`Barraca not found for ID: ${barracaId}`);
       return res.status(404).json({ message: 'Barraca not found' });
     }
     const cardapioItem = barraca.cardapio.id(cardapioId);
     if (!cardapioItem) {
-      console.log(`Cardapio item not found for ID: ${cardapioId}`);
       return res.status(404).json({ message: 'Cardapio item not found' });
     }
     res.json(cardapioItem);
@@ -56,17 +51,14 @@ router.get('/cardapio/search', async (req, res) => {
     const { name } = req.query;
     const event = await Event.findById(eventId);
     if (!event) {
-      console.log(`Event not found for ID: ${eventId}`);
       return res.status(404).json({ message: 'Event not found' });
     }
     const barraca = event.barracas.id(barracaId);
     if (!barraca) {
-      console.log(`Barraca not found for ID: ${barracaId}`);
       return res.status(404).json({ message: 'Barraca not found' });
     }
     const cardapioItem = barraca.cardapio.find(c => c.nome && c.nome.toLowerCase().includes(name.toLowerCase()));
     if (!cardapioItem) {
-      console.log(`Cardapio item not found with name: ${name}`);
       return res.status(404).json({ message: 'Cardapio item not found' });
     }
     res.json(cardapioItem);

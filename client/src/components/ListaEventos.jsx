@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ListaEventos.css';
 import eventoBase from '../img/eventoBase.jpeg';
-import Navbar from './Navbar';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
-import CurtidasButton from './buttons/CurtidasButton';
-import CardapioButton from './buttons/CardapioButton';
+
+const Navbar = lazy(() => import('./Navbar'))
+const CurtidasButton = lazy (() => import('./buttons/CurtidasButton'))
+const CardapioButton = lazy (() => import('./buttons/CardapioButton'))
 
 const ListaEventos = () => {
   const [events, setEvents] = useState([]);
@@ -43,9 +44,11 @@ const ListaEventos = () => {
     navigate(`/event/${eventId}/details`);
   };
 
+  const userToken = Cookies.get('authToken');
+
   return (
-    <>
-      <Navbar />
+    <Suspense fallback={<div>Carregando...</div>}>
+      <Navbar user={user} token={userToken} />
       <div className="upcoming-events-container">
         {events.map(event => (
           <div
@@ -89,7 +92,7 @@ const ListaEventos = () => {
           </div>
         ))}
       </div>
-    </>
+    </Suspense>
   );
 };
 

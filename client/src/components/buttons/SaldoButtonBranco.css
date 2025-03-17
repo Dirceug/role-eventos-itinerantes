@@ -1,4 +1,4 @@
-.cardapio-button-branco {
+.saldo-button-branco {
   background-color: #EE7F43;
   border: none;
   cursor: pointer;
@@ -6,38 +6,38 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
-  width: 60px; 
+  width: 50px; 
   height: 50px; 
   border-radius: 10px;
 }
 
-.cardapio-button-branco:hover {
+.saldo-button-branco:hover {
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.7);
 }
 
-.cardapio-content {
+.saldo-content {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.cardapio-icon {
+.saldo-icon {
   width: 30px; /* Tamanho explícito do ícone */
   height: 30px; /* Tamanho explícito do ícone */
   margin-bottom: 5px; /* Espaço entre o ícone e o texto */
   object-fit: contain; /* Garantir que a imagem mantenha sua proporção */
 }
 
-.cardapio-label {
+.saldo-label {
   color: white; /* Cor da letra branca */
   font-size: 14px;
   text-align: center;
 }
 
-.cardapio-button-branco:hover {
+.saldo-button-branco:hover {
   background-color: white; /* Fundo branco no hover */
 }
 
-.cardapio-button-branco:hover .cardapio-label {
+.saldo-button-branco:hover .saldo-label {
   color: #EE7F43; /* Cor da letra laranja no hover */
 }

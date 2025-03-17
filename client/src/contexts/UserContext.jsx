@@ -1,16 +1,20 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useMemo } from 'react';
 import Cookies from 'js-cookie';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+  console.log('UserProvider montado');
   const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       const token = Cookies.get('authToken');
+      console.log('Token obtido (UserContext):', token ? token.substring(0, 10) + '...' + token.substring(token.length - 10) : 'null');
       if (!token) {
         console.error('No token found');
+        setLoadingUser(false);
         return;
       }
 
@@ -32,22 +36,24 @@ export const UserProvider = ({ children }) => {
           }
         } else {
           const data = await response.json();
+          console.log('Dados do usuário recebidos:', data && data._id ? data._id : 'User ID not found');
           setUser(data);
+          console.log('Usuário definido no contexto:', data && data._id ? data._id : 'User not defined yet');
         }
       } catch (error) {
         console.error('Error fetching user:', error);
+      } finally {
+        setLoadingUser(false);
       }
     };
 
-    // Fetch user data immediately and then every 5 minutes
     fetchUser();
-    const interval = setInterval(fetchUser, 300000); // 300000 ms = 5 minutes
-
-    return () => clearInterval(interval);
   }, []);
 
+  const value = useMemo(() => ({ user, setUser, loadingUser }), [user, loadingUser]);
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );

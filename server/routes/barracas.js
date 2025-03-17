@@ -8,7 +8,6 @@ router.get('/barracas', async (req, res) => {
     const { eventId } = req.params;
     const event = await Event.findById(eventId).select('barracas');
     if (!event) {
-      console.log(`Event not found for ID: ${eventId}`);
       return res.status(404).json({ message: 'Event not found' });
     }
     res.json(event.barracas);
@@ -24,12 +23,10 @@ router.get('/barracas/:barracaId', async (req, res) => {
     const { eventId, barracaId } = req.params;
     const event = await Event.findById(eventId);
     if (!event) {
-      console.log(`Event not found for ID: ${eventId}`);
       return res.status(404).json({ message: 'Event not found' });
     }
     const barraca = event.barracas.id(barracaId);
     if (!barraca) {
-      console.log(`Barraca not found for ID: ${barracaId}`);
       return res.status(404).json({ message: 'Barraca not found' });
     }
     res.json(barraca);
@@ -46,12 +43,10 @@ router.get('/barracas/search', async (req, res) => {
     const { title } = req.query;
     const event = await Event.findById(eventId);
     if (!event) {
-      console.log(`Event not found for ID: ${eventId}`);
       return res.status(404).json({ message: 'Event not found' });
     }
     const barraca = event.barracas.find(b => b.nome && b.nome.toLowerCase().includes(title.toLowerCase()));
     if (!barraca) {
-      console.log(`Barraca not found with title: ${title}`);
       return res.status(404).json({ message: 'Barraca not found' });
     }
     res.json(barraca);

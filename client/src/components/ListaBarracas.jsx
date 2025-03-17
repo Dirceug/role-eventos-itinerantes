@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext, lazy, Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './ListaBarracas.css';
-import Navbar from './Navbar';
 import Cookies from 'js-cookie';
-import BackButton from './buttons/BackButton';
+import UserContext from '../contexts/UserContext';
+
+const Navbar = lazy(() => import('./Navbar'));
+const BackButton = lazy(() => import('./buttons/BackButton'));
 
 const ListaBarracas = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { eventId, userId } = location.state || {};
+  const { eventId } = location.state || {};
+  const { user } = useContext(UserContext);
   const [event, setEvent] = useState(null);
   const [barracas, setBarracas] = useState([]);
 
@@ -49,32 +52,34 @@ const ListaBarracas = () => {
     navigate(`/event/${eventId}/barraca/${barracaId}/cardapio`);
   };
 
+  const userToken = Cookies.get('authToken');
+
   return (
-    <>
-      <Navbar />
-    <div className="container">
-      <div className="lista-barracas-container">
-        <BackButton />
-        <h1>{event.nome}</h1>
-        <div className="barracas-list">
-          {barracas.map(barraca => (
-            <div key={barraca._id} className="barraca-card" onClick={() => handleCardapioClick(barraca._id)}>
-              <h2>{barraca.nome}</h2>
-              <h3>{barraca.descricao}</h3>
-              <ul className="cardapio-list">
-                {barraca.cardapio.filter(prato => prato.status === 'ativo').map(prato => (
-                  <li key={prato._id}>{prato.nome}</li>
-                ))}
-              </ul>
-              <div className="status">
-                <strong>Status:</strong> {barraca.status}
+    <Suspense fallback={<div>Carregando...</div>}>
+      <Navbar user={user} token={userToken} />
+      <div className="container">
+        <div className="lista-barracas-container">
+          <BackButton />
+          <h1>{event.nome}</h1>
+          <div className="barracas-list">
+            {barracas.map(barraca => (
+              <div key={barraca._id} className="barraca-card" onClick={() => handleCardapioClick(barraca._id)}>
+                <h2>{barraca.nome}</h2>
+                <h3>{barraca.descricao}</h3>
+                <ul className="cardapio-list">
+                  {barraca.cardapio.filter(prato => prato.status === 'ativo').map(prato => (
+                    <li key={prato._id}>{prato.nome}</li>
+                  ))}
+                </ul>
+                <div className="status">
+                  <strong>Status:</strong> {barraca.status}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-                  </>
+    </Suspense>
   );
 };
 

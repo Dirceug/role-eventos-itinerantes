@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
   usuarioId: { type: String, required: true, index: true },
-  eventoId: { type: String, required: true },
+  eventoId: { type: String, required: false },
   tipo: { type: String, required: true }, // compra, adição de saldo, retirada de saldo, transferência, etc.
   valor: { type: Number, required: true }, // positivo ou negativo
   moeda: { type: String, required: true },

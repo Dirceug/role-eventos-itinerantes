@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './DetalheCardapio.css';
-import Navbar from './Navbar';
 import Cookies from 'js-cookie';
-import Comprar from './Comprar';
 import UserContext from '../contexts/UserContext';
-import BackButton from './buttons/BackButton';
+
+const Navbar = lazy(() => import('./Navbar'));
+const BackButton = lazy(() => import('./buttons/BackButton'));
+const Comprar = lazy(() => import('./Comprar'));
 
 const DetalheCardapio = () => {
   const { eventId, barracaId } = useParams();
@@ -49,34 +50,40 @@ const DetalheCardapio = () => {
   };
 
   if (pratoSelecionado) {
-    return <Comprar user={user} prato={pratoSelecionado} eventId={eventId} barracaId={barracaId} barracaNome={barraca.nome} />;
+    return (
+      <Suspense fallback={<div>Carregando...</div>}>
+        <Comprar user={user} prato={pratoSelecionado} eventId={eventId} barracaId={barracaId} barracaNome={barraca.nome} />
+      </Suspense>
+    );
   }
 
+  const userToken = Cookies.get('authToken');
+
   return (
-    <>
-      <Navbar eventId={eventId} />
-    <div className="container">
-      <div className="detalhe-cardapio-container">
-        <BackButton />
-        <h1>{barraca.nome}</h1>
-        <div className="pratos-list">
-          {barraca.cardapio.filter(prato => prato.status === 'ativo').sort((a, b) => a.nome.localeCompare(b.nome)).map(prato => (
-            <div key={prato._id} className="prato-card">
-              <img src={prato.imagem} alt={prato.nome} className="prato-imagem" />
-              <div className="prato-info">
-                <h3 className="prato-nome">{prato.nome}</h3>
-                <p className="prato-ingredientes">{prato.ingredientes}</p>
-                <div className="prato-bottom">
-                  <h3 className="prato-valor">R$ {prato.valor}</h3>
-                  <button onClick={() => handleCompraClick(prato)}>Comprar</button>
+    <Suspense fallback={<div>Carregando...</div>}>
+      <Navbar user={user} token={userToken} eventId={eventId} />
+      <div className="container">
+        <div className="detalhe-cardapio-container">
+          <BackButton />
+          <h1>{barraca.nome}</h1>
+          <div className="pratos-list">
+            {barraca.cardapio.filter(prato => prato.status === 'ativo').sort((a, b) => a.nome.localeCompare(b.nome)).map(prato => (
+              <div key={prato._id} className="prato-card">
+                <img src={prato.imagem} alt={prato.nome} className="prato-imagem" />
+                <div className="prato-info">
+                  <h3 className="prato-nome">{prato.nome}</h3>
+                  <p className="prato-ingredientes">{prato.ingredientes}</p>
+                  <div className="prato-bottom">
+                    <h3 className="prato-valor">R$ {prato.valor}</h3>
+                    <button onClick={() => handleCompraClick(prato)}>Comprar</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-    </>
+    </Suspense>
   );
 };
 

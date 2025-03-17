@@ -1,8 +1,9 @@
-import React from 'react';
-import LoginComponent from '../components/LoginComponent'
+import React, {lazy }from 'react';
 import dancing from '../img/icones/dancing.png';
-
 import './Pages.css'
+
+const LoginComponent = lazy(() => import('../components/LoginComponent'))
+//import LoginComponent from '../components/LoginComponent'
 
 function Login() {
   return (

@@ -5,8 +5,10 @@ import cardapioIcon from '../../img/icones/cardapioBranco.png'; // Importar o í
 function CardapioButtonBranco({ eventId, userId, label, onClick }) {
   return (
     <button className="cardapio-button-branco" onClick={onClick}>
-      <img src={cardapioIcon} alt="Cardápio" className="cardapio-icon" />
-      {label}
+      <div className="cardapio-content">
+        <img src={cardapioIcon} alt="Cardápio" className="cardapio-icon" />
+        <span className="cardapio-label">{label}</span>
+      </div>
     </button>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { auth } from '../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
 import './Signup.css';
 

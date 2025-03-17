@@ -9,7 +9,6 @@ const verifyToken = (req, res, next) => {
 
   admin.auth().verifyIdToken(token)
     .then((decodedToken) => {
-      console.log('Token verified:', decodedToken);
       req.uid = decodedToken.uid;
       next();
     })
