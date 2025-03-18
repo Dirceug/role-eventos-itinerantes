@@ -3,9 +3,12 @@ const router = express.Router({ mergeParams: true });
 const Event = require('../models/event');
 
 // GET all barracas for a specific event
-router.get('/barracas', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const { eventId } = req.params;
+    if (!eventId) {
+      return res.status(400).json({ message: 'Event ID is required' });
+    }
     const event = await Event.findById(eventId).select('barracas');
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
@@ -18,9 +21,12 @@ router.get('/barracas', async (req, res) => {
 });
 
 // GET a specific barraca by ID
-router.get('/barracas/:barracaId', async (req, res) => {
+router.get('/:barracaId', async (req, res) => {
   try {
     const { eventId, barracaId } = req.params;
+    if (!eventId || !barracaId) {
+      return res.status(400).json({ message: 'Event ID and Barraca ID are required' });
+    }
     const event = await Event.findById(eventId);
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
@@ -37,10 +43,13 @@ router.get('/barracas/:barracaId', async (req, res) => {
 });
 
 // GET a specific barraca by title
-router.get('/barracas/search', async (req, res) => {
+router.get('/search', async (req, res) => {
   try {
     const { eventId } = req.params;
     const { title } = req.query;
+    if (!eventId || !title) {
+      return res.status(400).json({ message: 'Event ID and title are required' });
+    }
     const event = await Event.findById(eventId);
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });

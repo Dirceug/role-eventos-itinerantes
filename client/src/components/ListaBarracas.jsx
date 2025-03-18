@@ -31,9 +31,23 @@ const ListaBarracas = () => {
             'Authorization': `Bearer ${token}`
           }
         });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
+        console.log('Event Data:', data);  // Log event data
+
+        if (data.barracas) {
+          console.log('All Barracas:', data.barracas);  // Log all barracas before filtering
+          //const activeBarracas = data.barracas.filter(barraca => barraca.status === 'ativo');
+          const activeBarracas = data.barracas;
+          setBarracas(activeBarracas);
+          console.log('Active Barracas:', activeBarracas);  // Log active barracas
+        } else {
+          console.error('No barracas found in event data');
+        }
+
         setEvent(data);
-        setBarracas(data.barracas.filter(barraca => barraca.status === 'ativo'));
       } catch (error) {
         console.error('Error fetching event:', error);
       }
@@ -60,22 +74,25 @@ const ListaBarracas = () => {
       <div className="container">
         <div className="lista-barracas-container">
           <BackButton />
-          <h1>{event.nome}</h1>
+          <h1>{event.nome}</h1>  
           <div className="barracas-list">
-            {barracas.map(barraca => (
-              <div key={barraca._id} className="barraca-card" onClick={() => handleCardapioClick(barraca._id)}>
-                <h2>{barraca.nome}</h2>
-                <h3>{barraca.descricao}</h3>
-                <ul className="cardapio-list">
-                  {barraca.cardapio.filter(prato => prato.status === 'ativo').map(prato => (
-                    <li key={prato._id}>{prato.nome}</li>
-                  ))}
-                </ul>
-                <div className="status">
-                  <strong>Status:</strong> {barraca.status}
+            {barracas.map(barraca => {
+              console.log('Rendering Barraca:', barraca); // Log barraca data
+              return (
+                <div key={barraca._id} className="barraca-card" onClick={() => handleCardapioClick(barraca._id)}>
+                  <h2>{barraca.nome}</h2>
+                  <h3>{barraca.descricao}</h3>
+                  <ul className="cardapio-list">
+                    {barraca.cardapio.filter(prato => prato.status === 'ativo').map(prato => (
+                      <li key={prato._id}>{prato.nome}</li>
+                    ))}
+                  </ul>
+                  <div className="status">
+                    <strong>Status:</strong> {barraca.status}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

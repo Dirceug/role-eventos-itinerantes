@@ -54,6 +54,11 @@ function Navbar({ eventId }) {
     return <div>Carregando...</div>;
   }
 
+  const handleCardapioClick = () => {
+    navigate('/lista-barracas', { state: { eventId, userId: user ? user.uid : null } });
+  };
+
+
   return (
     <nav className="navbar">
       <button className="hamburger-menu" onClick={toggleHamburgerMenu}>
@@ -76,6 +81,7 @@ function Navbar({ eventId }) {
             eventId={eventId}
             userId={user ? user._id : null}
             label="Cardápio"
+            onClick={handleCardapioClick}
           />
         )}
         {user && (

@@ -1,48 +1,29 @@
 const mongoose = require('mongoose');
 
-const cardapioSchema = new mongoose.Schema({
-  nome: String,
-  id: String,
-  ingredientes: String,
-  valor: Number,
-  imagem: String,
-  estoque: Number,
-  status: { type: String, default: "ativo" },
-});
-
 const barracaSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  nome: String,
-  descricao: String,
   responsavel: {
     nome: String,
     contato: String
   },
-  funcionarios: Map,
-  cardapio: [cardapioSchema],
-  pedidos: Map,
-  status: { type: String, default: "ativo" },
-});
-
-const enderecoSchema = new mongoose.Schema({
-  apelido: String,
-  cep: String,
-  logradouro: String,
-  numero: String,
-  complemento: String,
-  bairro: String,
-  cidade: String,
-  estado: String,
-  pontoReferencia: String,
   status: String,
-  _id: String
-});
-
-const dataEventoSchema = new mongoose.Schema({
-  dataAbertura: Date,
-  horaAbertura: String,
-  dataFechamento: Date,
-  horaFechamento: String
+  nome: String,
+  descricao: String,
+  funcionarios: {
+    type: Map,
+    of: new mongoose.Schema({
+      nome: String,
+      cargo: String
+    })
+  },
+  cardapio: [{
+    nome: String,
+    id: String,
+    ingredientes: String,
+    valor: Number,
+    imagem: String,
+    estoque: Number,
+    status: String
+  }]
 });
 
 const eventSchema = new mongoose.Schema({
@@ -50,17 +31,33 @@ const eventSchema = new mongoose.Schema({
   descricao: String,
   data: Date,
   barracas: [barracaSchema],
-  organizadores: [
-    {
-      id: String,
-      nome: String
-    }
-  ],
+  organizadores: [{
+    id: String,
+    nome: String
+  }],
   fotoUrl: String,
-  dataEvento: [dataEventoSchema],
+  dataEvento: [{
+    dataAbertura: Date,
+    horaAbertura: String,
+    dataFechamento: Date,
+    horaFechamento: String
+  }],
   numeroFavoritos: Number,
-  endereco: enderecoSchema,
-  status: { type: String, default: "ativo" },
+  endereco: {
+    apelido: String,
+    cep: String,
+    logradouro: String,
+    numero: String,
+    complemento: String,
+    bairro: String,
+    cidade: String,
+    estado: String,
+    pontoReferencia: String,
+    status: String
+  },
+  status: String
 });
 
-module.exports = mongoose.model('Event', eventSchema);
+const Event = mongoose.model('Event', eventSchema);
+
+module.exports = Event;
