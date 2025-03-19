@@ -60,8 +60,8 @@ const DetalheEvento = (props) => {
       <div className="container">
         <div className="detalhe-evento-container">
           <div className="detalhe-evento-header">
-            <BackButton />
             <CurtidasButton eventId={eventId} initialLikesCount={event.numeroFavoritos} />
+            <BackButton />
           </div>
           <div className="detalhe-evento-foto">
             <img src={event.fotoUrl} alt={event.nome} />

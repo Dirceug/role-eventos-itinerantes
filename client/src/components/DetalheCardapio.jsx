@@ -64,7 +64,9 @@ const DetalheCardapio = () => {
       <Navbar user={user} token={userToken} eventId={eventId} />
       <div className="container">
         <div className="detalhe-cardapio-container">
-          <BackButton />
+          <div className="detalhe-evento-cardapio">
+            <BackButton />
+          </div>
           <h1>{barraca.nome}</h1>
           <div className="pratos-list">
             {barraca.cardapio.filter(prato => prato.status === 'ativo').sort((a, b) => a.nome.localeCompare(b.nome)).map(prato => (

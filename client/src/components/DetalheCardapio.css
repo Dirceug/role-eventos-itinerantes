@@ -34,6 +34,16 @@ html, body, .container {
   left: 20px;
 }
 
+.detalhe-evento-cardapio {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  position: fixed;
+  top: 60px; 
+  background-color: none; 
+  z-index: 500;
+}
+
 h1 {
   margin-bottom: 20px;
   color:#333;
