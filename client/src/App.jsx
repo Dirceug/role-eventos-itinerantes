@@ -12,10 +12,10 @@ const LoginComEmail = lazy(() => import('./pages/LoginComEmail'));
 const RegistrarUsuario = lazy(() => import('./pages/cadastro/RegistrarUsuario'));
 const AtualizarEndereco = lazy(() => import('./pages/cadastro/AtualizarEndereco'));
 const DadosBancarios = lazy(() => import('./pages/cadastro/DadosBancarios'));
-const ListaEventos = lazy(() => import('./components/ListaEventos'));
-const DetalheEvento = lazy(() => import('./components/DetalheEvento'));
-const ListaBarracas = lazy(() => import('./components/ListaBarracas'));
-const DetalheCardapio = lazy(() => import('./components/DetalheCardapio'));
+const ListaEventos = lazy(() => import('./pages/ListaEventos'));
+const DetalheEvento = lazy(() => import('./pages/DetalheEvento'));
+const ListaBarracas = lazy(() => import('./pages/ListaBarracas'));
+const DetalheCardapio = lazy(() => import('./pages/DetalheCardapio'));
 
 function App() {
   const [showAdicionarSaldo, setShowAdicionarSaldo] = useState(false);

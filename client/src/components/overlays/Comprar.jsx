@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ScaleLoader } from 'react-spinners';
 import Cookies from 'js-cookie'; // Certifique-se de importar corretamente a biblioteca js-cookie
 import './Comprar.css';
-import UserContext from '../contexts/UserContext';
+import UserContext from '../../contexts/UserContext';
 
 // Componente de loader para exibir enquanto a transação está sendo processada
 const CompraLoader = () => (

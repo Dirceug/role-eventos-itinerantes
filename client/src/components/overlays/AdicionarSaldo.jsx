@@ -4,9 +4,12 @@ import axios from 'axios';
 import { ScaleLoader } from 'react-spinners';
 import Joi from 'joi';
 import './AdicionarSaldo.css';
-import UserContext from '../contexts/UserContext';
-import olhoFechado from '../img/icones/olhoFechadoLaranja.png';
-import olhoAberto from '../img/icones/olhoAbertoLaranja.png';
+import UserContext from '../../contexts/UserContext.jsx';
+import olhoFechado from '../../img/icones/olhoFechadoLaranja.png';
+import olhoAberto from '../../img/icones/olhoAbertoLaranja.png';
+
+import useSaldo from '../../hooks/VerSaldo.js';
+
 
 const SaldoLoader = () => (
   <div className="loader-container">
@@ -18,51 +21,47 @@ Modal.setAppElement('#root'); // Define o elemento raiz da sua aplicação
 
 const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
   const { loadingUser } = useContext(UserContext);
-  const [saldo, setSaldo] = useState(null);
+  const { saldo, loading: loadingSaldo } = useSaldo(userId, token);
   const [valor, setValor] = useState('');
   const [loading, setLoading] = useState(false);
-  const [loadingSaldo, setLoadingSaldo] = useState(true);
   const [error, setError] = useState('');
   const [userDisplayName, setUserDisplayName] = useState('');
   const [showSaldo, setShowSaldo] = useState(false); // Estado para alternar a exibição do saldo
 
   useEffect(() => {
-    if (!userId) {
-      console.error("User ID is undefined");
-      return;
+    if (isOpen && userId) {
+      const fetchSaldo = async () => {
+        setLoadingSaldo(true);
+        try {
+          const response = await axios.get(`http://localhost:5000/api/transactions/saldo/${userId}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          setSaldo(response.data.saldo);
+        } catch (error) {
+          console.error('Erro ao buscar saldo:', error);
+        }
+        setLoadingSaldo(false);
+      };
+
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          setUserDisplayName(response.data.displayName);
+        } catch (error) {
+          console.error('Erro ao buscar usuário:', error);
+        }
+      };
+
+      fetchSaldo();
+      fetchUser();
     }
-
-    const fetchSaldo = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/transactions/saldo/${userId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        setSaldo(response.data.saldo);
-        setLoadingSaldo(false);
-      } catch (error) {
-        console.error('Erro ao buscar saldo:', error);
-        setLoadingSaldo(false);
-      }
-    };
-
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        setUserDisplayName(response.data.displayName);
-      } catch (error) {
-        console.error('Erro ao buscar usuário:', error);
-      }
-    };
-
-    fetchSaldo();
-    fetchUser();
-  }, [userId, token]);
+  }, [isOpen, userId, token]);
 
   const schema = Joi.object({
     valor: Joi.number().min(10).max(500).required()

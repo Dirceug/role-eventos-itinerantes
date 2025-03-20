@@ -4,8 +4,8 @@ import Eventos from '../components/usuarios/Eventos';
 import Comandas from '../components/usuarios/Comandas';
 import CarteiraVirtual from '../components/usuarios/CarteiraVirtual';
 import Logout from '../components/Logout';
-import Navbar from '../components/Navbar'
-import ListaEventos from '../components/ListaEventos'
+import Navbar from '../components/layout/Navbar'
+import ListaEventos from '../pages/ListaEventos'
 
 
 

@@ -2,8 +2,7 @@ import React, {lazy }from 'react';
 import dancing from '../img/icones/dancing.png';
 import './Pages.css'
 
-const LoginComponent = lazy(() => import('../components/LoginComponent'))
-//import LoginComponent from '../components/LoginComponent'
+const LoginComponent = lazy(() => import('./LoginComponent'))
 
 function Login() {
   return (

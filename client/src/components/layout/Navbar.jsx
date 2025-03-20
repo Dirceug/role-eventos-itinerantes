@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import UserContext from '../contexts/UserContext';
+import UserContext from '../../contexts/UserContext';
 import { getAuth, signOut } from 'firebase/auth';
 import Cookies from 'js-cookie';
 import './Navbar.css';
 
-const CardapioButtonBranco = lazy(() => import('./buttons/CardapioButtonBranco'));
-const SaldoButtonBranco = lazy(() => import('./buttons/SaldoButtonBranco'));
+const CardapioButtonBranco = lazy(() => import('../buttons/CardapioButtonBranco'));
+const SaldoButtonBranco = lazy(() => import('../buttons/SaldoButtonBranco'));
 
 function Navbar({ eventId }) {
   const { user, loadingUser } = useContext(UserContext);

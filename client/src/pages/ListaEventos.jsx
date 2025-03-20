@@ -5,9 +5,9 @@ import eventoBase from '../img/eventoBase.jpeg';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
 
-const Navbar = lazy(() => import('./Navbar'))
-const CurtidasButton = lazy (() => import('./buttons/CurtidasButton'))
-const CardapioButton = lazy (() => import('./buttons/CardapioButton'))
+const Navbar = lazy(() => import('../components/layout/Navbar'))
+const CurtidasButton = lazy (() => import('../components/buttons/CurtidasButton'))
+const CardapioButton = lazy (() => import('../components/buttons/CardapioButton'))
 
 const ListaEventos = () => {
   const [events, setEvents] = useState([]);

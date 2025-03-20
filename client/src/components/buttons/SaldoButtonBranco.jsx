@@ -2,7 +2,7 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import './SaldoButtonBranco.css';
 import saldoIcon from '../../img/icones/carteiraBranco.png';
 
-const AdicionarSaldo = lazy(() => import('../AdicionarSaldo'));
+const AdicionarSaldo = lazy(() => import('../overlays/AdicionarSaldo'));
 
 function SaldoButtonBranco({ userId, token, label }) {
   const [isModalOpen, setIsModalOpen] = useState(false);

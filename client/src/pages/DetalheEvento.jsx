@@ -4,9 +4,9 @@ import './DetalheEvento.css';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
 
-const Navbar = lazy(() => import('./Navbar'));
-const CurtidasButton = lazy(() => import('./buttons/CurtidasButton'));
-const BackButton = lazy(() => import('./buttons/BackButton'));
+const Navbar = lazy(() => import('../components/layout/Navbar'));
+const CurtidasButton = lazy(() => import('../components/buttons/CurtidasButton'));
+const BackButton = lazy(() => import('../components/buttons/BackButton'));
 
 const DetalheEvento = (props) => {
   const { eventId } = useParams();

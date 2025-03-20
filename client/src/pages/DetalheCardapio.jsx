@@ -5,9 +5,9 @@ import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
 import Modal from 'react-modal';
 
-const Navbar = lazy(() => import('./Navbar'));
-const BackButton = lazy(() => import('./buttons/BackButton'));
-const Comprar = lazy(() => import('./Comprar'));
+const Navbar = lazy(() => import('../components/layout/Navbar'));
+const BackButton = lazy(() => import('../components/buttons/BackButton'));
+const Comprar = lazy(() => import('../components/overlays/Comprar'));
 
 const DetalheCardapio = () => {
   const { eventId, barracaId } = useParams();

@@ -3,9 +3,9 @@ import { auth, googleProvider, facebookProvider } from '../firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../contexts/UserContext';
-import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
+import Cookies from 'js-cookie';
 import './LoginComponent.css';
-import ButtonGrande from './buttons/ButtonGrande';
+import ButtonGrande from '../components/buttons/ButtonGrande';
 
 function LoginComponent() {
   const navigate = useNavigate();
@@ -15,18 +15,15 @@ function LoginComponent() {
     signInWithPopup(auth, googleProvider)
       .then(async (result) => {
         const user = result.user;
-
-
         const idToken = await user.getIdToken();
-
-        // Armazenar o token no cookie
         Cookies.set('authToken', idToken);
+        console.log('Token obtido (Google):', idToken);
 
-        // Enviar requisição para salvar o usuário no backend
         const response = await fetch('http://localhost:5000/api/users/register', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${idToken}`
           },
           body: JSON.stringify({
             displayName: user.displayName,
@@ -39,9 +36,10 @@ function LoginComponent() {
         });
 
         const data = await response.json();
+        console.log('Resposta do backend:', data);
 
         if (response.ok) {
-          setUser(user);  // Atualizar o contexto com os dados do usuário
+          setUser(data);
           navigate('/usuarios');
         } else {
           console.error('Error saving user:', data);
@@ -56,13 +54,10 @@ function LoginComponent() {
     signInWithPopup(auth, facebookProvider)
       .then(async (result) => {
         const user = result.user;
-
         const idToken = await user.getIdToken();
-
-        // Armazenar o token no cookie
         Cookies.set('authToken', idToken);
-
-        setUser(user);  // Atualizar o contexto com os dados do usuário
+        console.log('Token obtido (Facebook):', idToken);
+        setUser(user);
         navigate('/usuarios');
       })
       .catch((error) => {
@@ -78,13 +73,10 @@ function LoginComponent() {
     signInWithEmailAndPassword(auth, email, password)
       .then(async (result) => {
         const user = result.user;
-
         const idToken = await user.getIdToken();
-
-        // Armazenar o token no cookie
         Cookies.set('authToken', idToken);
-
-        setUser(user);  // Atualizar o contexto com os dados do usuário
+        console.log('Token obtido (Email):', idToken);
+        setUser(user);
         navigate('/events');
       })
       .catch((error) => {

@@ -4,8 +4,8 @@ import './ListaBarracas.css';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
 
-const Navbar = lazy(() => import('./Navbar'));
-const BackButton = lazy(() => import('./buttons/BackButton'));
+const Navbar = lazy(() => import('../components/layout/Navbar'));
+const BackButton = lazy(() => import('../components/buttons/BackButton'));
 
 const ListaBarracas = () => {
   const location = useLocation();
