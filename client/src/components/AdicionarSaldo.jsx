@@ -5,6 +5,8 @@ import { ScaleLoader } from 'react-spinners';
 import Joi from 'joi';
 import './AdicionarSaldo.css';
 import UserContext from '../contexts/UserContext';
+import olhoFechado from '../img/icones/olhoFechadoLaranja.png';
+import olhoAberto from '../img/icones/olhoAbertoLaranja.png';
 
 const SaldoLoader = () => (
   <div className="loader-container">
@@ -22,6 +24,7 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
   const [loadingSaldo, setLoadingSaldo] = useState(true);
   const [error, setError] = useState('');
   const [userDisplayName, setUserDisplayName] = useState('');
+  const [showSaldo, setShowSaldo] = useState(false); // Estado para alternar a exibição do saldo
 
   useEffect(() => {
     if (!userId) {
@@ -114,6 +117,10 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
     }
   };
 
+  const toggleShowSaldo = () => {
+    setShowSaldo(!showSaldo);
+  };
+
   if (loadingUser) {
     return <SaldoLoader />;
   }
@@ -130,7 +137,14 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
         <div className="modal-content">
           <button className="close-button" onClick={onRequestClose}>X</button>
           <p className="saldo-info">Olá {userDisplayName}, seu saldo atual é de:</p>
-          <h1 className="saldo-valor">R$ {saldo}</h1>
+          <div className="saldo-container">
+            <h1 className="saldo-valor">
+              {showSaldo ? `R$ ${saldo}` : 'R$ ***,**'}
+            </h1>
+            <button className="toggle-saldo-button" onClick={toggleShowSaldo}>
+              <img src={showSaldo ? olhoAberto : olhoFechado} alt="Toggle Saldo" />
+            </button>
+          </div>
           <form onSubmit={handleSubmit}>
             <label className="valor-label" htmlFor="valor">Valor a adicionar:</label>
             <input

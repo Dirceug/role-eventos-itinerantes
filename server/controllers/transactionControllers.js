@@ -1,12 +1,23 @@
 const mongoose = require('mongoose');
 const Transaction = require('../models/transaction');
 const Pedido = require('../models/pedido');
+const Evento = require('../models/event'); // Certifique-se de importar o modelo de Evento
 const { User } = require('../models/user');
 
 // Função para calcular o saldo do usuário
 const calcularSaldoUsuario = async (usuarioId) => {
-  const transacoes = await Transaction.find({ usuarioId, status: 'concluída' });
-  return transacoes.reduce((saldo, transacao) => saldo + transacao.valor, 0);
+  try {
+    const transacoes = await Transaction.find({ usuarioId, status: 'concluída' });
+    console.log('Transações recuperadas:', transacoes); // Adicione log para depuração
+    const saldo = transacoes.reduce((saldo, transacao) => {
+      return saldo + (transacao.valor || 0);
+    }, 0);
+    console.log('Saldo calculado:', saldo); // Adicione log para depuração
+    return saldo;
+  } catch (error) {
+    console.error('Erro ao calcular saldo do usuário:', error);
+    throw error;
+  }
 };
 
 // Obter o saldo do usuário
@@ -67,12 +78,38 @@ const criarTransacao = async (req, res) => {
       throw new Error('A data e hora de retirada deve ser maior que a data e hora atual');
     }
 
+    // Se a transação for do tipo compra, encontrar o evento e a barraca para atualizar o estoque do cardápio
+    if (tipo === 'compra') {
+      const evento = await Evento.findById(eventoId).session(session);
+      if (!evento) {
+        throw new Error('Evento não encontrado');
+      }
+
+      const barraca = evento.barracas.id(barracaId);
+      if (!barraca) {
+        throw new Error('Barraca não encontrada');
+      }
+
+      const cardapio = barraca.cardapio.id(cardapioId);
+      if (!cardapio) {
+        throw new Error('Item do cardápio não encontrado');
+      }
+
+      if (cardapio.estoque < quantidade) {
+        throw new Error('Estoque insuficiente');
+      }
+
+      // Atualizar o estoque
+      cardapio.estoque -= quantidade;
+      await evento.save({ session });
+    }
+
     // Criar a transação
     const transacao = new Transaction({
       usuarioId,
-      eventoId,
-      barracaId,
-      cardapioId,
+      eventoId: tipo === 'compra' ? eventoId : null,
+      barracaId: tipo === 'compra' ? barracaId : null,
+      cardapioId: tipo === 'compra' ? cardapioId : null,
       tipo,
       valor: valorAjustado,
       moeda,
