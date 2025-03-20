@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext, lazy, Suspense } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './DetalheCardapio.css';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
+import Modal from 'react-modal';
 
 const Navbar = lazy(() => import('./Navbar'));
 const BackButton = lazy(() => import('./buttons/BackButton'));
@@ -10,7 +11,6 @@ const Comprar = lazy(() => import('./Comprar'));
 
 const DetalheCardapio = () => {
   const { eventId, barracaId } = useParams();
-  const navigate = useNavigate();
   const [barraca, setBarraca] = useState(null);
   const [pratoSelecionado, setPratoSelecionado] = useState(null);
   const { user } = useContext(UserContext);
@@ -49,13 +49,9 @@ const DetalheCardapio = () => {
     setPratoSelecionado(prato);
   };
 
-  if (pratoSelecionado) {
-    return (
-      <Suspense fallback={<div>Carregando...</div>}>
-        <Comprar user={user} prato={pratoSelecionado} eventId={eventId} barracaId={barracaId} barracaNome={barraca.nome} />
-      </Suspense>
-    );
-  }
+  const closeModal = () => {
+    setPratoSelecionado(null);
+  };
 
   const userToken = Cookies.get('authToken');
 
@@ -84,6 +80,25 @@ const DetalheCardapio = () => {
             ))}
           </div>
         </div>
+        {pratoSelecionado && (
+          <Modal
+            isOpen={!!pratoSelecionado}
+            onRequestClose={closeModal}
+            className="comprar-modal"
+          >
+            <Suspense fallback={<div>Carregando...</div>}>
+              <Comprar
+                user={user}
+                prato={pratoSelecionado}
+                eventId={eventId}
+                barracaId={barracaId}
+                barracaNome={barraca.nome}
+                isOpen={!!pratoSelecionado}
+                onRequestClose={closeModal}
+              />
+            </Suspense>
+          </Modal>
+        )}
       </div>
     </Suspense>
   );

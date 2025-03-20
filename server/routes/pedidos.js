@@ -1,16 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Pedido = require('../models/pedido');
+const { criarPedido, atualizarPedido } = require('../controllers/pedidoControllers');
 
 // Criar um novo pedido
-router.post('/', async (req, res) => {
-  try {
-    const pedido = new Pedido(req.body);
-    await pedido.save();
-    res.status(201).json(pedido);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
+router.post('/', criarPedido);
+
+// Atualizar o status do pedido e a última atualização
+router.put('/:id', atualizarPedido);
 
 module.exports = router;

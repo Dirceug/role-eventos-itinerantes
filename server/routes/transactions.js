@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { obterTransacoes, criarTransacao, obterSaldoUsuario } = require('../controllers/transactionControllers.js');
+const { obterTransacoes, criarTransacao, obterSaldoUsuario } = require('../controllers/transactionControllers');
 
 // GET all transactions
 router.get('/', obterTransacoes);
