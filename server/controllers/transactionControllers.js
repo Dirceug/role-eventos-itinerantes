@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const math = require('mathjs');
 const Transaction = require('../models/transaction');
 const Pedido = require('../models/pedido');
-const Evento = require('../models/event'); // Certifique-se de importar o modelo de Evento
+const Evento = require('../models/event');
 const { User } = require('../models/user');
 
 // Função para calcular o saldo do usuário
@@ -9,7 +10,7 @@ const calcularSaldoUsuario = async (usuarioId) => {
   try {
     const transacoes = await Transaction.find({ usuarioId, status: 'concluída' });
     const saldo = transacoes.reduce((saldo, transacao) => {
-      return saldo + (transacao.valor || 0);
+      return math.round(math.add(saldo, transacao.valor || 0), 2);
     }, 0);
     console.log('Saldo calculado:', saldo); // Adicione log para depuração
     return saldo;
@@ -102,6 +103,33 @@ const criarTransacao = async (req, res) => {
       // Atualizar o estoque
       cardapio.estoque -= quantidade;
       await evento.save({ session });
+
+      // Criar o pedido
+      const pedido = new Pedido({
+        usuarioId,
+        eventoId,
+        barracaId,
+        cardapioId,
+        nomePrato: cardapio.nome, // Obtendo o nome do prato
+        tipo,
+        valor: valorAjustado,
+        moeda,
+        quantidade,
+        valorUnidade,
+        descricao,
+        detalhes,
+        status: 'pendente',
+        dataHoraRetirada
+      });
+
+      await pedido.save({ session });
+      console.log('Pedido criado:', pedido);
+
+      // Mensagem de compra concluída
+      message = `Olá ${usuario.displayName}, sua compra de ${quantidade} ${cardapio.nome} no valor de R$ ${math.abs(valorAjustado).toFixed(2)} foi enviada a ${barraca.nome}.`;
+    } else {
+      // Mensagem de adição de saldo
+      message = `Olá ${usuario.displayName}, o saldo de R$ ${math.abs(valorAjustado).toFixed(2)} foi acrescentado ao seu saldo.`;
     }
 
     // Criar a transação
@@ -123,37 +151,6 @@ const criarTransacao = async (req, res) => {
 
     const novaTransacao = await transacao.save({ session });
     console.log('Transação criada:', novaTransacao);
-
-    let message = '';
-
-    // Criar um pedido se a transação for do tipo compra
-    if (tipo === 'compra') {
-      const pedido = new Pedido({
-        usuarioId,
-        eventoId,
-        barracaId,
-        cardapioId,
-        tipo,
-        valor: valorAjustado,
-        moeda,
-        quantidade,
-        valorUnidade,
-        descricao,
-        detalhes,
-        status: 'pendente',
-        dataHoraRetirada
-      });
-
-      await pedido.save({ session });
-      console.log('Pedido criado:', pedido);
-
-      // Mensagem de compra concluída
-      const barraca = evento.barracas.id(barracaId);  // Buscando a barraca novamente para acessar seu nome
-      message = `Olá ${usuario.displayName}, sua compra de ${quantidade} ${descricao} no valor de R$ ${Math.abs(valorAjustado).toFixed(2)} foi enviada a ${barraca.nome}.`;
-    } else {
-      // Mensagem de adição de saldo
-      message = `Olá ${usuario.displayName}, o saldo de R$ ${valorAjustado.toFixed(2)} foi acrescentado ao seu saldo.`;
-    }
 
     // Atualizar status da transação após salvar
     novaTransacao.status = 'concluída';
