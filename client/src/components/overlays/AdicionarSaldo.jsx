@@ -3,13 +3,13 @@ import Modal from 'react-modal';
 import axios from 'axios';
 import { ScaleLoader } from 'react-spinners';
 import Joi from 'joi';
+import { toast } from 'react-toastify';
 import './AdicionarSaldo.css';
-import UserContext from '../../contexts/UserContext.jsx';
+import UserContext from '../../contexts/UserContext';
 import olhoFechado from '../../img/icones/olhoFechadoLaranja.png';
 import olhoAberto from '../../img/icones/olhoAbertoLaranja.png';
 
 import useSaldo from '../../hooks/VerSaldo.js';
-
 
 const SaldoLoader = () => (
   <div className="loader-container">
@@ -17,16 +17,16 @@ const SaldoLoader = () => (
   </div>
 );
 
-Modal.setAppElement('#root'); // Define o elemento raiz da sua aplicação
+Modal.setAppElement('#root');
 
 const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
   const { loadingUser } = useContext(UserContext);
-  const { saldo, loading: loadingSaldo } = useSaldo(userId, token);
+  const { saldo, loading: loadingSaldo, setSaldo, setLoadingSaldo } = useSaldo(userId, token);
   const [valor, setValor] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [userDisplayName, setUserDisplayName] = useState('');
-  const [showSaldo, setShowSaldo] = useState(false); // Estado para alternar a exibição do saldo
+  const [showSaldo, setShowSaldo] = useState(false);
 
   useEffect(() => {
     if (isOpen && userId) {
@@ -61,7 +61,7 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
       fetchSaldo();
       fetchUser();
     }
-  }, [isOpen, userId, token]);
+  }, [isOpen, userId, token, setLoadingSaldo, setSaldo]);
 
   const schema = Joi.object({
     valor: Joi.number().min(10).max(500).required()
@@ -101,17 +101,19 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
     console.log('Enviando transação:', transactionData);
 
     try {
-      await axios.post('http://localhost:5000/api/transactions', transactionData, {
+      const response = await axios.post('http://localhost:5000/api/transactions', transactionData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
 
+      toast.success(response.data.message); // Exibir mensagem de sucesso
       setLoading(false);
       onRequestClose();
     } catch (error) {
       console.error('Erro ao adicionar saldo:', error);
+      toast.error('Erro ao adicionar saldo. Tente novamente.'); // Exibir mensagem de erro
       setLoading(false);
     }
   };

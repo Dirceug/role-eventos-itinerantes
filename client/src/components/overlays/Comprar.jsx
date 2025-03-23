@@ -2,43 +2,38 @@ import React, { useState, useContext } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { ScaleLoader } from 'react-spinners';
-import Cookies from 'js-cookie'; // Certifique-se de importar corretamente a biblioteca js-cookie
+import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 import './Comprar.css';
 import UserContext from '../../contexts/UserContext';
 
-// Componente de loader para exibir enquanto a transação está sendo processada
 const CompraLoader = () => (
   <div className="loader-container">
     <ScaleLoader color="#EE7F43" height={100} radius={15} speedMultiplier={1} width={1} />
   </div>
 );
 
-// Define o elemento raiz da aplicação para o Modal
 Modal.setAppElement('#root');
 
-// Componente principal
 const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barracaNome }) => {
   const { loadingUser } = useContext(UserContext);
-  const [quantidade, setQuantidade] = useState(1); // Inicializa com 1 unidade
-  const [observacoes, setObservacoes] = useState(""); // Estado para armazenar observações
-  const [loading, setLoading] = useState(false); // Estado para controlar o estado de carregamento
-  const [error, setError] = useState(''); // Estado para armazenar mensagens de erro
+  const [quantidade, setQuantidade] = useState(1);
+  const [observacoes, setObservacoes] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  // Função para aumentar a quantidade do prato
   const handleMais = () => {
     if (quantidade < prato.estoque && quantidade < 10) {
       setQuantidade(quantidade + 1);
     }
   };
 
-  // Função para diminuir a quantidade do prato
   const handleMenos = () => {
     if (quantidade > 1) {
       setQuantidade(quantidade - 1);
     }
   };
 
-  // Função para enviar o pedido
   const handlePedido = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -61,18 +56,19 @@ const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barr
     console.log('Enviando transação:', transactionData);
 
     try {
-      await axios.post('http://localhost:5000/api/transactions', transactionData, {
+      const response = await axios.post('http://localhost:5000/api/transactions', transactionData, {
         headers: {
           'Authorization': `Bearer ${Cookies.get('authToken')}`,
           'Content-Type': 'application/json'
         }
       });
 
+      toast.success(response.data.message); // Exibir mensagem de sucesso
       setLoading(false);
       onRequestClose();
     } catch (error) {
       console.error('Erro ao enviar pedido:', error);
-      setError('Erro ao enviar pedido. Tente novamente.');
+      toast.error('Erro ao enviar pedido. Tente novamente.'); // Exibir mensagem de erro
       setLoading(false);
     }
   };
@@ -85,6 +81,7 @@ const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barr
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
+      shouldCloseOnOverlayClick={true} // Adicionando esta linha para garantir que o modal possa ser fechado ao clicar fora
       className="comprar-modal"
     >
       <div className="modal-content">

@@ -8,7 +8,6 @@ const { User } = require('../models/user');
 const calcularSaldoUsuario = async (usuarioId) => {
   try {
     const transacoes = await Transaction.find({ usuarioId, status: 'concluída' });
-    console.log('Transações recuperadas:', transacoes); // Adicione log para depuração
     const saldo = transacoes.reduce((saldo, transacao) => {
       return saldo + (transacao.valor || 0);
     }, 0);
@@ -79,8 +78,9 @@ const criarTransacao = async (req, res) => {
     }
 
     // Se a transação for do tipo compra, encontrar o evento e a barraca para atualizar o estoque do cardápio
+    let evento;
     if (tipo === 'compra') {
-      const evento = await Evento.findById(eventoId).session(session);
+      evento = await Evento.findById(eventoId).session(session);
       if (!evento) {
         throw new Error('Evento não encontrado');
       }
@@ -124,6 +124,8 @@ const criarTransacao = async (req, res) => {
     const novaTransacao = await transacao.save({ session });
     console.log('Transação criada:', novaTransacao);
 
+    let message = '';
+
     // Criar um pedido se a transação for do tipo compra
     if (tipo === 'compra') {
       const pedido = new Pedido({
@@ -144,6 +146,13 @@ const criarTransacao = async (req, res) => {
 
       await pedido.save({ session });
       console.log('Pedido criado:', pedido);
+
+      // Mensagem de compra concluída
+      const barraca = evento.barracas.id(barracaId);  // Buscando a barraca novamente para acessar seu nome
+      message = `Olá ${usuario.displayName}, sua compra de ${quantidade} ${descricao} no valor de R$ ${Math.abs(valorAjustado).toFixed(2)} foi enviada a ${barraca.nome}.`;
+    } else {
+      // Mensagem de adição de saldo
+      message = `Olá ${usuario.displayName}, o saldo de R$ ${valorAjustado.toFixed(2)} foi acrescentado ao seu saldo.`;
     }
 
     // Atualizar status da transação após salvar
@@ -151,7 +160,7 @@ const criarTransacao = async (req, res) => {
     await novaTransacao.save({ session });
 
     await session.commitTransaction();
-    res.status(201).json(novaTransacao);
+    res.status(201).json({ message, transacao: novaTransacao });
   } catch (err) {
     await session.abortTransaction();
     console.error('Erro ao criar transação:', err.message);

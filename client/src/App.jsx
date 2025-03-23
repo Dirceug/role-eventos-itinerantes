@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { UserProvider } from './contexts/UserContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
+import { ToastContainer } from 'react-toastify';
 import './App.css';
 
 const Login = lazy(() => import('./pages/Login'));
@@ -52,6 +53,7 @@ function App() {
             </Routes>
           </Suspense>
         </ErrorBoundary>
+        <ToastContainer />
       </Router>
     </UserProvider>
   );
