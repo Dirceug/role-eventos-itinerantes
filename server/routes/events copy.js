@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Event = require('../models/event');
-const verifyToken = require('../middleware/authenticateToken');
+const verifyToken = require('../middleware/authenticateToken'); // Importar o middleware de autenticação
+const mongoose = require('mongoose');
 
 // Middleware para logar todas as requisições
 router.use((req, res, next) => {
@@ -35,20 +36,7 @@ router.get('/:id', verifyToken, async (req, res) => {
 
 // POST create a new event (Proteger a rota)
 router.post('/', verifyToken, async (req, res) => {
-  const { nome, descricao, data, endereco, dataEvento, organizadores, status } = req.body;
-
-  const event = new Event({
-    nome,
-    descricao,
-    data,
-    endereco,
-    dataEvento,
-    barracas: [],
-    organizadores,
-    status,
-    fotoUrl: ""
-  });
-
+  const event = new Event(req.body);
   try {
     const newEvent = await event.save();
     res.status(201).json(newEvent);
