@@ -56,7 +56,8 @@ const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barr
       dataHoraRetirada: dataHoraRetirada || null, // Incluindo novo campo
       tempoPreparo: prato.tempoPreparo,
       status: 'pendente',
-      chaveBarraca: chaveBarraca
+      chaveBarraca: chaveBarraca,
+      foto: prato.imagem
     };
 
     console.log('Enviando transação:', transactionData);

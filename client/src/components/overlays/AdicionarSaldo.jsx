@@ -73,13 +73,14 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
   });
 
   const handleChange = (e) => {
-    const formattedValue = e.target.value.replace(/[^0-9.,]/g, '').replace(/,/g, '.');
+    const input = e.target.value.replace(/\D/g, '');
+    const formattedValue = (Number(input) / 100).toFixed(2).replace('.', ',');
     setValor(formattedValue);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const parsedValor = parseFloat(valor);
+    const parsedValor = parseFloat(valor.replace(',', '.'));
     const { error } = schema.validate({ valor: parsedValor });
     if (error) {
       setError(error.message);
@@ -140,22 +141,25 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
           <p className="saldo-info">Olá {userDisplayName}, seu saldo atual é de:</p>
           <div className="saldo-container">
             <h1 className="saldo-valor">
-              {showSaldo ? `R$ ${saldo}` : 'R$ ***,**'}
+              R$ {showSaldo ? `${saldo}` : '***,**'}
             </h1>
             <button className="toggle-saldo-button" onClick={toggleShowSaldo}>
               <img src={showSaldo ? olhoAberto : olhoFechado} alt="Toggle Saldo" />
             </button>
           </div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="form-label">
             <label className="valor-label" htmlFor="valor">Valor a adicionar:</label>
-            <input
-              type="text"
-              id="valor"
-              className="valor-input"
-              value={valor}
-              onChange={handleChange}
-              placeholder="R$ 0,00"
-            />
+            <div className="valor-input-container">
+              <span className="valor-prefixo">R$</span>
+              <input
+                type="text"
+                id="valor"
+                className="valor-input"
+                value={valor}
+                onChange={handleChange}
+                placeholder="00,00"
+              />
+            </div>
             {error && <p className="error-message">{error}</p>}
             <button type="submit" className="submit-button" disabled={loading}>
               {loading ? (

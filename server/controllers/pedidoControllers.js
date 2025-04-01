@@ -56,7 +56,7 @@ const criarPedido = async (req, res) => {
     }
 
     const numeroFormatado = numeroPedidoBarraca.toString().padStart(4, '0');
-    const numeroPedido = `${barraca.chaveBarraca}-${numeroFormatado}`;
+    const numeroPedido = `${barraca.chaveBarraca || 'num'}-${numeroFormatado}`;
 
     const pedido = new Pedido({
       usuarioId,
@@ -76,7 +76,7 @@ const criarPedido = async (req, res) => {
       numeroPedido,
       tempoPreparo: cardapio.tempoPreparo,
       historicoStatus: [{ status: 'pendente' }],
-      foto
+      foto: cardapio.foto // Atribuir a foto do cardápio ao pedido
     });
 
     await pedido.save({ session });

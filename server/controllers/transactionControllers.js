@@ -38,7 +38,7 @@ const gerarNumeroPedido = (chaveBarraca, ultimoNumero) => {
     numeroPedidoBarraca = 1;
   }
   const numeroFormatado = numeroPedidoBarraca.toString().padStart(4, '0');
-  return `${chaveBarraca}-${numeroFormatado}`;
+  return `${chaveBarraca || 'num'}-${numeroFormatado}`;
 };
 
 // Criar uma nova transação e pedido
