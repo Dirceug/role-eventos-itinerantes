@@ -1,0 +1,61 @@
+.event-form {
+  background-color: #272727;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.back-button {
+  background-color: #EE7F43;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 10px;
+}
+
+input, textarea, select {
+  margin-top: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+hr {
+  margin: 20px 0;
+  border: 1px solid #ccc;
+}
+
+.data-evento {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+button[type="button"] {
+  background-color: #ffffff;
+  color: #EE7F43;
+  border: 1px solid #EE7F43;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+button[type="submit"] {
+  background-color: #EE7F43;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}

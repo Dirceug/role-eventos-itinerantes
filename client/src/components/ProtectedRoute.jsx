@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import UserContext from '../contexts/UserContext';
-import Cookies from 'js-cookie'; // Importar a biblioteca de cookies
+import Cookies from 'js-cookie';
 
 const ProtectedRoute = ({ element }) => {
   const { user, setUser } = useContext(UserContext);
@@ -29,13 +29,13 @@ const ProtectedRoute = ({ element }) => {
           setIsLoading(false);
           if (response.status === 401) {
             console.error('Unauthorized access - Invalid token');
-            Cookies.remove('authToken'); // Remover token inválido
+            Cookies.remove('authToken');
           } else {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
         } else {
           const userData = await response.json();
-          setUser(userData); // Atualizar o contexto com os dados do usuário
+          setUser(userData);
           setIsLoading(false);
         }
       } catch (error) {
@@ -52,7 +52,7 @@ const ProtectedRoute = ({ element }) => {
   }
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   return element;

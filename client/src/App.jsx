@@ -18,6 +18,7 @@ const DetalheEvento = lazy(() => import('./pages/DetalheEvento'));
 const ListaBarracas = lazy(() => import('./pages/ListaBarracas'));
 const DetalheCardapio = lazy(() => import('./pages/DetalheCardapio'));
 const ListaPedidos = lazy(() => import('../src/pages/ListaPedidos')); 
+const CriarEventos = lazy(() => import('./pages/CriarEventos'));
 
 function App() {
   const [showAdicionarSaldo, setShowAdicionarSaldo] = useState(false);
@@ -52,6 +53,7 @@ function App() {
               <Route path="/event/:eventId/barraca/:barracaId/cardapio" element={<ProtectedRoute element={<DetalheCardapio />} />} />
               <Route path="/lista-barracas" element={<ProtectedRoute element={<ListaBarracas />} />} />
               <Route path="/lista-pedidos" element={<ProtectedRoute element={<ListaPedidos />} />} />
+              <Route path="/eventos/novo" element={<ProtectedRoute element={<CriarEventos />} />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>
