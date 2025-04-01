@@ -17,7 +17,6 @@ function LoginComponent() {
         const user = result.user;
         const idToken = await user.getIdToken();
         Cookies.set('authToken', idToken);
-        console.log('Token obtido (Google):', idToken);
 
         const response = await fetch('http://localhost:5000/api/users/register', {
           method: 'POST',
@@ -36,7 +35,6 @@ function LoginComponent() {
         });
 
         const data = await response.json();
-        console.log('Resposta do backend:', data);
 
         if (response.ok) {
           setUser(data);
@@ -56,7 +54,6 @@ function LoginComponent() {
         const user = result.user;
         const idToken = await user.getIdToken();
         Cookies.set('authToken', idToken);
-        console.log('Token obtido (Facebook):', idToken);
         setUser(user);
         navigate('/usuarios');
       })
@@ -75,7 +72,6 @@ function LoginComponent() {
         const user = result.user;
         const idToken = await user.getIdToken();
         Cookies.set('authToken', idToken);
-        console.log('Token obtido (Email):', idToken);
         setUser(user);
         navigate('/events');
       })

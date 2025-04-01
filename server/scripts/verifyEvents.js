@@ -40,4 +40,27 @@ router.get('/:eventId/search', async (req, res) => {
   }
 });
 
+
+// Verificar se a chave da barraca é única dentro do evento
+router.get('/:eventId/verifyChaveBarraca', async (req, res) => {
+  const { eventId } = req.params;
+  const { chaveBarraca } = req.query;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Evento não encontrado' });
+    }
+
+    const barracaExists = event.barracas.some(b => b.chaveBarraca === chaveBarraca);
+    if (barracaExists) {
+      return res.status(400).json({ message: 'Chave da barraca já existe neste evento, tente escolher outra', type: 'error', position: 'top-right', autoClose: 15000 });
+    }
+
+    res.status(200).json({ message: 'Chave da barraca disponível', type: 'success', position: 'top-right', autoClose: 5000 });
+  } catch (error) {
+    res.status(500).json({ message: error.message, type: 'error', position: 'top-right', autoClose: 5000 });
+  }
+});
+
 module.exports = router;

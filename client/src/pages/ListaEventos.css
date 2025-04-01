@@ -38,6 +38,7 @@
   padding: 10px;
 }
 
+
 .event-overlay:hover {
   background-color: rgba(0, 0, 0, 0.3);
 }
@@ -61,7 +62,7 @@
 .event-description p {
   margin: 0;
   font-size: 1em;
-  max-width: 100%;
+  max-width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

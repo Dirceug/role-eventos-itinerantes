@@ -4,11 +4,12 @@
   align-items: center;
 }
 
-.comprar-container {
+.comprar-modal {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 90%;
+  max-width: 500px;
   background-color: white;
   border: 2px solid #EE7F43;
   padding: 20px;
@@ -16,9 +17,10 @@
   margin: 10px;
 }
 
-.prato-imagem {
-  width: 100%;
+.prato-imagem2 {
+  width: 80%;
   max-width: 300px;
+  height: auto;
   border-radius: 10px;
 }
 
@@ -34,19 +36,23 @@
   font-style: italic;
 }
 
-.observacoes {
+.checkbox-container {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.observacoes, .data-hora-retirada {
   width: 100%;
   margin: 20px 0;
 }
 
-.observacoes label {
+.observacoes label, .data-hora-retirada label {
   display: block;
   margin-bottom: 5px;
 }
 
-.observacoes textarea {
+.observacoes textarea, .data-hora-retirada input {
   width: 90%;
-  height: 100px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -55,6 +61,7 @@
 .quantidade-container {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
 }
 
@@ -93,4 +100,23 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 1.2rem;
+}
+
+@media (max-width: 600px) {
+  .comprar-modal {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .prato-imagem {
+    max-width: 100%;
+  }
+
+  .quantidade-container {
+    flex-direction: column;
+  }
+
+  .quantidade-button {
+    width: 50px;
+  }
 }

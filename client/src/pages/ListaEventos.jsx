@@ -67,7 +67,9 @@ const ListaEventos = () => {
                 className="event-button event-description"
                 onClick={() => handleEventClick(event._id)}
               >
-                <p>{event.descricao.length > 244 ? `${event.descricao.substring(0, 241)}...` : event.descricao}</p>
+                <p className="event-descricao">{event.descricao.length > 244 ? `${event.descricao.substring(0, 241)}...` : event.descricao}</p>
+                <p><br/></p>
+                <p>{event.endereco.cidade} - {event.endereco.estado}</p>
               </button>
               <div className="event-details">
                 {event.dataEvento && event.dataEvento.map((data, index) => (

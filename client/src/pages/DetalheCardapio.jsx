@@ -75,6 +75,7 @@ const DetalheCardapio = () => {
                     <h3 className="prato-valor">R$ {prato.valor}</h3>
                     <button onClick={() => handleCompraClick(prato)}>Comprar</button>
                   </div>
+                    <p className="prato-tempo"> {prato.tempoPreparo} min</p>
                 </div>
               </div>
             ))}
@@ -93,6 +94,7 @@ const DetalheCardapio = () => {
                 eventId={eventId}
                 barracaId={barracaId}
                 barracaNome={barraca.nome}
+                chaveBarraca={barraca.chaveBarraca} // Passando chaveBarraca como prop
                 isOpen={!!pratoSelecionado}
                 onRequestClose={closeModal}
               />

@@ -15,10 +15,13 @@ const CompraLoader = () => (
 
 Modal.setAppElement('#root');
 
-const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barracaNome }) => {
+const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barracaNome, chaveBarraca }) => {
   const { loadingUser } = useContext(UserContext);
   const [quantidade, setQuantidade] = useState(1);
   const [observacoes, setObservacoes] = useState("");
+  const [dataHoraRetirada, setDataHoraRetirada] = useState(""); // Novo campo
+  const [showObservacoes, setShowObservacoes] = useState(false); // Controle de visibilidade para observações
+  const [showDataHoraRetirada, setShowDataHoraRetirada] = useState(false); // Controle de visibilidade para data/hora de retirada
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -50,7 +53,10 @@ const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barr
       valorUnidade: prato.valor,
       descricao: prato.ingredientes,
       detalhes: observacoes || null,
-      status: 'pendente'
+      dataHoraRetirada: dataHoraRetirada || null, // Incluindo novo campo
+      tempoPreparo: prato.tempoPreparo,
+      status: 'pendente',
+      chaveBarraca: chaveBarraca
     };
 
     console.log('Enviando transação:', transactionData);
@@ -86,20 +92,53 @@ const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barr
     >
       <div className="modal-content">
         <button className="close-button" onClick={onRequestClose}>X</button>
-        <img src={prato.imagem} alt={prato.nome} className="prato-imagem" />
+        <img src={prato.imagem} alt={prato.nome} className="prato-imagem2" />
         <div className="prato-info">
           <h3 className="prato-nome">{prato.nome}</h3>
           <p className="prato-ingredientes">{prato.ingredientes}</p>
           <h3 className="prato-valor">R$ {prato.valor.toFixed(2)}</h3>
         </div>
-        <div className="observacoes">
-          <label htmlFor="observacoes">Alterações</label>
-          <textarea
-            id="observacoes"
-            value={observacoes}
-            onChange={(e) => setObservacoes(e.target.value)}
-          />
+        <div className="checkbox-container">
+          <label>
+            <input
+              type="checkbox"
+              checked={showObservacoes}
+              onChange={() => setShowObservacoes(!showObservacoes)}
+            />
+            Incluir Alterações
+          </label>
         </div>
+        {showObservacoes && (
+          <div className="observacoes">
+            <label htmlFor="observacoes">Alterações</label>
+            <textarea
+              id="observacoes"
+              value={observacoes}
+              onChange={(e) => setObservacoes(e.target.value)}
+            />
+          </div>
+        )}
+        <div className="checkbox-container">
+          <label>
+            <input
+              type="checkbox"
+              checked={showDataHoraRetirada}
+              onChange={() => setShowDataHoraRetirada(!showDataHoraRetirada)}
+            />
+            Agendar Retirada
+          </label>
+        </div>
+        {showDataHoraRetirada && (
+          <div className="data-hora-retirada">
+            <label htmlFor="dataHoraRetirada">Data e Hora de Retirada</label>
+            <input 
+              type="datetime-local" 
+              id="dataHoraRetirada" 
+              value={dataHoraRetirada} 
+              onChange={(e) => setDataHoraRetirada(e.target.value)} 
+            />
+          </div>
+        )}
         <hr />
         <div className="quantidade-container">
           <h2 className="quantidade-label">Unidades</h2>

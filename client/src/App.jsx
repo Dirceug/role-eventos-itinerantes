@@ -17,6 +17,7 @@ const ListaEventos = lazy(() => import('./pages/ListaEventos'));
 const DetalheEvento = lazy(() => import('./pages/DetalheEvento'));
 const ListaBarracas = lazy(() => import('./pages/ListaBarracas'));
 const DetalheCardapio = lazy(() => import('./pages/DetalheCardapio'));
+const ListaPedidos = lazy(() => import('../src/pages/ListaPedidos')); 
 
 function App() {
   const [showAdicionarSaldo, setShowAdicionarSaldo] = useState(false);
@@ -49,7 +50,8 @@ function App() {
               <Route path="/event/:eventId/details" element={<ProtectedRoute element={<DetalheEvento />} />} />
               <Route path="/event/:eventId/barracas" element={<ProtectedRoute element={<ListaBarracas />} />} />
               <Route path="/event/:eventId/barraca/:barracaId/cardapio" element={<ProtectedRoute element={<DetalheCardapio />} />} />
-              <Route path="/lista-barracas" element={<ProtectedRoute element={<ListaBarracas />} />} /> {/* Adicionando a nova rota */}
+              <Route path="/lista-barracas" element={<ProtectedRoute element={<ListaBarracas />} />} />
+              <Route path="/lista-pedidos" element={<ProtectedRoute element={<ListaPedidos />} />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

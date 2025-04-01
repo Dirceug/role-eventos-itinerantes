@@ -18,7 +18,6 @@ function AuthEmailPassword() {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
-        console.log(result.user);
         Cookies.set('authToken', result.user.accessToken); // Definir o cookie de autenticação
         navigate('/usuarios');
       })

@@ -31,6 +31,16 @@ const obterSaldoUsuario = async (req, res) => {
   }
 };
 
+// Função para gerar um número de pedido único
+const gerarNumeroPedido = (chaveBarraca, ultimoNumero) => {
+  let numeroPedidoBarraca = ultimoNumero + 1;
+  if (numeroPedidoBarraca > 9999) {
+    numeroPedidoBarraca = 1;
+  }
+  const numeroFormatado = numeroPedidoBarraca.toString().padStart(4, '0');
+  return `${chaveBarraca}-${numeroFormatado}`;
+};
+
 // Criar uma nova transação e pedido
 const criarTransacao = async (req, res) => {
   const session = await mongoose.startSession();
@@ -51,7 +61,8 @@ const criarTransacao = async (req, res) => {
       valorUnidade,
       descricao,
       detalhes,
-      dataHoraRetirada
+      dataHoraRetirada,
+      chaveBarraca 
     } = req.body;
 
     // Verificar se o usuário existe
@@ -80,6 +91,9 @@ const criarTransacao = async (req, res) => {
 
     // Se a transação for do tipo compra, encontrar o evento e a barraca para atualizar o estoque do cardápio
     let evento;
+    let numeroPedido;
+    let cardapio; // Definir a variável cardapio no escopo correto
+
     if (tipo === 'compra') {
       evento = await Evento.findById(eventoId).session(session);
       if (!evento) {
@@ -91,7 +105,7 @@ const criarTransacao = async (req, res) => {
         throw new Error('Barraca não encontrada');
       }
 
-      const cardapio = barraca.cardapio.id(cardapioId);
+      cardapio = barraca.cardapio.id(cardapioId);
       if (!cardapio) {
         throw new Error('Item do cardápio não encontrado');
       }
@@ -104,13 +118,23 @@ const criarTransacao = async (req, res) => {
       cardapio.estoque -= quantidade;
       await evento.save({ session });
 
-      // Criar o pedido
+      // Obtém o último número de pedido da barraca para gerar um novo número de pedido
+      const ultimoPedido = await Pedido.findOne({ barracaId }).sort({ numeroPedido: -1 }).exec();
+      console.log('Último pedido encontrado:', ultimoPedido); // Log para depuração
+
+      let ultimoNumero = 0;
+      if (ultimoPedido && ultimoPedido.numeroPedido) {
+        ultimoNumero = parseInt(ultimoPedido.numeroPedido.split('-')[1]);
+      }
+      console.log('Último número de pedido:', ultimoNumero); // Log para depuração
+      numeroPedido = gerarNumeroPedido(chaveBarraca, ultimoNumero);
+
       const pedido = new Pedido({
         usuarioId,
         eventoId,
         barracaId,
         cardapioId,
-        nomePrato: cardapio.nome, // Obtendo o nome do prato
+        nomePrato: cardapio.nome, 
         tipo,
         valor: valorAjustado,
         moeda,
@@ -119,7 +143,10 @@ const criarTransacao = async (req, res) => {
         descricao,
         detalhes,
         status: 'pendente',
-        dataHoraRetirada
+        dataHoraRetirada,
+        numeroPedido,
+        tempoPreparo: cardapio.tempoPreparo,
+        historicoStatus: [{ status: 'pendente' }]
       });
 
       await pedido.save({ session });
@@ -146,16 +173,20 @@ const criarTransacao = async (req, res) => {
       descricao,
       detalhes,
       status: 'pendente',
-      dataHoraRetirada
+      dataHoraRetirada,
+      numeroPedido: tipo === 'compra' ? numeroPedido : null,
+      tempoPreparo: tipo === 'compra' ? cardapio.tempoPreparo : null,
+      historicoStatus: tipo === 'compra' ? [{ status: 'pendente' }] : null
     });
 
     const novaTransacao = await transacao.save({ session });
     console.log('Transação criada:', novaTransacao);
 
     // Atualizar status da transação após salvar
-    novaTransacao.status = 'concluída';
-    await novaTransacao.save({ session });
-
+    if (tipo !== 'compra') {
+      novaTransacao.status = 'concluída';
+      await novaTransacao.save({ session });
+    }
     await session.commitTransaction();
     res.status(201).json({ message, transacao: novaTransacao });
   } catch (err) {

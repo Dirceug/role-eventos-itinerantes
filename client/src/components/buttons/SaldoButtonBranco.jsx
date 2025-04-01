@@ -8,11 +8,9 @@ function SaldoButtonBranco({ userId, token, label }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    console.log('AdicionarSaldo userId:', userId);
   }, [userId]);
 
   const handleOpenModal = () => {
-    console.log('Token obtido (UserContext):', token ? token.substring(0, 10) : 'null');
     if (!token) {
       console.error('No token found');
       return;
