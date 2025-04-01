@@ -12,20 +12,7 @@ import ListaEventos from '../pages/ListaEventos'
 function Usuarios() {
   return (
     <div>
-
-        <ListaEventos />
-        <Eventos />
-        <Logout />
-      <nav>
-        <Link to="eventos">Eventos</Link>
-        <Link to="comandas">Comandas</Link>
-        <Link to="carteira-virtual">Carteira Virtual</Link>
-      </nav>
-      <Routes>
-        <Route path="eventos" element={<Eventos />} />
-        <Route path="comandas" element={<Comandas />} />
-        <Route path="carteira-virtual" element={<CarteiraVirtual />} />
-      </Routes>
+      <ListaEventos />
     </div>
   );
 }

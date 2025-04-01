@@ -5,9 +5,9 @@ import eventoBase from '../img/eventoBase.jpeg';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
 
-const Navbar = lazy(() => import('../components/layout/Navbar'))
-const CurtidasButton = lazy (() => import('../components/buttons/CurtidasButton'))
-const CardapioButton = lazy (() => import('../components/buttons/CardapioButton'))
+const Navbar = lazy(() => import('../components/layout/Navbar'));
+const CurtidasButton = lazy(() => import('../components/buttons/CurtidasButton'));
+const CardapioButton = lazy(() => import('../components/buttons/CardapioButton'));
 
 const ListaEventos = () => {
   const [events, setEvents] = useState([]);
@@ -44,6 +44,11 @@ const ListaEventos = () => {
     navigate(`/event/${eventId}/details`);
   };
 
+  const handleCardapioClick = (eventId, e) => {
+    e.stopPropagation();
+    navigate('/lista-barracas', { state: { eventId, userId: user ? user.uid : null } });
+  };
+
   const userToken = Cookies.get('authToken');
 
   return (
@@ -55,40 +60,33 @@ const ListaEventos = () => {
             key={event._id}
             className="event"
             style={{ backgroundImage: `url(${event.fotoUrl || eventoBase})` }}
+            onClick={() => handleEventClick(event._id)}
           >
             <div className="event-overlay">
-              <button
-                className="event-button event-title"
-                onClick={() => handleEventClick(event._id)}
-              >
-                <h2>{event.nome}</h2>
-              </button>
-              <button
-                className="event-button event-description"
-                onClick={() => handleEventClick(event._id)}
-              >
-                <p className="event-descricao">{event.descricao.length > 244 ? `${event.descricao.substring(0, 241)}...` : event.descricao}</p>
-                <p><br/></p>
-                <p>{event.endereco.cidade} - {event.endereco.estado}</p>
-              </button>
-              <div className="event-details">
-                {event.dataEvento && event.dataEvento.map((data, index) => (
-                  <button
-                    key={index}
-                    className="event-date"
-                    onClick={() => handleEventClick(event._id)}
-                  >
-                    <p className="date">{new Date(data.dataAbertura).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</p>
-                    <p className="time">{data.horaAbertura}</p>
-                    <p className="time">{data.horaFechamento}</p>
-                  </button>
-                ))}
+              <div className="event-content">
+                <div className="event-title">
+                  <h2>{event.nome}</h2>
+                </div>
+                <div className="event-description">
+                  <p className="event-descricao">{event.descricao.length > 244 ? `${event.descricao.substring(0, 241)}...` : event.descricao}</p>
+                  <p><br /></p>
+                  <p>{event.endereco.cidade} - {event.endereco.estado}</p>
+                </div>
+                <div className="event-details">
+                  {event.dataEvento && event.dataEvento.map((data, index) => (
+                    <div key={index} className="event-date">
+                      <p className="date">{new Date(data.dataAbertura).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</p>
+                      <p className="time">{data.horaAbertura}</p>
+                      <p className="time">{data.horaFechamento}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="event-likes">
+              <div className="event-likes" onClick={(e) => e.stopPropagation()}>
                 <CurtidasButton eventId={event._id} initialLikesCount={event.numeroFavoritos} />
               </div>
-              <div className="event-barracas">
-                <CardapioButton label="Ver Barracas" eventId={event._id} size="40px" />
+              <div className="event-barracas" onClick={(e) => handleCardapioClick(event._id, e)}>
+                <CardapioButton label="Ver Barracas" size="40px" />
               </div>
             </div>
           </div>

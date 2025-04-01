@@ -30,7 +30,12 @@ const EventForm = () => {
 
   const handleDataEventoChange = (index, field, value) => {
     const newDataEvento = [...dataEvento];
-    newDataEvento[index][field] = value;
+    if (field === 'dataAbertura' || field === 'dataFechamento') {
+      newDataEvento[index][field] = value;
+      newDataEvento[index][`hora${field.charAt(4).toUpperCase() + field.slice(5)}`] = value.split('T')[1];
+    } else {
+      newDataEvento[index][field] = value;
+    }
     setDataEvento(newDataEvento);
   };
 
