@@ -23,7 +23,7 @@ const DetalheEvento = (props) => {
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/events/${eventId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -63,7 +63,13 @@ const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barr
     console.log('Enviando transação:', transactionData);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/transactions', transactionData, {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) {
+        console.error('API URL is not defined');
+        return;
+      }
+
+      const response = await axios.post(`${apiUrl}/transactions`, transactionData, {
         headers: {
           'Authorization': `Bearer ${Cookies.get('authToken')}`,
           'Content-Type': 'application/json'

@@ -19,14 +19,25 @@ export const UserProvider = ({ children }) => {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/api/users/me', {
+        console.log('API URL:', import.meta.env.VITE_API_URL);
+        const apiUrl = import.meta.env.VITE_API_URL;
+        if (!apiUrl) {
+          throw new Error('API URL is not defined. Please check your environment variables.');
+        }
+
+        const response = await fetch(`${apiUrl}/users/me`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           }
         });
+
+        // Log the response if it's not ok
         if (!response.ok) {
+          const responseText = await response.text();
+          console.error('Error response:', responseText);
+          
           if (response.status === 404) {
             console.error('User not found');
           } else if (response.status === 401) {

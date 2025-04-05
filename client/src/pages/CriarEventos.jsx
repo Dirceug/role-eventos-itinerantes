@@ -60,7 +60,13 @@ const EventForm = () => {
     };
 
     try {
-      await axios.post('http://localhost:5000/api/events', event, {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) {
+        console.error('API URL is not defined');
+        return;
+      }
+
+      await axios.post(`${apiUrl}/events`, event, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

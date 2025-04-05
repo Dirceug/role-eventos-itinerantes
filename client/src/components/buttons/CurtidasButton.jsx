@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import CoracaoPreenchido from '../../img/icones/coracaoPreenchido.png';
-import CoracaoVazado from '../../img/icones/coracaoVazado.png'
+import CoracaoVazado from '../../img/icones/coracaoVazado.png';
 import './CurtidasButton.css';
 import UserContext from '../../contexts/UserContext';
 
@@ -21,7 +21,8 @@ const CurtidasButton = ({ eventId, initialLikesCount }) => {
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/api/curtidas?eventoId=${eventId}`, {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await fetch(`${apiUrl}/curtidas?eventoId=${eventId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -43,7 +44,7 @@ const CurtidasButton = ({ eventId, initialLikesCount }) => {
     };
 
     checkLikedStatus();
-  }, [eventId]);
+  }, [eventId, user.firebaseUid]);
 
   const handleLikeClick = async () => {
     const token = Cookies.get('authToken');
@@ -54,7 +55,8 @@ const CurtidasButton = ({ eventId, initialLikesCount }) => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/curtidas`, {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${apiUrl}/curtidas`, {
         method: liked ? 'DELETE' : 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -30,7 +30,7 @@ function AtualizarDadosBancarios() {
   const handleNext = async () => {
     try {
       const token = Cookies.get('authToken'); // Obter o token de autenticação dos cookies
-      const response = await fetch('http://localhost:5000/api/users/updateBankDetails', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/users/updateBankDetails', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

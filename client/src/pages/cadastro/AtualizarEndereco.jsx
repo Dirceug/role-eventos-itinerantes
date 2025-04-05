@@ -87,7 +87,7 @@ function AtualizarEndereco() {
 
     try {
       const token = Cookies.get('authToken'); // Obter o token de autenticação dos cookies
-      const response = await fetch('http://localhost:5000/api/users/updateAddress', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/users/updateAddress', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

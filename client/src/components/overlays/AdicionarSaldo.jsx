@@ -33,7 +33,13 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
       const fetchSaldo = async () => {
         setLoadingSaldo(true);
         try {
-          const response = await axios.get(`http://localhost:5000/api/transactions/saldo/${userId}`, {
+          const apiUrl = import.meta.env.VITE_API_URL;
+          if (!apiUrl) {
+            console.error('API URL is not defined');
+            return;
+          }
+
+          const response = await axios.get(`${apiUrl}/transactions/saldo/${userId}`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -47,7 +53,13 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
 
       const fetchUser = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
+          const apiUrl = import.meta.env.VITE_API_URL;
+          if (!apiUrl) {
+            console.error('API URL is not defined');
+            return;
+          }
+
+          const response = await axios.get(`${apiUrl}/users/${userId}`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -102,7 +114,13 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
     console.log('Enviando transação:', transactionData);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/transactions', transactionData, {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) {
+        console.error('API URL is not defined');
+        return;
+      }
+
+      const response = await axios.post(`${apiUrl}/transactions`, transactionData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

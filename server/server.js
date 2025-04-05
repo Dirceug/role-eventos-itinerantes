@@ -10,7 +10,21 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [process.env.DEV_ORIGIN, process.env.PROD_ORIGIN];
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  allowedHeaders: 'Content-Type,Authorization' // Inclua outros cabeçalhos personalizados, se houver
+}));
 app.use(express.json());
 
 // MongoDB Connection
@@ -21,6 +35,13 @@ mongoose.connect(process.env.MONGO_URI)
 // Middleware para logar todas as requisições
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
+  next();
+});
+
+// Middleware para configurar COOP e COEP
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'unsafe-none');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
   next();
 });
 

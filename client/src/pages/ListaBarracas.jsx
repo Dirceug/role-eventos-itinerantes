@@ -24,7 +24,7 @@ const ListaBarracas = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/events/${eventId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -39,7 +39,6 @@ const ListaBarracas = () => {
 
         if (data.barracas) {
           console.log('All Barracas:', data.barracas);  // Log all barracas before filtering
-          //const activeBarracas = data.barracas.filter(barraca => barraca.status === 'ativo');
           const activeBarracas = data.barracas;
           setBarracas(activeBarracas);
           console.log('Active Barracas:', activeBarracas);  // Log active barracas

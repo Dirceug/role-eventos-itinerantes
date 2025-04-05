@@ -18,7 +18,14 @@ function LoginComponent() {
         const idToken = await user.getIdToken();
         Cookies.set('authToken', idToken);
 
-        const response = await fetch('http://localhost:5000/api/users/register', {
+        console.log('API URL:', import.meta.env.VITE_API_URL);
+        const apiUrl = import.meta.env.VITE_API_URL;
+        if (!apiUrl) {
+          console.error('API URL is not defined');
+          return;
+        }
+
+        const response = await fetch(`${apiUrl}/users/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

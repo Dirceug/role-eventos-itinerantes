@@ -20,6 +20,9 @@ const DetalheCardapio = lazy(() => import('./pages/DetalheCardapio'));
 const ListaPedidos = lazy(() => import('../src/pages/ListaPedidos')); 
 const CriarEventos = lazy(() => import('./pages/CriarEventos'));
 
+//import dotenv from 'dotenv';
+//dotenv.config();
+
 function App() {
   const [showAdicionarSaldo, setShowAdicionarSaldo] = useState(false);
   const [user, setUser] = useState(null);
