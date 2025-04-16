@@ -3,6 +3,8 @@ const admin = require('../firebase'); // Importando a inicialização do Firebas
 const router = express.Router();
 const { User } = require('../models/user'); // Importando o modelo User corretamente
 const verifyToken = require('../middleware/authenticateToken'); // Importar o middleware de autenticação
+const { generateIdentifier, formatIdentifier } = require('../scripts/identifier'); // Importe a função de geração
+
 
 // Middleware para logar todas as requisições
 router.use((req, res, next) => {
@@ -42,6 +44,8 @@ router.post('/register', async (req, res) => {
     // Verifica se o usuário já existe no banco de dados
     let user = await User.findOne({ email: email });
     if (!user) {
+      // Gera o identificador único
+      const identifier = generateIdentifier();
       // Adiciona o usuário no banco de dados MongoDB
       user = new User({
         displayName: displayName,
@@ -49,7 +53,8 @@ router.post('/register', async (req, res) => {
         photoURL: photoURL,
         firebaseUid: firebaseUid,
         emailVerified: emailVerified,
-        isAnonymous: isAnonymous
+        isAnonymous: isAnonymous,
+        identifier: identifier, // Adiciona o identificador gerado
       });
 
       const newUser = await user.save();
@@ -63,8 +68,11 @@ router.post('/register', async (req, res) => {
       user.isAnonymous = isAnonymous;
 
       const updatedUser = await user.save();
-      return res.status(200).json(updatedUser);
-    }
+      // Retorna o usuário com o identificador formatado
+      return res.status(200).json({
+        ...updatedUser.toObject(),
+        identifier: formatIdentifier(updatedUser.identifier),
+      });    }
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(400).json({ message: error.message });

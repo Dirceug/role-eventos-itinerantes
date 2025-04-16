@@ -22,7 +22,7 @@ const CurtidasButton = ({ eventId, initialLikesCount }) => {
 
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await fetch(`${apiUrl}/curtidas?eventoId=${eventId}`, {
+        const response = await fetch(`${apiUrl}/curtidas/status?eventoId=${eventId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -32,9 +32,8 @@ const CurtidasButton = ({ eventId, initialLikesCount }) => {
 
         if (response.ok) {
           const data = await response.json();
-          const userLiked = data.some(curtida => curtida.usuarioId.firebaseUid === user.firebaseUid);
-          setLiked(userLiked);
-          setLikesCount(data.length);
+          setLiked(data.liked); // Backend deve retornar "liked: true/false" para o usuário atual
+          setLikesCount(data.likesCount); // Retorna o número total de curtidas do evento
         } else {
           console.error('Error checking liked status:', response.statusText);
         }

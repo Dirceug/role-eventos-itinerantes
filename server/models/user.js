@@ -51,6 +51,7 @@ const userSchema = new mongoose.Schema({
   isAnonymous: Boolean,
   cpf: String,
   status: String,
+  identifier: { type: String, required: true, unique: true }, // Novo campo para o identificador
   endereco: {
     type: Map,
     of: enderecoSchema

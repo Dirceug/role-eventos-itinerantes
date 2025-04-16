@@ -7,6 +7,12 @@ import UserContext from '../contexts/UserContext';
 import './CriarEventos.css';
 import BackButton from '../components/buttons/BackButton'; // Importe o BackButton aqui
 
+// Função para formatar o identificador no formato XX-XX-X
+function formatIdentifier(identifier) {
+  if (!identifier || identifier.length !== 5) return identifier; // Valida o identificador
+  return `${identifier.slice(0, 2)} - ${identifier.slice(2, 4)} - ${identifier.slice(4)}`;
+}
+
 const schema = Joi.object({
   nome: Joi.string().max(100).required().messages({
     'string.empty': 'O nome do evento é obrigatório.',
@@ -175,7 +181,7 @@ const EventForm = () => {
       <BackButton />
       <h1>Cadastre seu evento</h1>
       <h1>
-        Nome do Responsável: <strong>{user.displayName}</strong>
+        Nome do Responsável: {user.displayName} ( {formatIdentifier(user.identifier)} )
       </h1>
       <form onSubmit={handleSubmit}>
         <label>
