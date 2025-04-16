@@ -2,16 +2,10 @@
   background-color: #272727;
   color: #ffffff;
   padding: 20px;
-  border-radius: 5px;
 }
 
-.back-button {
-  background-color: #EE7F43;
-  color: #ffffff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin-bottom: 20px;
+h1 {
+  text-align: center;
 }
 
 form {
@@ -26,10 +20,11 @@ label {
 input, textarea, select {
   margin-top: 5px;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border-bottom: 1px solid #ccc;
   width: 100%;
   box-sizing: border-box;
+  background-color: #272727;
+  color: #ffffff;
 }
 
 hr {

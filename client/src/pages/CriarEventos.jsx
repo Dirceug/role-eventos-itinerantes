@@ -2,8 +2,67 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import Joi from 'joi'; // Importe a biblioteca Joi
 import UserContext from '../contexts/UserContext';
 import './CriarEventos.css';
+import BackButton from '../components/buttons/BackButton'; // Importe o BackButton aqui
+
+const schema = Joi.object({
+  nome: Joi.string().max(100).required().messages({
+    'string.empty': 'O nome do evento é obrigatório.',
+    'string.max': 'O nome do evento deve ter no máximo 100 caracteres.',
+  }),
+  descricao: Joi.string().max(2000).required().messages({
+    'string.empty': 'A descrição do evento é obrigatória.',
+    'string.max': 'A descrição deve ter no máximo 2000 caracteres.',
+  }),
+  data: Joi.date().iso().required().messages({
+    'date.base': 'A data é obrigatória e deve ser uma data válida.',
+    'date.iso': 'A data deve estar no formato ISO.',
+  }),
+  status: Joi.string().valid('Ativo', 'Inativo', 'Pausado', 'Apagado').required().messages({
+    'any.only': 'O status deve ser Ativo, Inativo, Pausado ou Apagado.',
+    'string.empty': 'O status é obrigatório.',
+  }),
+  endereco: Joi.object({
+    apelido: Joi.string().required().messages({
+      'string.empty': 'O apelido do endereço é obrigatório.',
+    }),
+    cep: Joi.string().optional(),
+    logradouro: Joi.string().required().messages({
+      'string.empty': 'O logradouro é obrigatório.',
+    }),
+    numero: Joi.string().required().messages({
+      'string.empty': 'O número do endereço é obrigatório.',
+    }),
+    complemento: Joi.string().optional(),
+    bairro: Joi.string().required().messages({
+      'string.empty': 'O bairro é obrigatório.',
+    }),
+    cidade: Joi.string().required().messages({
+      'string.empty': 'A cidade é obrigatória.',
+    }),
+    estado: Joi.string().required().messages({
+      'string.empty': 'O estado é obrigatório.',
+    }),
+    pontoReferencia: Joi.string().optional(),
+    status: Joi.string().valid('ativo').required(),
+  }).required(),
+  dataEvento: Joi.array().items(
+    Joi.object({
+      dataAbertura: Joi.date().iso().required().messages({
+        'date.base': 'A data de abertura deve ser uma data válida.',
+        'date.iso': 'A data de abertura deve estar no formato ISO.',
+        'any.required': 'A data de abertura é obrigatória.',
+      }),
+      dataFechamento: Joi.date().iso().required().messages({
+        'date.base': 'A data de fechamento deve ser uma data válida.',
+        'date.iso': 'A data de fechamento deve estar no formato ISO.',
+        'any.required': 'A data de fechamento é obrigatória.',
+      }),
+    })
+  ).min(1).required(),
+});
 
 const EventForm = () => {
   const { user } = useContext(UserContext);
@@ -22,11 +81,12 @@ const EventForm = () => {
     cidade: '',
     estado: '',
     pontoReferencia: '',
-    status: 'ativo'
+    status: 'ativo',
   });
   const [dataEvento, setDataEvento] = useState([
-    { dataAbertura: '', horaAbertura: '', dataFechamento: '', horaFechamento: '' }
+    { dataAbertura: '', horaAbertura: '', dataFechamento: '', horaFechamento: '' },
   ]);
+  const [errors, setErrors] = useState({});
 
   const handleDataEventoChange = (index, field, value) => {
     const newDataEvento = [...dataEvento];
@@ -40,11 +100,41 @@ const EventForm = () => {
   };
 
   const addDataEvento = () => {
-    setDataEvento([...dataEvento, { dataAbertura: '', horaAbertura: '', dataFechamento: '', horaFechamento: '' }]);
+    setDataEvento([
+      ...dataEvento,
+      { dataAbertura: '', horaAbertura: '', dataFechamento: '', horaFechamento: '' },
+    ]);
+  };
+
+  const validate = () => {
+    const event = {
+      nome,
+      descricao,
+      data,
+      status,
+      endereco,
+      dataEvento,
+    };
+
+    const { error } = schema.validate(event, { abortEarly: false });
+    if (error) {
+      const errorMessages = {};
+      error.details.forEach((detail) => {
+        errorMessages[detail.path.join('.')] = detail.message;
+      });
+      setErrors(errorMessages);
+      return false;
+    }
+    setErrors({});
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validate()) {
+      return;
+    }
+
     const token = Cookies.get('authToken');
     const event = {
       nome,
@@ -53,10 +143,12 @@ const EventForm = () => {
       endereco,
       dataEvento,
       status,
-      organizadores: [{
-        nome: user.displayName,
-        uid: user._id
-      }]
+      organizadores: [
+        {
+          nome: user.displayName,
+          uid: user._id,
+        },
+      ],
     };
 
     try {
@@ -68,9 +160,9 @@ const EventForm = () => {
 
       await axios.post(`${apiUrl}/events`, event, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
       });
       navigate('/eventos');
     } catch (error) {
@@ -80,84 +172,102 @@ const EventForm = () => {
 
   return (
     <div className="event-form">
-      <button className="back-button" onClick={() => navigate(-1)}>Voltar</button>
+      <BackButton />
       <h1>Cadastre seu evento</h1>
-      <p>Nome do Responsável: {user.displayName}</p>
+      <h1>
+        Nome do Responsável: <strong>{user.displayName}</strong>
+      </h1>
       <form onSubmit={handleSubmit}>
         <label>
-          Nome:
-          <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} maxLength="100" required />
+          Nome do evento:
+          <input
+            type="text"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            maxLength="100"
+            required
+          />
+          {errors['nome'] && <p className="error">{errors['nome']}</p>}
         </label>
         <label>
           Descrição:
-          <textarea value={descricao} onChange={(e) => setDescricao(e.target.value)} maxLength="2000" required />
+          <textarea
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+            maxLength="2000"
+            required
+          />
+          {errors['descricao'] && <p className="error">{errors['descricao']}</p>}
         </label>
         <label>
           Data:
-          <input type="datetime-local" value={data} onChange={(e) => setData(e.target.value)} required />
+          <input
+            type="datetime-local"
+            value={data}
+            onChange={(e) => setData(e.target.value)}
+            required
+          />
+          {errors['data'] && <p className="error">{errors['data']}</p>}
         </label>
         <label>
           Status:
-          <select value={status} onChange={(e) => setStatus(e.target.value)} required>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            required
+          >
             <option value="Ativo">Ativo</option>
             <option value="Inativo">Inativo</option>
             <option value="Pausado">Pausado</option>
             <option value="Apagado">Apagado</option>
           </select>
+          {errors['status'] && <p className="error">{errors['status']}</p>}
         </label>
         <hr />
         <h2>Endereço</h2>
-        <label>
-          Apelido:
-          <input type="text" value={endereco.apelido} onChange={(e) => setEndereco({ ...endereco, apelido: e.target.value })} required />
-        </label>
-        <label>
-          CEP:
-          <input type="text" value={endereco.cep} onChange={(e) => setEndereco({ ...endereco, cep: e.target.value })} />
-        </label>
-        <label>
-          Logradouro:
-          <input type="text" value={endereco.logradouro} onChange={(e) => setEndereco({ ...endereco, logradouro: e.target.value })} required />
-        </label>
-        <label>
-          Número:
-          <input type="text" value={endereco.numero} onChange={(e) => setEndereco({ ...endereco, numero: e.target.value })} required />
-        </label>
-        <label>
-          Complemento:
-          <input type="text" value={endereco.complemento} onChange={(e) => setEndereco({ ...endereco, complemento: e.target.value })} />
-        </label>
-        <label>
-          Bairro:
-          <input type="text" value={endereco.bairro} onChange={(e) => setEndereco({ ...endereco, bairro: e.target.value })} required />
-        </label>
-        <label>
-          Cidade:
-          <input type="text" value={endereco.cidade} onChange={(e) => setEndereco({ ...endereco, cidade: e.target.value })} required />
-        </label>
-        <label>
-          Estado:
-          <input type="text" value={endereco.estado} onChange={(e) => setEndereco({ ...endereco, estado: e.target.value })} required />
-        </label>
-        <label>
-          Ponto de Referência:
-          <input type="text" value={endereco.pontoReferencia} onChange={(e) => setEndereco({ ...endereco, pontoReferencia: e.target.value })} />
-        </label>
+        {/* Campos do endereço */}
         <hr />
         <h2>Horário de Funcionamento</h2>
         {dataEvento.map((item, index) => (
           <div key={index} className="data-evento">
             <label>
               Data e Hora de Abertura:
-              <input type="datetime-local" value={item.dataAbertura} onChange={(e) => handleDataEventoChange(index, 'dataAbertura', e.target.value)} required />
+              <input
+                type="datetime-local"
+                value={item.dataAbertura}
+                onChange={(e) =>
+                  handleDataEventoChange(index, 'dataAbertura', e.target.value)
+                }
+                required
+              />
+              {errors[`dataEvento.${index}.dataAbertura`] && (
+                <p className="error">
+                  {errors[`dataEvento.${index}.dataAbertura`]}
+                </p>
+              )}
             </label>
             <label>
               Data e Hora de Fechamento:
-              <input type="datetime-local" value={item.dataFechamento} onChange={(e) => handleDataEventoChange(index, 'dataFechamento', e.target.value)} required />
+              <input
+                type="datetime-local"
+                value={item.dataFechamento}
+                onChange={(e) =>
+                  handleDataEventoChange(index, 'dataFechamento', e.target.value)
+                }
+                required
+              />
+              {errors[`dataEvento.${index}.dataFechamento`] && (
+                <p className="error">
+                  {errors[`dataEvento.${index}.dataFechamento`]}
+                </p>
+              )}
             </label>
           </div>
         ))}
-        <button type="button" onClick={addDataEvento}>Adicionar outra data</button>
+        <button type="button" onClick={addDataEvento}>
+          Adicionar outra data
+        </button>
+        <hr />
         <button type="submit">Criar Evento</button>
       </form>
     </div>
