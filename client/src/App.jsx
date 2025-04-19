@@ -19,6 +19,7 @@ const ListaBarracas = lazy(() => import('./pages/ListaBarracas'));
 const DetalheCardapio = lazy(() => import('./pages/DetalheCardapio'));
 const ListaPedidos = lazy(() => import('../src/pages/ListaPedidos')); 
 const CriarEventos = lazy(() => import('./pages/CriarEventos'));
+const ListaUsuarios = lazy(() => import('./pages/ListaUsuarios'));
 
 //import dotenv from 'dotenv';
 //dotenv.config();
@@ -57,6 +58,7 @@ function App() {
               <Route path="/lista-barracas" element={<ProtectedRoute element={<ListaBarracas />} />} />
               <Route path="/lista-pedidos" element={<ProtectedRoute element={<ListaPedidos />} />} />
               <Route path="/eventos/novo" element={<ProtectedRoute element={<CriarEventos />} />} />
+              <Route path="/listaUsuarios/*" element={<ProtectedRoute element={<ListaUsuarios />} />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

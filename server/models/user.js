@@ -66,6 +66,10 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// Adicionando índices para melhorar buscas frequentes
+userSchema.index({ _id: 1 });
+userSchema.index({ identifier: 1 });
+
 const User = mongoose.model('User', userSchema);
 const Curtida = mongoose.model('Curtida', curtidaSchema);
 const Amizade = mongoose.model('Amizade', amizadeSchema);

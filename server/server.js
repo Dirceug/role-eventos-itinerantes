@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const verifyToken = require('./middleware/authenticateToken'); // Importar o middleware de autenticação
+const NodeCache = require("node-cache");
 
 dotenv.config();
 
@@ -26,6 +27,9 @@ app.use(cors({
   allowedHeaders: 'Content-Type,Authorization' // Inclua outros cabeçalhos personalizados, se houver
 }));
 app.use(express.json());
+
+// Cache Global
+const userCache = new NodeCache({ stdTTL: 600 });
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)

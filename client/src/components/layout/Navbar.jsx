@@ -8,6 +8,7 @@ import './Navbar.css';
 const CardapioButtonBranco = lazy(() => import('../buttons/CardapioButtonBranco'));
 const SaldoButtonBranco = lazy(() => import('../buttons/SaldoButtonBranco'));
 const ListaPedidosButton = lazy(() => import('../buttons/ListaPedidosButton'));
+const ListaUsuariosButton = lazy(() => import('../buttons/ListaUsuariosButton'));
 
 
 function Navbar({ eventId }) {
@@ -92,6 +93,13 @@ function Navbar({ eventId }) {
             userId={user._id}
             token={userToken}
             label="Adicionar Saldo"
+          />
+        )}
+        {user && (
+          <ListaUsuariosButton
+            userId={user._id}
+            token={userToken}
+            label="Usuarios"
           />
         )}
         {user && (

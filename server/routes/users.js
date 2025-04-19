@@ -4,7 +4,9 @@ const router = express.Router();
 const { User } = require('../models/user'); // Importando o modelo User corretamente
 const verifyToken = require('../middleware/authenticateToken'); // Importar o middleware de autenticação
 const { generateIdentifier, formatIdentifier } = require('../scripts/identifier'); // Importe a função de geração
+const NodeCache = require("node-cache");
 
+const userCache = new NodeCache({ stdTTL: 600 }); // Cache de usuários com TTL de 10 minutos
 
 // Middleware para logar todas as requisições
 router.use((req, res, next) => {
@@ -33,6 +35,27 @@ router.get('/me', verifyToken, async (req, res) => {
   } catch (error) {
     console.error('Error fetching user data:', error);
     res.status(500).json({ message: 'Error fetching user data', error });
+  }
+});
+
+// GET user by identifier or _id
+router.get('/search', verifyToken, async (req, res) => {
+  const { _id, identifier } = req.query;
+
+  try {
+    let query = {};
+    if (_id) query._id = _id;
+    if (identifier) query.identifier = { $regex: identifier, $options: 'i' }; // Busca parcial
+
+    const user = await User.findOne(query, { _id: 1, displayName: 1, photoURL: 1, email: 1 }); // Projeção
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error('Error searching user:', err);
+    res.status(500).json({ message: 'Erro ao buscar usuário.', error: err.message });
   }
 });
 
