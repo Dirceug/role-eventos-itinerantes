@@ -39,3 +39,63 @@
 .close-button.orange:hover {
   background-color: #D66A2E;
 }
+
+.detalhe-evento-container {
+  display: flex;
+  flex-direction: column; /* Garante que os itens fiquem em coluna */
+  align-items: center; /* Alinha os itens verticalmente ao centro */
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column; /* Para organizar os itens verticalmente dentro do modal */
+  align-items: center; /* Alinha os itens horizontalmente ao centro do modal */
+  background-color: white; /* Se você quiser um fundo branco para o conteúdo do modal */
+  padding: 20px; /* Opcional: para espaçamento interno */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Opcional: para uma sombra */
+}
+
+.detalhe-evento-foto {
+  border-radius: 50px;
+  max-width: 250px; /* Define a largura máxima da foto */
+  max-height: 250px; /* Define a altura máxima da foto */
+  overflow: hidden; /* Garante que a imagem não ultrapasse as dimensões */
+  display: flex;
+  justify-content: center;
+}
+
+.detalhe-evento-foto img {
+  display: flex;
+  justify-content: center;
+  width: 100%; /* Faz a imagem ocupar a largura do container .detalhe-evento-foto */
+  height: auto; /* Mantém a proporção da altura da imagem */
+}
+
+.edit-buttons {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+button {
+  margin: 10px;
+  color: #EE7F43;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 5px;
+  border-color: #EE7F43;
+}
+
+button:hover {
+  margin: 10px;
+  color: white;
+  background-color: #EE7F43;
+  border-radius: 5px;
+  font-size: 18px;
+  padding: 5px;
+  border-color: white;
+}
+
+
+

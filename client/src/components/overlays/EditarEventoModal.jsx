@@ -57,9 +57,6 @@ const EditarEventoModal = ({ isOpen, onRequestClose, eventId }) => {
         {/* <Navbar user={user} token={Cookies.get('authToken')} eventId={eventId} /> */}
         <div className="container">
           <div className="detalhe-evento-container">
-            <div className="detalhe-evento-header">
-              <CurtidasButton eventId={eventId} initialLikesCount={event.numeroFavoritos} />
-            </div>
             <div className="detalhe-evento-foto">
               <img src={event.fotoUrl} alt={event.nome} />
             </div>
