@@ -81,6 +81,8 @@ router.post('/register', async (req, res) => {
       });
 
       const newUser = await user.save();
+      userCache.del("users");
+
       return res.status(201).json(newUser);
     } else {
       // Se o usuário já existe, atualize os detalhes

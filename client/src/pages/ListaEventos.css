@@ -129,3 +129,32 @@ html, body, .container {
   top: 10px;
   right: 10px;
 }
+
+.no-events-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.no-events-text {
+  font-size: 2em;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.create-event-button {
+  background-color: #EE7F43;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.create-event-button:hover {
+  background-color: #D66A2E;
+}

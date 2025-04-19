@@ -68,6 +68,16 @@ const DetalheEvento = (props) => {
           </div>
           <div className="detalhe-evento-info">
             <h2>{event.nome}</h2>
+            <div className="organizador">
+            <p><strong>Organizado por: </strong>
+                {event.organizadores && event.organizadores.map((organizador, index, array) => (
+                  <React.Fragment key={organizador._id}>
+                    {organizador.nome}
+                    {index < array.length - 1 ? ', ' : ''}
+                  </React.Fragment>
+                ))}
+              </p>
+            </div>
             <p>{new Date(event.data).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} - {new Date(event.data).toLocaleDateString('pt-BR', { weekday: 'long' })}</p>
             <p>{event.descricao}</p>
             <div className="data-detalhada-container">

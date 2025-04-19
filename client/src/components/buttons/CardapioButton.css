@@ -20,3 +20,7 @@
   height: 24px;
   margin-bottom: 5px; /* Espaço entre o ícone e o texto */
 }
+
+span {
+  color: #EE7F43;
+}

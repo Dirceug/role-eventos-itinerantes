@@ -14,6 +14,7 @@ const RegistrarUsuario = lazy(() => import('./pages/cadastro/RegistrarUsuario'))
 const AtualizarEndereco = lazy(() => import('./pages/cadastro/AtualizarEndereco'));
 const DadosBancarios = lazy(() => import('./pages/cadastro/DadosBancarios'));
 const ListaEventos = lazy(() => import('./pages/ListaEventos'));
+const MeusEventos = lazy(() => import('./pages/MeusEventos'));
 const DetalheEvento = lazy(() => import('./pages/DetalheEvento'));
 const ListaBarracas = lazy(() => import('./pages/ListaBarracas'));
 const DetalheCardapio = lazy(() => import('./pages/DetalheCardapio'));
@@ -52,6 +53,7 @@ function App() {
               <Route path="/cadastro/atualizarendereco" element={<ProtectedRoute element={<AtualizarEndereco />} />} />
               <Route path="/cadastro/dadosbancarios" element={<ProtectedRoute element={<DadosBancarios />} />} />
               <Route path="/upcoming-events" element={<ProtectedRoute element={<ListaEventos />} />} />
+              <Route path="/meus-eventos" element={<ProtectedRoute element={<MeusEventos />} />} />
               <Route path="/event/:eventId/details" element={<ProtectedRoute element={<DetalheEvento />} />} />
               <Route path="/event/:eventId/barracas" element={<ProtectedRoute element={<ListaBarracas />} />} />
               <Route path="/event/:eventId/barraca/:barracaId/cardapio" element={<ProtectedRoute element={<DetalheCardapio />} />} />
@@ -59,6 +61,7 @@ function App() {
               <Route path="/lista-pedidos" element={<ProtectedRoute element={<ListaPedidos />} />} />
               <Route path="/eventos/novo" element={<ProtectedRoute element={<CriarEventos />} />} />
               <Route path="/listaUsuarios/*" element={<ProtectedRoute element={<ListaUsuarios />} />} />
+              <Route path="/eventos" element={<ProtectedRoute element={<ListaEventos />} />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

@@ -76,6 +76,7 @@ function Navbar({ eventId }) {
           {/* <Link to="/carteira-virtual">Carteira Virtual</Link> */}
           <Link to="/carteira-virtual">Restaurantes Corporativos</Link>
           <Link to="/eventos/novo">Cadastrar Eventos</Link>
+          <Link to="/meus-eventos">Meus Eventos</Link>
           <a href="/logout" onClick={handleLogout}>Logout</a>
         </div>
       )}
