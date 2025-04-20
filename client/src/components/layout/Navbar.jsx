@@ -22,7 +22,7 @@ function Navbar({ eventId }) {
     if (!user) {
       console.error('No user logged in');
     } else {
-      console.log('User ID in Navbar:', user._id);
+      //console.log('User ID in Navbar:', user._id);
     }
   }, [user]);
 

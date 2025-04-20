@@ -6,14 +6,13 @@ const mongoose = require('mongoose');
 
 // Middleware para logar todas as requisições
 router.use((req, res, next) => {
-  console.log(`${req.method} ${req.url} - Body:`, req.body);
+  //console.log(`${req.method} ${req.url} - Body:`, req.body);
   next();
 });
 
 // GET all amizades (Proteger a rota)
 router.get('/', verifyToken, async (req, res) => {
   try {
-    console.log('Fetching all amizades');
     const amizades = await Amizade.find().populate('usuarioId1').populate('usuarioId2');
     res.json(amizades);
   } catch (err) {
@@ -29,7 +28,6 @@ router.post('/', verifyToken, async (req, res) => {
 
   try {
     const { usuarioId2, status } = req.body;
-    console.log('Creating new amizade for UID:', req.uid);
 
     const newAmizade = new Amizade({
       usuarioId1: req.uid,
@@ -40,8 +38,6 @@ router.post('/', verifyToken, async (req, res) => {
     await newAmizade.save({ session });
     await session.commitTransaction();
     session.endSession();
-
-    console.log('Amizade created:', newAmizade);
     res.status(201).json(newAmizade);
   } catch (err) {
     await session.abortTransaction();

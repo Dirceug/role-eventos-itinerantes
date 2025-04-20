@@ -10,7 +10,6 @@ const verifyToken = (req, res, next) => {
   admin.auth().verifyIdToken(token)
     .then((decodedToken) => {
       req.uid = decodedToken.uid;
-      console.log('Token authenticated successfully:');
       next();
     })
     .catch((error) => {

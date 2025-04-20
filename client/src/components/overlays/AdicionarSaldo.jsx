@@ -111,8 +111,6 @@ const AdicionarSaldo = ({ isOpen, onRequestClose, userId, token }) => {
       status: 'pendente'
     };
 
-    console.log('Enviando transação:', transactionData);
-
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       if (!apiUrl) {

@@ -15,7 +15,6 @@ function Signup() {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (result) => {
-        console.log(result.user);
         const idToken = await result.user.getIdToken();
         Cookies.set('authToken', idToken); // Armazenar o token no cookie
         navigate('/events');

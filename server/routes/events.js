@@ -7,7 +7,6 @@ const verifyToken = require('../middleware/authenticateToken');
 router.use((req, res, next) => {
   next();
 });
-
 // GET all events (Proteger a rota)
 router.get('/', verifyToken, async (req, res) => {
   try {
@@ -55,6 +54,176 @@ router.post('/', verifyToken, async (req, res) => {
   } catch (err) {
     console.error('Error creating event:', err);
     res.status(400).json({ message: err.message });
+  }
+});
+
+// Adicionar novos organizadores a um evento
+router.put('/:eventId/organizadores', verifyToken, async (req, res) => {
+  const { eventId } = req.params;
+  const { organizadores } = req.body;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Evento não encontrado.' });
+    }
+
+    // Validação dos organizadores
+    const validOrganizadores = organizadores.filter(org => org.status === 'Ativo' && org.emailVerified);
+    if (validOrganizadores.length === 0) {
+      return res.status(400).json({ message: 'Nenhum organizador válido encontrado.' });
+    }
+
+    event.organizadores.push(...validOrganizadores);
+    const updatedEvent = await event.save();
+    res.json(updatedEvent);
+  } catch (err) {
+    console.error('Erro ao adicionar organizadores:', err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Editar dados de um organizador
+router.put('/:eventId/organizadores/:organizadorId', verifyToken, async (req, res) => {
+  const { eventId, organizadorId } = req.params;
+  const updates = req.body;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Evento não encontrado.' });
+    }
+
+    const organizador = event.organizadores.id(organizadorId);
+    if (!organizador) {
+      return res.status(404).json({ message: 'Organizador não encontrado.' });
+    }
+
+    Object.assign(organizador, updates); // Atualiza os campos
+    const updatedEvent = await event.save();
+    res.json(updatedEvent);
+  } catch (err) {
+    console.error('Erro ao editar organizador:', err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Apagar organizador
+router.delete('/:eventId/organizadores/:organizadorId', verifyToken, async (req, res) => {
+  const { eventId, organizadorId } = req.params;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Evento não encontrado.' });
+    }
+
+    event.organizadores.id(organizadorId).remove();
+    const updatedEvent = await event.save();
+    res.json(updatedEvent);
+  } catch (err) {
+    console.error('Erro ao remover organizador:', err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Adicionar nova barraca
+router.put('/:eventId/barracas', verifyToken, async (req, res) => {
+  const { eventId } = req.params;
+  const { barracas } = req.body;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Evento não encontrado.' });
+    }
+
+    event.barracas.push(...barracas);
+    const updatedEvent = await event.save();
+    res.json(updatedEvent);
+  } catch (err) {
+    console.error('Erro ao adicionar barracas:', err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Editar dados da barraca
+router.put('/:eventId/barracas/:barracaId', verifyToken, async (req, res) => {
+  const { eventId, barracaId } = req.params;
+  const updates = req.body;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Evento não encontrado.' });
+    }
+
+    const barraca = event.barracas.id(barracaId);
+    if (!barraca) {
+      return res.status(404).json({ message: 'Barraca não encontrada.' });
+    }
+
+    Object.assign(barraca, updates);
+    const updatedEvent = await event.save();
+    res.json(updatedEvent);
+  } catch (err) {
+    console.error('Erro ao editar barraca:', err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Adicionar prato no cardápio de uma barraca
+router.put('/:eventId/barracas/:barracaId/cardapios', verifyToken, async (req, res) => {
+  const { eventId, barracaId } = req.params;
+  const { cardapios } = req.body;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Evento não encontrado.' });
+    }
+
+    const barraca = event.barracas.id(barracaId);
+    if (!barraca) {
+      return res.status(404).json({ message: 'Barraca não encontrada.' });
+    }
+
+    barraca.cardapio.push(...cardapios);
+    const updatedEvent = await event.save();
+    res.json(updatedEvent);
+  } catch (err) {
+    console.error('Erro ao adicionar pratos ao cardápio:', err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Editar prato no cardápio de uma barraca
+router.put('/:eventId/barracas/:barracaId/cardapios/:pratoId', verifyToken, async (req, res) => {
+  const { eventId, barracaId, pratoId } = req.params;
+  const updates = req.body;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Evento não encontrado.' });
+    }
+
+    const barraca = event.barracas.id(barracaId);
+    if (!barraca) {
+      return res.status(404).json({ message: 'Barraca não encontrada.' });
+    }
+
+    const prato = barraca.cardapio.id(pratoId);
+    if (!prato) {
+      return res.status(404).json({ message: 'Prato não encontrado.' });
+    }
+
+    Object.assign(prato, updates);
+    const updatedEvent = await event.save();
+    res.json(updatedEvent);
+  } catch (err) {
+    console.error('Erro ao editar prato do cardápio:', err);
+    res.status(500).json({ message: err.message });
   }
 });
 

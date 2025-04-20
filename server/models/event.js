@@ -38,17 +38,22 @@ const barracaSchema = new mongoose.Schema({
   cardapio: [cardapioSchema]
 });
 
+const organizadorSchema = new mongoose.Schema({
+  displayName: String,
+  email: String,
+  photoURL: String,
+  identifier: String,
+  _id: mongoose.Schema.Types.ObjectId,
+  status: String,
+  emailVerified: Boolean
+});
+
 const eventSchema = new mongoose.Schema({
   nome: String,
   descricao: String,
   data: Date,
   barracas: [barracaSchema],
-  organizadores: [{
-    uid: String,
-    nome: String,
-    cargo: String,
-    contato: String
-  }],
+  organizadores: [organizadorSchema],
   fotoUrl: String,
   dataEvento: [{
     dataAbertura: Date,

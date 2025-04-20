@@ -12,7 +12,7 @@ const calcularSaldoUsuario = async (usuarioId) => {
     const saldo = transacoes.reduce((saldo, transacao) => {
       return math.round(math.add(saldo, transacao.valor || 0), 2);
     }, 0);
-    console.log('Saldo calculado:', saldo); // Adicione log para depuração
+    //console.log('Saldo calculado:', saldo); // Adicione log para depuração
     return saldo;
   } catch (error) {
     console.error('Erro ao calcular saldo do usuário:', error);
@@ -47,7 +47,7 @@ const criarTransacao = async (req, res) => {
   session.startTransaction();
 
   try {
-    console.log('Requisição recebida para criar transação:', req.body);
+    //console.log('Requisição recebida para criar transação:', req.body);
 
     const {
       usuarioId,
@@ -74,7 +74,7 @@ const criarTransacao = async (req, res) => {
 
     // Verificar o saldo do usuário
     const saldoAtual = await calcularSaldoUsuario(usuarioId);
-    console.log('Saldo atual do usuário:', saldoAtual);
+    //console.log('Saldo atual do usuário:', saldoAtual);
 
     // Ajustar o valor para transações de compra
     const valorAjustado = tipo === 'compra' ? -Math.abs(valor) : valor;
@@ -120,13 +120,11 @@ const criarTransacao = async (req, res) => {
 
       // Obtém o último número de pedido da barraca para gerar um novo número de pedido
       const ultimoPedido = await Pedido.findOne({ barracaId }).sort({ numeroPedido: -1 }).exec();
-      console.log('Último pedido encontrado:', ultimoPedido); // Log para depuração
 
       let ultimoNumero = 0;
       if (ultimoPedido && ultimoPedido.numeroPedido) {
         ultimoNumero = parseInt(ultimoPedido.numeroPedido.split('-')[1]);
       }
-      console.log('Último número de pedido:', ultimoNumero); // Log para depuração
       numeroPedido = gerarNumeroPedido(chaveBarraca, ultimoNumero);
 
       const pedido = new Pedido({

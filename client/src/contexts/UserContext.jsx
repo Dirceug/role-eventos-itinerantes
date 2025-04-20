@@ -4,14 +4,13 @@ import Cookies from 'js-cookie';
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  console.log('UserProvider montado');
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       const token = Cookies.get('authToken');
-      console.log('Token obtido (UserContext):', token ? token.substring(0, 10) + '...' + token.substring(token.length - 10) : 'null');
+      console.log('Token obtido (UserContext):', token );
       if (!token) {
         console.error('No token found');
         setLoadingUser(false);

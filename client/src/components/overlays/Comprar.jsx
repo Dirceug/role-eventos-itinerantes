@@ -60,8 +60,6 @@ const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barr
       foto: prato.imagem
     };
 
-    console.log('Enviando transação:', transactionData);
-
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       if (!apiUrl) {

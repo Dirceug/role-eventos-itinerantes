@@ -35,13 +35,10 @@ const ListaBarracas = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log('Event Data:', data);  // Log event data
 
         if (data.barracas) {
-          console.log('All Barracas:', data.barracas);  // Log all barracas before filtering
           const activeBarracas = data.barracas;
           setBarracas(activeBarracas);
-          console.log('Active Barracas:', activeBarracas);  // Log active barracas
         } else {
           console.error('No barracas found in event data');
         }
@@ -76,7 +73,6 @@ const ListaBarracas = () => {
           <h1>{event.nome}</h1>  
           <div className="barracas-list">
             {barracas.map(barraca => {
-              console.log('Rendering Barraca:', barraca); // Log barraca data
               return (
                 <div key={barraca._id} className="barraca-card" onClick={() => handleCardapioClick(barraca._id)}>
                   <h2>{barraca.nome}</h2>

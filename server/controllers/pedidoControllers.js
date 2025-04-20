@@ -122,7 +122,6 @@ const obterPedido = async (req, res) => {
       console.error('Pedido não encontrado:', id);
       return res.status(404).json({ message: 'Pedido não encontrado' });
     }
-    console.log('Pedido encontrado:', pedido);
     res.status(200).json(pedido);
   } catch (err) {
     console.error('Erro ao buscar pedido:', err.message);
@@ -133,9 +132,7 @@ const obterPedido = async (req, res) => {
 // Adicionar função para obter todos os pedidos
 const obterTodosPedidos = async (req, res) => {
   try {
-    console.log('Requisição para obter todos os pedidos recebida');
     const pedidos = await Pedido.find();
-    console.log('Pedidos encontrados:', pedidos);
     res.status(200).json(pedidos);
   } catch (err) {
     console.error('Erro ao buscar pedidos:', err.message);
