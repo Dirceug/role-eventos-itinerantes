@@ -68,6 +68,12 @@ app.use('/api/pedidos', verifyToken, pedidoRoutes); // Proteger a rota
 app.use('/api/curtidas', verifyToken, curtidasRoutes); // Nova rota para curtidas
 app.use('/api/amizades', verifyToken, amizadesRoutes); // Nova rota para amizades
 
+// Middleware de tratamento de erros global
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log do erro no console
+  res.status(err.status || 500).json({ message: err.message }); // Retorna o erro em formato JSON
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });

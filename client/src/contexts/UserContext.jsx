@@ -10,7 +10,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = Cookies.get('authToken');
-      console.log('Token obtido (UserContext):', token );
+      //console.log('Token obtido (UserContext):', token );
       if (!token) {
         console.error('No token found');
         setLoadingUser(false);
@@ -18,7 +18,6 @@ export const UserProvider = ({ children }) => {
       }
 
       try {
-        console.log('API URL:', import.meta.env.VITE_API_URL);
         const apiUrl = import.meta.env.VITE_API_URL;
         if (!apiUrl) {
           throw new Error('API URL is not defined. Please check your environment variables.');
@@ -46,9 +45,7 @@ export const UserProvider = ({ children }) => {
           }
         } else {
           const data = await response.json();
-          console.log('Dados do usuário recebidos:', data && data._id ? data._id : 'User ID not found');
           setUser(data);
-          console.log('Usuário definido no contexto:', data && data._id ? data._id : 'User not defined yet');
         }
       } catch (error) {
         console.error('Error fetching user:', error);
