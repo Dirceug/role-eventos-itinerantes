@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { auth, googleProvider, facebookProvider } from '../firebase';
-import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithPopup, signInWithRedirect, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../contexts/UserContext';
 import Cookies from 'js-cookie';
@@ -11,33 +11,49 @@ function LoginComponent() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
-  const handleGoogleLogin = () => {
-    signInWithPopup(auth, googleProvider)
-      .then(async (result) => {
-        const user = result.user;
-        const idToken = await user.getIdToken();
-        Cookies.set('authToken', idToken);
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
 
-        const apiUrl = import.meta.env.VITE_API_URL;
-        if (!apiUrl) {
-          console.error('API URL is not defined');
-          return;
-        }
+      console.log('Google login successful. Firebase user:', user);
 
-        let response = await fetch(`${apiUrl}/users/me`, {
+      const idToken = await user.getIdToken();
+      Cookies.set('authToken', idToken);
+
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) {
+        console.error('API URL is not defined in environment variables.');
+        return;
+      }
+
+      // Fetch user data from the API
+      try {
+        const response = await fetch(`${apiUrl}/users/me`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${idToken}`,
           },
         });
-        const userData = await response.json();
-        console.log(userData);
 
-        response = await fetch(`${apiUrl}/users/register`, {
+        if (!response.ok) {
+          console.error('Failed to fetch user data:', {
+            status: response.status,
+            statusText: response.statusText,
+            body: await response.text(),
+          });
+          return;
+        }
+
+        const userData = await response.json();
+        console.log('Fetched user data:', userData);
+
+        // Register user in the database
+        const registerResponse = await fetch(`${apiUrl}/users/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${idToken}`
+            'Authorization': `Bearer ${idToken}`,
           },
           body: JSON.stringify({
             displayName: user.displayName,
@@ -45,59 +61,91 @@ function LoginComponent() {
             photoURL: user.photoURL,
             firebaseUid: user.uid,
             emailVerified: user.emailVerified,
-            isAnonymous: user.isAnonymous
-          })
+            isAnonymous: user.isAnonymous,
+          }),
         });
 
-        const data = await response.json();
-
-        if (response.ok) {
-          setUser(data);
-          navigate('/usuarios');
-        } else {
-          console.error('Error saving user:', data);
+        if (!registerResponse.ok) {
+          console.error('Failed to register user:', {
+            status: registerResponse.status,
+            statusText: registerResponse.statusText,
+            body: await registerResponse.text(),
+          });
+          return;
         }
-      })
-      .catch((error) => {
-        if (error.code === 'auth/popup-closed-by-user') {
-          console.warn('O usuário fechou o pop-up de login.');
-          setErrorMessage('O pop-up de login foi fechado. Tente novamente.');
-        } else {
-          console.error('Erro durante o login com Google:', error);
-          setErrorMessage('Erro ao tentar fazer login com o Google. Tente novamente mais tarde.');
-        }      });
-  };
 
-  const handleFacebookLogin = () => {
-    signInWithPopup(auth, facebookProvider)
-      .then(async (result) => {
-        const user = result.user;
-        const idToken = await user.getIdToken();
-        Cookies.set('authToken', idToken);
-        setUser(user);
+        const registerData = await registerResponse.json();
+        console.log('User registered successfully:', registerData);
+
+        setUser(registerData);
         navigate('/usuarios');
-      })
-      .catch((error) => {
-        console.error('Error during Facebook login:', error);
+      } catch (apiError) {
+        console.error('Error during API calls:', apiError);
+      }
+    } catch (error) {
+      console.error('Error during Google login:', {
+        code: error.code,
+        message: error.message,
+        fullError: error,
       });
+
+      if (error.code === 'auth/popup-closed-by-user') {
+        console.warn('The user closed the login pop-up before completing the process.');
+        alert('Pop-up de login foi fechado. Tente novamente.');
+      } else {
+        alert('Erro ao tentar fazer login com o Google. Tente novamente mais tarde.');
+      }
+    }
   };
 
-  const handleEmailLogin = (e) => {
+  const handleFacebookLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      const user = result.user;
+
+      console.log('Facebook login successful. Firebase user:', user);
+
+      const idToken = await user.getIdToken();
+      Cookies.set('authToken', idToken);
+
+      setUser(user);
+      navigate('/usuarios');
+    } catch (error) {
+      console.error('Error during Facebook login:', {
+        code: error.code,
+        message: error.message,
+        fullError: error,
+      });
+
+      alert('Erro ao tentar fazer login com o Facebook. Tente novamente mais tarde.');
+    }
+  };
+
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (result) => {
-        const user = result.user;
-        const idToken = await user.getIdToken();
-        Cookies.set('authToken', idToken);
-        setUser(user);
-        navigate('/events');
-      })
-      .catch((error) => {
-        console.error('Error during email login:', error);
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user = result.user;
+
+      console.log('Email login successful. Firebase user:', user);
+
+      const idToken = await user.getIdToken();
+      Cookies.set('authToken', idToken);
+
+      setUser(user);
+      navigate('/events');
+    } catch (error) {
+      console.error('Error during email login:', {
+        code: error.code,
+        message: error.message,
+        fullError: error,
       });
+
+      alert('Erro ao tentar fazer login com e-mail. Tente novamente mais tarde.');
+    }
   };
 
   const navigateToSignup = () => {

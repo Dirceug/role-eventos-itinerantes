@@ -13,6 +13,5 @@ router.get('/:id', obterPedido);
 
 // Obter todos os pedidos
 router.get('/', obterTodosPedidos); // Certifique-se de que obterTodosPedidos está definido e importado corretamente
-console.log("Requisição para obter todos os pedidos recebida no routes")
 
 module.exports = router;
