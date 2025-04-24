@@ -24,7 +24,16 @@ function LoginComponent() {
           return;
         }
 
-        const response = await fetch(`${apiUrl}/users/register`, {
+        let response = await fetch(`${apiUrl}/users/me`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${idToken}`,
+          },
+        });
+        const userData = await response.json();
+        console.log(userData);
+
+        response = await fetch(`${apiUrl}/users/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -50,8 +59,13 @@ function LoginComponent() {
         }
       })
       .catch((error) => {
-        console.error('Error during Google login:', error);
-      });
+        if (error.code === 'auth/popup-closed-by-user') {
+          console.warn('O usuário fechou o pop-up de login.');
+          setErrorMessage('O pop-up de login foi fechado. Tente novamente.');
+        } else {
+          console.error('Erro durante o login com Google:', error);
+          setErrorMessage('Erro ao tentar fazer login com o Google. Tente novamente mais tarde.');
+        }      });
   };
 
   const handleFacebookLogin = () => {

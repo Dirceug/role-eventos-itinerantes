@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -72,6 +73,8 @@ app.use('/api/amizades', verifyToken, amizadesRoutes); // Nova rota para amizade
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log do erro no console
   res.status(err.status || 500).json({ message: err.message }); // Retorna o erro em formato JSON
+  res.setHeader('Content-Type', 'application/json');
+  next();
 });
 
 app.listen(port, () => {
