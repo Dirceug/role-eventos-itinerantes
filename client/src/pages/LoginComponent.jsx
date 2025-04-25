@@ -13,9 +13,11 @@ function LoginComponent() {
 
   const handleGoogleLogin = async () => {
     try {
+      console.log('Iniciando login com Google...');
       const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
+      console.log('Login com Google bem-sucedido:', result);
 
+      const user = result.user;
       console.log('Google login successful. Firebase user:', user);
 
       const idToken = await user.getIdToken();
@@ -88,6 +90,12 @@ function LoginComponent() {
         message: error.message,
         fullError: error,
       });
+      if (error.code === 'auth/popup-closed-by-user') {
+        console.warn('O popup foi fechado pelo usuário antes de completar o processo.');
+        alert('Pop-up de login foi fechado. Tente novamente.');
+      } else {
+        alert('Erro ao tentar fazer login com o Google. Tente novamente mais tarde.');
+      }
 
       if (error.code === 'auth/popup-closed-by-user') {
         console.warn('The user closed the login pop-up before completing the process.');
