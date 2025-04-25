@@ -32,8 +32,11 @@ admin.initializeApp({
   databaseURL: 'https://role-eventos-itinerantes.firebaseio.com'
 });
 
-const auth = admin.auth();
-const firestore = admin.firestore();
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://role-eventos-itinerantes.firebaseio.com', // Substitua pelo URL correto do banco de dados
+  });
+}
 
-
-module.exports = {admin, auth, firestore};
+module.exports = admin; // Exporta diretamente o objeto admin
