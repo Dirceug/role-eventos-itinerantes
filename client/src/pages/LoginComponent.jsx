@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { auth, googleProvider, facebookProvider } from '../firebase';
-import { signInWithPopup, signInWithRedirect, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithPopup, signInWithRedirect, signInWithEmailAndPassword, getRedirectResult } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../contexts/UserContext';
 import Cookies from 'js-cookie';
@@ -17,7 +17,6 @@ function LoginComponent() {
         const result = await getRedirectResult(auth);
         if (result) {
           console.log('Login com redirecionamento bem-sucedido:', result);
-
           const user = result.user;
           const idToken = await user.getIdToken();
           Cookies.set('authToken', idToken, { expires: 1 });

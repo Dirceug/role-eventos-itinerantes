@@ -25,8 +25,9 @@ const verifyToken = (req, res, next) => {
     })
     .catch((error) => {
       console.error('[Auth Middleware] Falha na verificação do token:', error.message);
-      res.status(401).json({ message: 'Token inválido ou expirado.', error: error.message });
-    });
+      if (!res.headersSent) { // Garante que os cabeçalhos não foram enviados
+        res.status(401).json({ message: 'Token inválido ou expirado.', error: error.message });
+      }    });
 };
 
 module.exports = verifyToken;
