@@ -14,7 +14,7 @@ function LoginComponent() {
   const handleGoogleLogin = async () => {
     try {
       console.log('Iniciando login com Google...');
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithRedirect(auth, googleProvider);
       console.log('Login com Google bem-sucedido:', result);
 
       const user = result.user;
@@ -31,7 +31,7 @@ function LoginComponent() {
 
       // Fetch user data from the API
       try {
-        const response = await fetch(`${apiUrl}/users/me`, {
+        const response = await fetch(`${apiUrl}/api/users/me`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${idToken}`,
