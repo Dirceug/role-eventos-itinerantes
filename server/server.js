@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-const allowedOrigins = [process.env.DEV_ORIGIN, process.env.PROD_ORIGIN];
+const allowedOrigins = [process.env.DEV_ORIGIN, process.env.PROD_ORIGIN_1, process.env.PROD_ORIGIN_2];
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps or curl requests)
@@ -43,20 +43,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Endpoint para obter informações do usuário logado
-router.get('/me', verifyToken, async (req, res) => {
-  try {
-    const userId = req.user.id; // Assumindo que o middleware `verifyToken` adiciona o ID do usuário no objeto `req.user`
-    const user = await User.findById(userId); // Substitua `User` pelo modelo correto
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    res.json(user);
-  } catch (error) {
-    console.error('Error fetching user:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
 
 // Middleware para configurar COOP e COEP
 // app.use((req, res, next) => {
