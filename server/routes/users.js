@@ -27,13 +27,16 @@ router.get('/', verifyToken, async (req, res) => {
 // GET user information (Proteger a rota)
 router.get('/me', verifyToken, async (req, res) => {
   try {
+    console.log('[Rota /me] Solicitação recebida. UID:', req.uid);
     const user = await User.findOne({ firebaseUid: req.uid });
     if (!user) {
+      console.error('[Rota /me] Usuário não encontrado.');
       return res.status(404).json({ message: 'User not found' });
     }
+    console.log('[Rota /me] Usuário encontrado:', user);
     res.json(user);
   } catch (error) {
-    console.error('Error fetching user data:', error);
+    console.error('[Rota /me] Erro ao buscar usuário:', error);    
     res.status(500).json({ message: 'Error fetching user data', error });
   }
 });

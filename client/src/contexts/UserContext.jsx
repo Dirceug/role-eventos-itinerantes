@@ -10,7 +10,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = Cookies.get('authToken');
-      //console.log('Token obtido (UserContext):', token );
+      console.log('Token obtido (UserContext):', token );
       if (!token) {
         console.error('No token found');
         setLoadingUser(false);
@@ -45,6 +45,7 @@ export const UserProvider = ({ children }) => {
           }
         } else {
           const data = await response.json();
+          console.log('Usuário carregado:', data);
           setUser(data);
         }
       } catch (error) {
