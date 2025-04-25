@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect, useMemo } from 'react';
 import Cookies from 'js-cookie';
+import { auth } from '../firebase';
+
 
 const UserContext = createContext();
 
@@ -65,6 +67,51 @@ export const UserProvider = ({ children }) => {
       {children}
     </UserContext.Provider>
   );
+};
+
+const fetchUser = async () => {
+  try {
+    // Renove o token antes de fazer a solicitação
+    const user = auth.currentUser;
+    if (!user) {
+      console.error('Nenhum usuário autenticado.');
+      return null;
+    }
+
+    const idToken = await user.getIdToken(true); // Renova o token antes de usá-lo
+    Cookies.set('authToken', idToken, { expires: 1 }); // Atualiza o token nos cookies
+    console.log('Token renovado e salvo:', idToken);
+
+    // Faça a requisição ao backend
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${apiUrl}/api/users/me`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${idToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      const responseText = await response.text();
+      console.error('Erro de resposta:', responseText);
+      if (response.status === 404) {
+        console.error('Usuário não encontrado.');
+      } else if (response.status === 401) {
+        console.error('Acesso não autorizado - Token inválido.');
+      } else {
+        throw new Error(`Erro HTTP: status ${response.status}`);
+      }
+      return null;
+    }
+
+    const userData = await response.json();
+    console.log('Usuário carregado:', userData);
+    setUser(userData);
+  } catch (error) {
+    console.error('Erro ao buscar ou renovar o token:', error);
+  } finally {
+    setLoadingUser(false);
+  }
 };
 
 export default UserContext;

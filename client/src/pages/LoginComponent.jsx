@@ -13,15 +13,16 @@ function LoginComponent() {
 
   useEffect(() => {
     const handleRedirectResult = async () => {
+      console.log('Iniciando recuperação do resultado do redirecionamento...');
       try {
         const result = await getRedirectResult(auth);
         if (result) {
           console.log('Login com redirecionamento bem-sucedido:', result);
           const user = result.user;
-          const idToken = await user.getIdToken();
+          const idToken = await user.getIdToken(true);
           Cookies.set('authToken', idToken, { expires: 1 });
           console.log('Token salvo com sucesso:', idToken);
-
+          console.log('Token salvo nos cookies:', Cookies.get('authToken'));
           // Fetch user data
           await fetchUserData(idToken, user);
         }
@@ -39,7 +40,8 @@ function LoginComponent() {
         console.error('API URL não definida nas variáveis de ambiente.');
         return;
       }
-
+    
+      // Faça a requisição ao backend
       const response = await fetch(`${apiUrl}/api/users/me`, {
         method: 'GET',
         headers: {
@@ -65,18 +67,44 @@ function LoginComponent() {
     }
   };
 
+
+  // Atualizamos o token automaticamente no useEffect
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          console.log('Login com redirecionamento bem-sucedido:', result);
+          const user = result.user;
+  
+          // Renove o token automaticamente
+          const idToken = await user.getIdToken(true); // Renova o token
+          Cookies.set('authToken', idToken, { expires: 1 }); // Salva nos cookies por 1 dia
+          console.log('Token renovado e salvo com sucesso:', idToken);
+  
+          // Buscar os dados do usuário
+          await fetchUserData(idToken, user);
+        }
+      } catch (error) {
+        console.error('Erro ao recuperar resultado do redirecionamento:', error);
+      }
+    };
+  
+    handleRedirectResult();
+  }, []);
+
   const handleGoogleLogin = async () => {
     try {
       console.log('Iniciando login com Google...');
-      await signInWithRedirect(auth, googleProvider);
+      const result = await signInWithRedirect(auth, googleProvider);
+      console.log('Redirecionamento para login iniciado.');
     } catch (error) {
       console.error('Erro durante o login com Google:', error);
       alert('Erro ao tentar fazer login com o Google. Tente novamente mais tarde.');
     }
   };
 
-
-
+  
   // const handleGoogleLogin = async () => {
   //   try {
   //     console.log('Iniciando login com Google...');
