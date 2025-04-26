@@ -12,6 +12,26 @@ function LoginComponent() {
   const { setUser } = useContext(UserContext);
 
   useEffect(() => {
+    const checkAuth = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        console.error('Nenhum usuário autenticado.');
+        return;
+      }
+  
+      try {
+        const idToken = await user.getIdToken(true); // Força a renovação do token
+        console.log('Token obtido:', idToken);
+        Cookies.set('authToken', idToken, { expires: 1 });
+      } catch (error) {
+        console.error('Erro ao obter token do usuário:', error);
+      }
+    };
+  
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
     const handleRedirectResult = async () => {
       console.log('Iniciando recuperação do resultado do redirecionamento...');
       try {
