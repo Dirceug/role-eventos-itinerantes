@@ -13,7 +13,12 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-const allowedOrigins = [process.env.DEV_ORIGIN, process.env.PROD_ORIGIN_1, process.env.PROD_ORIGIN_2];
+//const allowedOrigins = [process.env.DEV_ORIGIN, process.env.PROD_ORIGIN_1, process.env.PROD_ORIGIN_2];
+const allowedOrigins = [
+  'http://localhost:3000', // Para desenvolvimento local
+  'https://role-eventos-itinerantes.web.app', // Front-end hospedado no Firebase
+  'https://role-eventos-itinerantes.firebaseapp.com' // Alternativo do Firebase
+];
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps or curl requests)
