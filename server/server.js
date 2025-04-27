@@ -13,7 +13,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware
-const allowedOrigins = [process.env.DEV_ORIGIN, process.env.PROD_ORIGIN];
+const allowedOrigins = [process.env.DEV_ORIGIN, process.env.PROD_ORIGIN_1, process.env.PROD_ORIGIN_2];
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps or curl requests)
@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 
 // Middleware para configurar COOP e COEP
 app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Opener-Policy', 'unsafe-none');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
   res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
   next();
 });

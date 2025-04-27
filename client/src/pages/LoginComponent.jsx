@@ -16,6 +16,7 @@ function LoginComponent() {
       .then(async (result) => {
         const user = result.user;
         const idToken = await user.getIdToken();
+        console.log('Token JWT obtido:', idToken); // Log do token para debug
         Cookies.set('authToken', idToken);
 
         const apiUrl = import.meta.env.VITE_API_URL;
