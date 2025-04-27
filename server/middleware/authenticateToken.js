@@ -1,46 +1,27 @@
 const admin = require('../firebase'); // Firebase Admin SDK já inicializado
 
-const verifyToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  // Verifica se o cabeçalho Authorization está presente
-  if (!authHeader) {
-    console.error('[Auth Middleware] Cabeçalho Authorization ausente.');
-    return res.status(403).json({ message: 'Cabeçalho Authorization ausente.' });
-  }
-  // Extrai o token do cabeçalho
-  const token = authHeader.split(' ')[1];
-  if (!token) {
-    console.error('[Auth Middleware] Token Bearer ausente.');
-    return res.status(403).json({ message: 'Token ausente no cabeçalho Authorization.' });
-  }
-  // Verifica o token no Firebase
-  admin.auth().verifyIdToken(token)
-    .then((decodedToken) => {
-      console.log('[Auth Middleware] Token verificado com sucesso:', decodedToken);
-      req.uid = decodedToken.uid;
-      next();
-    })
-    .catch((error) => {
-      console.error('[Auth Middleware] Falha na verificação do token:', error.message);
-      if (error.code === 'auth/id-token-expired') {
-        return res.status(401).json({
-          message: 'Token expirado. Por favor, faça login novamente.',
-          error: error.message,
-        });
-      }   
-      if (!res.headersSent) {
-        res.status(401).json({ message: 'Token inválido ou expirado.', error: error.message });
-      }
-    });
-
-    if (error.code === 'auth/id-token-expired') {
-      return res.status(401).json({
-        message: 'Token expirado. Por favor, faça login novamente.',
-        error: error.message,
-      });
+const verifyToken = async (req, res, next) => {
+  try {
+    // Extrair o token do cabeçalho de autorização
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) {
+      console.error('No token provided in Authorization header.');
+      return res.status(403).json({ message: 'No token provided.' });
     }
 
+    // Verificar o token usando o Firebase Admin SDK
+    const decodedToken = await admin.auth().verifyIdToken(token);
 
+    // Adicionar o UID ao objeto de requisição
+    req.uid = decodedToken.uid;
+    next();
+  } catch (error) {
+    console.error('Failed to authenticate token:', error);
+    res.status(401).json({
+      message: 'Failed to authenticate token.',
+      error: error.message || 'Unknown error',
+    });
+  }
 };
 
 module.exports = verifyToken;
