@@ -25,7 +25,7 @@ export const UserProvider = ({ children }) => {
           throw new Error('API URL is not defined. Please check your environment variables.');
         }
 
-        const response = await fetch(`${apiUrl}/api/users/me`, {
+        const response = await fetch(`${apiUrl}api/users/me`, {
           method: 'GET',
           headers: {
             //'Content-Type': 'application/json',
