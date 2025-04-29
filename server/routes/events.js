@@ -36,13 +36,19 @@ router.get('/:id', verifyToken, async (req, res) => {
 router.post('/', verifyToken, async (req, res) => {
   const { nome, descricao, data, endereco, dataEvento, organizadores, status } = req.body;
 
+    // Validação para cada barraca
+    for (const barraca of barracas) {
+      if (!barraca.nome || !barraca.descricao) {
+        return res.status(400).json({ message: 'Cada barraca deve ter um nome e uma descrição.' });
+      }
+    }
   const event = new Event({
     nome,
     descricao,
     data,
     endereco,
     dataEvento,
-    barracas: [],
+    barracas,
     organizadores,
     status,
     fotoUrl: ""

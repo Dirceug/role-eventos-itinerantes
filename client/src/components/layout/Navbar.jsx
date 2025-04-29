@@ -71,12 +71,12 @@ function Navbar({ eventId }) {
       </button>
       {isHamburgerMenuOpen && (
         <div className="hamburger-menu-content">
-          <Link to="/usuarios">Eventos</Link>
+          <Link to="/usuarios">Totos Eventos</Link>
+          <Link to="/meus-eventos">Meus Eventos</Link>
           {/* <Link to="/comandas">Comandas</Link> */}
           {/* <Link to="/carteira-virtual">Carteira Virtual</Link> */}
-          <Link to="/carteira-virtual">Restaurantes Corporativos</Link>
+          <Link to="/restaurantesCorporativos">Restaurantes Corporativos</Link>
           <Link to="/eventos/novo">Cadastrar Eventos</Link>
-          <Link to="/meus-eventos">Meus Eventos</Link>
           <a href="/logout" onClick={handleLogout}>Logout</a>
         </div>
       )}

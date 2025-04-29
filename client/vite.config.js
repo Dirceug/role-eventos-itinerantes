@@ -17,4 +17,8 @@ export default defineConfig({
       }
     }
   }
+  // ,
+  // build: {
+  //   outDir: path.resolve(__dirname, '../dist'), // Use path.resolve para garantir um caminho absoluto
+  // }
 });

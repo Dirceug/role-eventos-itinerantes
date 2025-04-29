@@ -370,6 +370,7 @@ const EventForm = () => {
       status,
       endereco,
       dataEvento,
+      barracas,
     };
 
     const { error } = schema.validate(event, { abortEarly: false });
@@ -385,6 +386,17 @@ const EventForm = () => {
     setErrors({});
     return true;
   };
+
+    // Validação adicional para barracas
+    for (const barraca of barracas) {
+      if (!barraca.nome || !barraca.descricao) {
+        setErrors((prev) => ({
+          ...prev,
+          barracas: 'Todas as barracas devem ter nome e descrição.',
+        }));
+        return false;
+      }
+    }
 
   // Adiciona um organizador à lista
   const addOrganizer = (organizer) => {
@@ -415,10 +427,17 @@ const EventForm = () => {
   };
 
   // Atualizar informações da barraca
-  const updateBarraca = (index, field, value) => {
+  const updateBarraca = (barracaIndex, field, value, pratoIndex = null) => {
     setBarracas((prev) => {
       const updated = [...prev];
-      updated[index][field] = value;
+      if (pratoIndex !== null && field.startsWith('pratos')) {
+        // Atualizar um prato específico
+        const pratoField = field.split('.')[1]; // Extraia o campo do prato, ex: "nome"
+        updated[barracaIndex].pratos[pratoIndex][pratoField] = value;
+      } else {
+        // Atualizar um campo da barraca
+        updated[barracaIndex][field] = value;
+      }
       return updated;
     });
   };
@@ -484,6 +503,7 @@ const EventForm = () => {
       data,
       endereco,
       dataEvento,
+      barracas, 
       status,
       organizadores,
     };
@@ -827,7 +847,7 @@ const EventForm = () => {
                 Nome da Barraca:
                 <input
                   type="text"
-                  value={barraca.nome}
+                  value={barraca.nome || ''}
                   onChange={(e) => updateBarraca(barracaIndex, 'nome', e.target.value)}
                   required
                 />
@@ -835,7 +855,7 @@ const EventForm = () => {
               <label>
                 Descrição da Barraca:
                 <textarea
-                  value={barraca.descricao}
+                  value={barraca.descricao || ''}
                   onChange={(e) => updateBarraca(barracaIndex, 'descricao', e.target.value)}
                   required
                 />
@@ -980,16 +1000,16 @@ const EventForm = () => {
                     Nome:
                     <input
                       type="text"
-                      value={prato.nome}
-                      onChange={(e) => updateBarraca(barracaIndex, `pratos[${pratoIndex}].nome`, e.target.value)}
+                      value={prato.nome || ''}
+                      onChange={(e) => updateBarraca(barracaIndex, 'pratos.nome', e.target.value, pratoIndex)}
                       required
                     />
                   </label>
                   <label>
                     Ingredientes:
                     <textarea
-                      value={prato.ingredientes}
-                      onChange={(e) => updateBarraca(barracaIndex, `pratos[${pratoIndex}].ingredientes`, e.target.value)}
+                      value={prato.ingredientes || ''}
+                      onChange={(e) => updateBarraca(barracaIndex, 'pratos.ingredientes', e.target.value, pratoIndex)}
                       required
                     />
                   </label>
@@ -997,8 +1017,8 @@ const EventForm = () => {
                     Valor:
                     <input
                       type="number"
-                      value={prato.valor}
-                      onChange={(e) => updateBarraca(barracaIndex, `pratos[${pratoIndex}].valor`, e.target.value)}
+                      value={prato.valor || ''}
+                      onChange={(e) => updateBarraca(barracaIndex, 'pratos.valor', e.target.value, pratoIndex)}
                       required
                     />
                   </label>
@@ -1006,8 +1026,8 @@ const EventForm = () => {
                     Estoque:
                     <input
                       type="number"
-                      value={prato.estoque}
-                      onChange={(e) => updateBarraca(barracaIndex, `pratos[${pratoIndex}].estoque`, e.target.value)}
+                      value={prato.estoque || ''}
+                      onChange={(e) => updateBarraca(barracaIndex, 'pratos.estoque', e.target.value, pratoIndex)}
                       required
                     />
                   </label>
@@ -1015,8 +1035,8 @@ const EventForm = () => {
                     Tempo de Preparo:
                     <input
                       type="number"
-                      value={prato.tempoPreparo}
-                      onChange={(e) => updateBarraca(barracaIndex, `pratos[${pratoIndex}].tempoPreparo`, e.target.value)}
+                      value={prato.tempoPreparo || ''}
+                      onChange={(e) => updateBarraca(barracaIndex, 'pratos.tempoPreparo', e.target.value, pratoIndex)}
                       required
                     />
                   </label>
