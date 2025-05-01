@@ -1,0 +1,14 @@
+.events {
+  padding: 20px;
+  text-align: center;
+}
+
+.events ul {
+  list-style: none;
+  padding: 0;
+}
+
+.events li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}

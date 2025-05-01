@@ -1,0 +1,122 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.comprar-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 500px;
+  background-color: white;
+  border: 2px solid #EE7F43;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.prato-imagem2 {
+  width: 80%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.prato-info {
+  text-align: center;
+}
+
+.prato-nome, .prato-valor {
+  margin: 10px 0;
+}
+
+.prato-ingredientes {
+  font-style: italic;
+}
+
+.checkbox-container {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.observacoes, .data-hora-retirada {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.observacoes label, .data-hora-retirada label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.observacoes textarea, .data-hora-retirada input {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.quantidade-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.quantidade-label, .quantidade, .total {
+  color: white;
+  background-color: #EE7F43;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0px;
+}
+
+.quantidade-button {
+  background-color: #EE7F43;
+  color: white;
+  font-size: 25px;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.quantidade-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.total-container {
+  margin: 20px 0;
+}
+
+.pedido-button {
+  background-color: #EE7F43;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 600px) {
+  .comprar-modal {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .prato-imagem {
+    max-width: 100%;
+  }
+
+  .quantidade-container {
+    flex-direction: column;
+  }
+
+  .quantidade-button {
+    width: 50px;
+  }
+}

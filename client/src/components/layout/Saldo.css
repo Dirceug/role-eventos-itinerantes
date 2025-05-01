@@ -1,0 +1,34 @@
+.saldo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.saldo-valor {
+  font-size: 36px;
+  margin: 10px 0;
+  background-color: #EE7F43;
+  width: 150px;
+  padding: 10px 30px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.toggle-saldo-button {
+  background: transparent;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.toggle-saldo-button img {
+  width: 36px;
+  height: 36px;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

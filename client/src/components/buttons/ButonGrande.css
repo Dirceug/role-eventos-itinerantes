@@ -1,0 +1,71 @@
+.button-grande {
+  background-color: white;
+  justify-content: center;
+  color: #EE7F43;
+  border-color: #EE7F43;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 25px;
+  margin: 5px;
+  margin-top: 25px;
+  width: 250px;
+}
+
+.button-grande:hover {
+  background-color: #EE7F43;
+  color: white;
+  border: 1px, solid, white;
+}
+
+.button-grande.invertido {
+  background-color:  #EE7F43;
+  color: white;
+  border-color: #EE7F43;
+}
+
+.button-grande.invertido:hover {
+  background-color: white;
+  color: #EE7F43;
+}
+
+.social-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.social-button img {
+  width: 20px;
+  height: 20px;
+}
+
+.social-button:hover {
+  background-color: #f1f1f1;
+}
+
+.signup-redirect {
+  margin-top: 20px;
+}
+
+.signup-redirect button {
+  background-color: #34a853;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.signup-redirect button:hover {
+  background-color: #2c7a43;
+}

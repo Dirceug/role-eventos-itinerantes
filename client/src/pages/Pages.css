@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #0c0c0c;
+  color: #333;
+
+}
+
+nav.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #EE7F43;
+  color: white;
+}
+
+.paginaLogin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 20px;
+  background-color: #EE7F43;
+  height: 100%;
+  width: auto;
+}
+
+.paginaCadastro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #222;
+  height: 100%;
+  width: auto;
+}
+
+.cinquentaPorCento {
+  max-height: 50%;
+  width: 100%;
+  overflow-y: auto; /* Adiciona a barra de rolagem lateral */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.role{
+  color: white;
+  font-size: 50px;
+  margin: 5px;
+}
+
+h1 {
+  color: white;
+  font-size: 25px;
+  margin: 5px;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 50px;
+}
+
+h1 .tituloLogin {
+  color: white;
+  font-size: 30px;
+  margin: 5px;
+  font-family: 'Montserrat', sans-serif;
+  position: absolute;
+  margin-bottom: 100px;
+}
+
+
+.login button {
+  background-color: white;
+  justify-content: center;
+  color: #EE7F43;
+  border-color: #EE7F43;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 25px;
+  margin: 5px;
+  width: 250px;
+}
+
+.login button:hover {
+  background-color: #EE7F43;
+  color: white;
+}
+
+img.dancing {
+  height: 250px;
+  width: 250px;
+}
+
+nav.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+footer.footer {
+  margin-top: auto;
+  background-color: #EE7F43;
+  color: white;
+}
+
