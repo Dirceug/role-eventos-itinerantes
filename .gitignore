@@ -22,6 +22,10 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
+# Ignore o arquivo de configuração do PM2
+ecosystem.config.js
 
+# Ignore any other sensitive files
+roleMERN.pem
 
 # Ignore any other sensitive files
