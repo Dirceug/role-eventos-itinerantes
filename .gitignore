@@ -22,9 +22,8 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# touch .gitignore
-ecosystem.config.js"
+# Ignore o arquivo de configuração do PM2
+ecosystem.config.js
 
 # Ignore any other sensitive files
-
-role-aws-note.pem
+roleMERN.pem
