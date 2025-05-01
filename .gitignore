@@ -9,7 +9,7 @@ securityNotes/
 
 # Ignore build directories
 client/build/
-dist/
+client/dist/
 
 # Ignore logs
 logs/

@@ -1,0 +1,1 @@
+import{j as o}from"./index-CX-r_TzI.js";/* empty css                       */const n="/assets/configuracao-CYx5x04Y.png",i=({label:t,onClick:a})=>o.jsxs("button",{className:"cardapio-button",onClick:s=>{s.stopPropagation(),a()},children:[o.jsx("img",{src:n,alt:"Editar",className:"cardapio-icon"}),o.jsx("span",{children:t})]});export{i as default};

@@ -1,0 +1,1 @@
+import{j as r}from"./index-CX-r_TzI.js";import"./index-e84cf44d-BDGxaeLU.js";/* empty css                       */import"./Navbar-CfGvtLrd.js";import t from"./ListaEventos-DwG0Z-49.js";import"./eventoBase-Dg98OOL6.js";function n(){return r.jsx("div",{children:r.jsx(t,{})})}export{n as default};
