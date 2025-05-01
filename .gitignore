@@ -23,6 +23,8 @@ yarn-error.log*
 Thumbs.db
 
 # touch .gitignore
-"mern/ecosystem.config.js" >> .gitignore
+ecosystem.config.js"
 
 # Ignore any other sensitive files
+
+role-aws-note.pem
