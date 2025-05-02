@@ -1,0 +1,59 @@
+html, body, .container {
+  background-color: #ddd;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Remove a barra de rolagem horizontal */
+}
+
+.lista-pedidos-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #ddd;
+  margin: 20px auto;
+  width: 80%;
+  border-radius: 10px;
+}
+
+.pedido-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  width: 80%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.pedido-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+.pedido-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.pedido-info h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.pedido-info p {
+  margin: 5px 0;
+}
+
+.status-icon {
+  width: 50px;
+  height: 50px;
+  margin-left: 20px;
+}

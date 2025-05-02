@@ -56,11 +56,11 @@ app.use((req, res, next) => {
 });
 
 // Middleware para configurar COOP e COEP
-//app.use((req, res, next) => {
-//  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-//  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-//  next();
-//});
+app.use((req, res, next) => {
+ res.setHeader("Cross-Origin-Opener-Policy", "unsafe-none");
+ res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
+ next();
+});
 
 // Routes
 const userRoutes = require('./routes/users');

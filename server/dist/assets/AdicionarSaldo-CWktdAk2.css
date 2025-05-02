@@ -1,0 +1,129 @@
+.adicionar-saldo-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.modal-content {
+  position: relative;
+  background: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #EE7F43;
+  cursor: pointer;
+}
+
+
+.saldo-info {
+  color: white;
+  background-color: #EE7F43;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.saldo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.saldo-valor {
+  font-size: 30px;
+  margin: 10px 0;
+  background-color: #EE7F43;
+  width: 150px;
+  padding: 10px 30px;
+  border-radius: 10px;
+}
+
+.toggle-saldo-button {
+  background: transparent;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.toggle-saldo-button img {
+  width: 36px;
+  height: 36px;
+}
+
+.valor-label {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #EE7F43;
+}
+
+.valor-input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.valor-prefixo {
+  font-size: 24px;
+  margin-right: 10px;
+  color: #EE7F43;
+}
+
+.valor-input {
+  font-size: 24px;
+  padding: 10px;
+  border: 2px solid #EE7F43;
+  border-radius: 5px;
+  width: 200px;
+  text-align: center;
+}
+
+.submit-button {
+  background-color: #EE7F43;
+  color: white;
+  font-size: 18px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

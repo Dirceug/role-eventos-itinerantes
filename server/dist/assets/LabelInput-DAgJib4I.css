@@ -1,0 +1,31 @@
+.label-input {
+  margin-bottom: 15px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.label-input label {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  align-content: flex-start;
+  align-items: flex-start;
+}
+
+.label-input input {
+  background-color: #222;
+  color:#aaa;
+  border-bottom: 1px solid #ccc;
+  border-right: 0px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 5px;
+  margin-left: 10px;
+  width: 190px;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}

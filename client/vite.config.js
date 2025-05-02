@@ -18,10 +18,18 @@ export default defineConfig({
   //   }
   // }
   server: {
-    proxy: null, // Remova ou ajuste o proxy para não interferir no build
+    //proxy: null, // Remova ou ajuste o proxy para não interferir no build
+    headers: {
+      'Cross-Origin-Opener-Policy': 'unsafe-none',
+      'Cross-Origin-Embedder-Policy': 'unsafe-none'
+    },
   },
-  // ,
-  // build: {
-  //   outDir: path.resolve(__dirname, '../dist'), // Use path.resolve para garantir um caminho absoluto
-  // }
+  build: {
+    minify: false,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
 });

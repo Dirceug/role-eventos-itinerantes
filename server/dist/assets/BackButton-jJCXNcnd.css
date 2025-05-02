@@ -1,0 +1,16 @@
+.back-button {
+  background: transparent;
+  border: none;
+  color: #EE7F43;
+  font-size: 3.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  padding: 0;
+}
+
+.back-button.no-hover:hover {
+  background: rgba(0, 0, 0, 0.1);
+}

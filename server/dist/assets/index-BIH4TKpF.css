@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');/*body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #333;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.App-header, .footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f8f8;
+}
+
+nav.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: white;
+  color: white;
+}
+
+nav.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+footer.footer {
+  margin-top: auto;
+  background-color: #EE7F43;
+  color: white;
+}
+*/
+
+
+
+#root { /* ou o seletor que envolve o componente App */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Importar a fonte Montserrat do Google Fonts */
+/* Aplicar a fonte globalmente */
+body {
+  font-family: 'Montserrat', sans-serif;
+}

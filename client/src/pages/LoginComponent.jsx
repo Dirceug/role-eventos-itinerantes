@@ -11,80 +11,156 @@ function LoginComponent() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
-  const handleGoogleLogin = () => {
-    signInWithPopup(auth, googleProvider)
-      .then(async (result) => {
-        const user = result.user;
-        const idToken = await user.getIdToken();
-        console.log('Token JWT obtido:', idToken); // Log do token para debug
-        Cookies.set('authToken', idToken);
+  const handleGoogleLogin = async () => {
+    console.log('Iniciando login com Google...');
+    try {
+      // Inicia o login com o Firebase Auth
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      console.log('Usuário autenticado com Google:', user);
 
-        const apiUrl = import.meta.env.VITE_API_URL;
-        if (!apiUrl) {
-          console.error('API URL is not defined');
-          return;
-        }
+      // Obter o token JWT do usuário autenticado
+      const idToken = await user.getIdToken();
+      console.log('Token JWT obtido:', idToken);
+      Cookies.set('authToken', idToken);
 
-        const response = await fetch(`${apiUrl}/users/register`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${idToken}`
-          },
-          body: JSON.stringify({
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            firebaseUid: user.uid,
-            emailVerified: user.emailVerified,
-            isAnonymous: user.isAnonymous
-          })
-        });
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) {
+        console.error('API URL is not defined');
+        return;
+      }
 
-        const data = await response.json();
-
-        if (response.ok) {
-          setUser(data);
-          navigate('/usuarios');
-        } else {
-          console.error('Error saving user:', data);
-        }
-      })
-      .catch((error) => {
-        console.error('Error during Google login:', error);
+      // Registrar o usuário no backend
+      const response = await fetch(`${apiUrl}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
+        },
+        body: JSON.stringify({
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          firebaseUid: user.uid,
+          emailVerified: user.emailVerified,
+          isAnonymous: user.isAnonymous
+        })
       });
-  };
 
-  const handleFacebookLogin = () => {
-    signInWithPopup(auth, facebookProvider)
-      .then(async (result) => {
-        const user = result.user;
-        const idToken = await user.getIdToken();
-        Cookies.set('authToken', idToken);
-        setUser(user);
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('Usuário registrado no backend:', data);
+        setUser(data);
         navigate('/usuarios');
-      })
-      .catch((error) => {
-        console.error('Error during Facebook login:', error);
-      });
+      } else {
+        console.error('Erro ao salvar usuário no backend:', data);
+      }
+    } catch (error) {
+      console.error('Erro durante login com Google:', error);
+    }
   };
 
-  const handleEmailLogin = (e) => {
+  const handleFacebookLogin = async () => {
+    console.log('Iniciando login com Facebook...');
+    try {
+      // Inicia o login com o Firebase Auth
+      const result = await signInWithPopup(auth, facebookProvider);
+      const user = result.user;
+      console.log('Usuário autenticado com Facebook:', user);
+
+      // Obter o token JWT do usuário autenticado
+      const idToken = await user.getIdToken();
+      console.log('Token JWT obtido:', idToken);
+      Cookies.set('authToken', idToken);
+
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) {
+        console.error('API URL is not defined');
+        return;
+      }
+
+      // Registrar o usuário no backend
+      const response = await fetch(`${apiUrl}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
+        },
+        body: JSON.stringify({
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          firebaseUid: user.uid,
+          emailVerified: user.emailVerified,
+          isAnonymous: user.isAnonymous
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('Usuário registrado no backend:', data);
+        setUser(data);
+        navigate('/usuarios');
+      } else {
+        console.error('Erro ao salvar usuário no backend:', data);
+      }
+    } catch (error) {
+      console.error('Erro durante login com Facebook:', error);
+    }
+  };
+
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (result) => {
-        const user = result.user;
-        const idToken = await user.getIdToken();
-        Cookies.set('authToken', idToken);
-        setUser(user);
-        navigate('/events');
-      })
-      .catch((error) => {
-        console.error('Error during email login:', error);
+    console.log('Iniciando login com e-mail...');
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user = result.user;
+      console.log('Usuário autenticado com e-mail:', user);
+
+      const idToken = await user.getIdToken();
+      console.log('Token JWT obtido:', idToken);
+      Cookies.set('authToken', idToken);
+
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) {
+        console.error('API URL is not defined');
+        return;
+      }
+
+      // Registrar o usuário no backend
+      const response = await fetch(`${apiUrl}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
+        },
+        body: JSON.stringify({
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          firebaseUid: user.uid,
+          emailVerified: user.emailVerified,
+          isAnonymous: user.isAnonymous
+        })
       });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('Usuário registrado no backend:', data);
+        setUser(data);
+        navigate('/events');
+      } else {
+        console.error('Erro ao salvar usuário no backend:', data);
+      }
+    } catch (error) {
+      console.error('Erro durante login com e-mail:', error);
+    }
   };
 
   const navigateToSignup = () => {
