@@ -25,7 +25,6 @@ console.log("Firebase Service Account:", serviceAccount); // Adicione este log
 if (!admin.apps.length) { // Garante que não inicializamos múltiplas vezes
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://role-eventos-itinerantes.firebaseio.com',
   });
 }
 

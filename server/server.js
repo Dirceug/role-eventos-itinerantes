@@ -1,5 +1,8 @@
 require('dotenv').config();
 
+const https = require('https');
+const fs = require('fs');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -55,10 +58,19 @@ app.use((req, res, next) => {
   next();
 });
 
+// Configurar HTTPS com certificados locais
+const options = {
+  key: fs.readFileSync(path.join(__dirname, '/certs/localhost-key.pem')), // Use path.join para garantir o caminho correto
+  cert: fs.readFileSync(path.join(__dirname, '/certs/localhost-cert.pem')), // Use path.join para garantir o caminho correto
+};
+
 // Middleware para configurar COOP e COEP
 app.use((req, res, next) => {
- res.setHeader("Cross-Origin-Opener-Policy", "unsafe-none");
- res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
+ res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+ res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+ res.setHeader("Access-Control-Allow-Origin", "*");
+ res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+ res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
  next();
 });
 
@@ -84,12 +96,17 @@ app.use('/api/amizades', verifyToken, amizadesRoutes); // Nova rota para amizade
 // Servir os arquivos estáticos da pasta 'dist'
 const staticPath = path.join(__dirname, 'dist');
 console.log("Serving static files from:", staticPath);
-app.use(express.static(staticPath));
+app.use(express.static(path.join(__dirname, 'dist')));
 
-app.get('*', (req, res) => {
+
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port: ${port}`);
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`);
 });
+// https.createServer(options, app).listen(PORT, () => {
+//   console.log(`Servidor HTTPS rodando em https://localhost:${PORT}`);
+// });
