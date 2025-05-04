@@ -50,7 +50,7 @@ function App() {
               <Route path="/logincomemail" element={<LoginComEmail />} />
               <Route path="/usuarios/*" element={<ProtectedRoute element={<Usuarios />} />} />
               <Route path="/servico/*" element={<ProtectedRoute element={<Servico />} />} />
-              <Route path="/cadastro/registrarusuario" element={<ProtectedRoute element={<RegistrarUsuario />} />} />
+              <Route path="/cadastro/registrarusuario" element={<RegistrarUsuario />} />
               <Route path="/cadastro/atualizarendereco" element={<ProtectedRoute element={<AtualizarEndereco />} />} />
               <Route path="/cadastro/dadosbancarios" element={<ProtectedRoute element={<DadosBancarios />} />} />
               <Route path="/upcoming-events" element={<ProtectedRoute element={<ListaEventos />} />} />

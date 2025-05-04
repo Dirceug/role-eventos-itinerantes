@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  define: {
+    'process.env': {} // Isso evita que process.env seja sobrescrito durante o build
+  },
   base: '/',
   resolve: {
     alias: {

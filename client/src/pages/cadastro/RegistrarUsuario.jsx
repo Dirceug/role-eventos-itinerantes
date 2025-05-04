@@ -4,6 +4,8 @@ import Joi from 'joi'; // Importando o Joi diretamente
 import ButtonGrande from '../../components/buttons/ButtonGrande';
 import LabelInput from '../../components/LabelInput';
 import UserContext from '../../contexts/UserContext';
+import { createUserWithEmailAndPassword } from 'firebase/auth'; // Importar o método de criação de usuário do Firebase
+import { auth } from '../../firebase'; // Importar a instância do Firebase
 import '../../App.css';
 
 // Definindo o esquema de validação com Joi e mensagens de erro personalizadas
@@ -97,23 +99,57 @@ function RegistrarUsuario() {
 
   const handleNext = async () => {
     if (!validate()) return;
+
     try {
-      const response = await fetch('${process.env.REACT_APP_API_URL}/users/register', {
+      // Registrar usuário no FirebaseAuth
+      const firebaseResult = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUser = firebaseResult.user;
+      console.log('Usuário registrado no Firebase:', firebaseUser);
+
+      // Obter o token de autenticação do Firebase
+      const idToken = await firebaseUser.getIdToken();
+
+      // Construir a URL com a variável de ambiente
+      const apiUrl = import.meta.env.VITE_API_URL; // Certifique-se de que esta variável está definida
+      if (!apiUrl) {
+        throw new Error('A variável de ambiente VITE_API_URL não está definida.');
+      }
+      console.log("API_URL:", apiUrl )
+      // Enviar dados do usuário para o backend
+      const response = await fetch(`${apiUrl}/users/register`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}` // Enviar o token no cabeçalho
         },
-        body: JSON.stringify({ displayName, email, password, cpf, apelido })
+        body: JSON.stringify({
+          displayName,
+          email,
+          cpf,
+          apelido,
+          firebaseUid: firebaseUser.uid, // UID do Firebase
+          emailVerified: firebaseUser.emailVerified,
+          isAnonymous: firebaseUser.isAnonymous
+        })
       });
+
       if (response.ok) {
         const userData = await response.json();
+        console.log('Usuário registrado no backend:', userData);
         setUser(userData);
         navigate('/cadastro/atualizarendereco');
       } else {
-        console.error('Erro ao registrar usuário');
+        const errorData = await response.json();
+        console.error('Erro ao registrar usuário no backend:', errorData);
       }
     } catch (error) {
-      console.error('Erro ao registrar usuário:', error);
+      if (error.code === 'auth/email-already-in-use') {
+        console.error('Erro: O e-mail já está em uso.');
+        alert('Esse e-mail já está registrado. Tente fazer login ou usar outro e-mail.');
+        toast.error('Esse e-mail já está registrado. Tente fazer login ou usar outro e-mail.')
+      } else {
+        console.error('Erro ao registrar usuário:', error);
+      }
     }
   };
 

@@ -19,7 +19,7 @@ const serviceAccount = {
   universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
 };
 
-console.log("Firebase Service Account:", serviceAccount); // Adicione este log
+//console.log("Firebase Service Account:", serviceAccount); // Adicione este log
 
 // Inicializar o Firebase Admin SDK
 if (!admin.apps.length) { // Garante que não inicializamos múltiplas vezes

@@ -96,7 +96,10 @@ app.use('/api/amizades', verifyToken, amizadesRoutes); // Nova rota para amizade
 // Servir os arquivos estáticos da pasta 'dist'
 const staticPath = path.join(__dirname, 'dist');
 console.log("Serving static files from:", staticPath);
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(staticPath));
+
+// Certifique-se de lidar com rotas desconhecidas corretamente
+app.use('/api', userRoutes); // Certifique-se de que as rotas da API estão configuradas corretamente
 
 
 app.get('/*', (req, res) => {
