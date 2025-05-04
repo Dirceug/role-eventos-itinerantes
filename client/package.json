@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm --prefix client install && npm --prefix client run build && rm -rf server/dist && mv client/dist server/",
     "lint": "eslint .",
     "preview": "vite preview"
   },

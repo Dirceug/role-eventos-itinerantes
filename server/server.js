@@ -1,112 +1,134 @@
 require('dotenv').config();
-
-const https = require('https');
-const fs = require('fs');
-
 const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const session = require('express-session');
 const cors = require('cors');
-const path = require('path'); 
-const verifyToken = require('./middleware/authenticateToken'); // Importar o middleware de autenticação
-const NodeCache = require("node-cache");
+const path = require('path');
+const { generators } = require('openid-client'); // Use generators
+const clientPromise = require('./scripts/openidClients'); // Importar clientPromise
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
 const port = process.env.PORT || 5000;
 
+//console.log("AWS_REGION:", process.env.AWS_REGION);
+//console.log("COGNITO_USER_POOL_ID:", process.env.COGNITO_USER_POOL_ID);
+console.log("COGNITO_CLIENT_ID:", process.env.COGNITO_CLIENT_ID);
+console.log("COGNITO_CLIENT_SECRET:", process.env.COGNITO_CLIENT_SECRET);
+console.log("COGNITO_REDIRECT_URI:", process.env.COGNITO_REDIRECT_URI);
 // Middleware
-//const allowedOrigins = [process.env.DEV_ORIGIN, process.env.PROD_ORIGIN_1, process.env.PROD_ORIGIN_2];
 const allowedOrigins = [
-  //'http://localhost:3000', // Para desenvolvimento local Rect
-  'http://localhost:5173', // Para desenvolvimento local Vite
-  'http://localhost:5000', // Para testar o frontend buildado localmente
+  'http://localhost:5173',
+  'http://localhost:5000',
   'http://18.216.192.230',
   'http://rolesemfila.com.br',
-  //'https://52.14.179.20'
-  //'https://role-eventos-itinerantes.web.app', // Front-end hospedado no Firebase
-  //'https://role-eventos-itinerantes.firebaseapp.com' // Alternativo do Firebase
 ];
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  allowedHeaders: 'Content-Type,Authorization' // Inclua outros cabeçalhos personalizados, se houver
-}));
+app.use(cors());
 app.use(express.json());
+app.use(session({
+  secret: 'some secret',
+  resave: false,
+  saveUninitialized: false,
+}));
 
-// Cache Global
-const userCache = new NodeCache({ stdTTL: 600 });
+// PKCE Setup
+(async () => {
+  const codeVerifier = generators.codeVerifier(); // Gerar um code_verifier
+  const codeChallenge = generators.codeChallenge(codeVerifier); // Gerar o code_challenge
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
+  console.log("Code Verifier:", codeVerifier);
+  console.log("Code Challenge:", codeChallenge);
 
-// Middleware para logar todas as requisições
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
+  // Rotas
+  const userRoutes = require('./routes/users');
+  app.use('/api/users', userRoutes);
+
+  // Rota de login usando Cognito
+  app.get('/login', async (req, res) => {
+    try {
+      const client = await clientPromise; // Garantir que o cliente está inicializado
+      if (!client) {
+        throw new Error('OpenID client not initialized.');
+      }
+      const codeVerifier = generators.codeVerifier();
+      const codeChallenge = generators.codeChallenge(codeVerifier);
+      console.log("codeVerifier: ", codeVerifier)
+      console.log("codeChallenge: ", codeChallenge)
+      
+      req.session.code_verifier = codeVerifier; // Armazenar o code_verifier na sessão
+
+      // Adicione logs para verificar os valores
+      console.log("Client ID(login):", client.client_id);
+      console.log("Redirect URI(login):", process.env.COGNITO_REDIRECT_URI);
+      console.log("Code Challenge(login):", codeChallenge);
+      const authorizationUrl = client.authorizationUrl({
+        scope: 'email openid phone',
+        // code_challenge: codeChallenge,
+        // code_challenge_method: 'S256',
+        response_type: 'code',
+        redirect_uri: process.env.COGNITO_REDIRECT_URI,
+      });
+
+      console.log("Generated Authorization URL:(login)", authorizationUrl);
+      res.redirect(authorizationUrl);
+    } catch (err) {
+      console.error('Error generating authorization URL:', err);
+      res.status(500).send('Failed to initiate login.');
+    }
+  });
+
+  // Callback após login
+  app.get('/callback', async (req, res) => {
+    try {
+      const client = await clientPromise; // Garantir que o cliente está inicializado
+      const params = client.callbackParams(req); // Obter os parâmetros do callback
+
+      const tokenSet = await client.callback(
+        process.env.COGNITO_REDIRECT_URI,
+        params,
+        { code_verifier: req.session.code_verifier } // Passar o code_verifier
+      );
+
+      req.session.tokenSet = tokenSet; // Salvar os tokens na sessão
+      req.session.userInfo = await client.userinfo(tokenSet.access_token); // Obter informações do usuário
+      res.redirect('/');
+    } catch (err) {
+      console.error('Callback error:', err);
+      res.status(500).send('Authentication failed.');
+    }
+  });
+})();
+
+app.get('/usuarios', async (req, res) => {
+  try {
+    const client = await clientPromise; // Garantir que o cliente está inicializado
+    const params = client.callbackParams(req); // Obter os parâmetros do callback
+
+    console.log("Callback Params:", params); // Log para depuração
+
+    const tokenSet = await client.callback(
+      process.env.COGNITO_REDIRECT_URI,
+      params,
+      { code_verifier: req.session.code_verifier } // Passar o code_verifier
+    );
+
+    console.log("Tokens Received:", tokenSet); // Log para depuração
+    console.log("ID Token Claims:", tokenSet.claims()); // Log para depuração
+
+    req.session.tokenSet = tokenSet; // Salvar os tokens na sessão
+    req.session.userInfo = await client.userinfo(tokenSet.access_token); // Obter informações do usuário
+    res.redirect('/'); // Redirecionar para a página inicial após login
+  } catch (err) {
+    console.error('Usuários error:', err);
+    res.status(500).send('Authentication failed.');
+  }
 });
 
-// Configurar HTTPS com certificados locais
-const options = {
-  key: fs.readFileSync(path.join(__dirname, '/certs/localhost-key.pem')), // Use path.join para garantir o caminho correto
-  cert: fs.readFileSync(path.join(__dirname, '/certs/localhost-cert.pem')), // Use path.join para garantir o caminho correto
-};
-
-// Middleware para configurar COOP e COEP
-app.use((req, res, next) => {
- res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
- res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
- res.setHeader("Access-Control-Allow-Origin", "*");
- res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
- res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
- next();
-});
-
-// Routes
-const userRoutes = require('./routes/users');
-const transactionRoutes = require('./routes/transactions');
-const eventRoutes = require('./routes/events');
-const barracaRoutes = require('./routes/barracas');
-const cardapioRoutes = require('./routes/cardapios');
-const pedidoRoutes = require('./routes/pedidos');
-const curtidasRoutes = require('./routes/curtidas'); // Nova rota para curtidas
-const amizadesRoutes = require('./routes/amizades'); // Nova rota para amizades
-
-app.use('/api/users', userRoutes); // A rota de usuários já tem tratamento específico
-app.use('/api/transactions', verifyToken, transactionRoutes);
-app.use('/api/events', verifyToken, eventRoutes);
-app.use('/api/events/:eventId/barracas', verifyToken, barracaRoutes); // Proteger a rota
-app.use('/api/events/:eventId/barracas/:barracaId/cardapios', verifyToken, cardapioRoutes); // Proteger a rota
-app.use('/api/pedidos', verifyToken, pedidoRoutes); // Proteger a rota
-app.use('/api/curtidas', verifyToken, curtidasRoutes); // Nova rota para curtidas
-app.use('/api/amizades', verifyToken, amizadesRoutes); // Nova rota para amizades
-
-// Servir os arquivos estáticos da pasta 'dist'
-const staticPath = path.join(__dirname, 'dist');
-console.log("Serving static files from:", staticPath);
+// Servir arquivos estáticos
 app.use(express.static(path.join(__dirname, 'dist')));
-
-
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port: ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on port: ${port}`);
 });
-// https.createServer(options, app).listen(PORT, () => {
-//   console.log(`Servidor HTTPS rodando em https://localhost:${PORT}`);
-// });

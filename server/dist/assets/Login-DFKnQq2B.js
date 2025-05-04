@@ -1,0 +1,15 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/LoginComponent-BHF1NOnl.js","assets/index-Chp7mPQo.js","assets/index-BIH4TKpF.css","assets/ButtonGrande-B2aAx_Si.js","assets/ButtonGrande-8QRTMBCc.css","assets/LoginComponent-CWBv3fBo.css"])))=>i.map(i=>d[i]);
+import { j as jsxRuntimeExports, r as reactExports, _ as __vitePreload } from "./index-Chp7mPQo.js";
+/* empty css               */
+const dancing = "/assets/dancing-hCqRaFWV.png";
+const LoginComponent = reactExports.lazy(() => __vitePreload(() => import("./LoginComponent-BHF1NOnl.js"), true ? __vite__mapDeps([0,1,2,3,4,5]) : void 0));
+function Login() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "paginaLogin", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: dancing, alt: "", className: "dancing" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "role", children: "Rolê" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(LoginComponent, {})
+  ] });
+}
+export {
+  Login as default
+};
