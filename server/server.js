@@ -24,6 +24,9 @@ const allowedOrigins = [
   'http://localhost:5000', // Para testar o frontend buildado localmente
   'http://18.216.192.230',
   'http://rolesemfila.com.br',
+  'http://www.rolesemfila.com.br',
+  'https://rolesemfila.com.br',
+  'https://www.rolesemfila.com.br',
   //'https://52.14.179.20'
   //'https://role-eventos-itinerantes.web.app', // Front-end hospedado no Firebase
   //'https://role-eventos-itinerantes.firebaseapp.com' // Alternativo do Firebase
