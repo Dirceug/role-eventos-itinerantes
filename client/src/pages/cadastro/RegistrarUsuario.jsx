@@ -137,7 +137,7 @@ function RegistrarUsuario() {
         const userData = await response.json();
         console.log('Usuário registrado no backend:', userData);
         setUser(userData);
-        navigate('/cadastro/atualizarendereco');
+        navigate('/login');
       } else {
         const errorData = await response.json();
         console.error('Erro ao registrar usuário no backend:', errorData);

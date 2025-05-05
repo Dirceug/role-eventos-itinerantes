@@ -206,18 +206,18 @@ function LoginComponent() {
 
   return (
     <div className="login">
-      {/* <ButtonGrande onClick={handleGoogleLogin} className="social-button">
+      <ButtonGrande onClick={handleGoogleLogin} className="social-button">
         Entrar com Google (em desenvolvimento)
       </ButtonGrande>
       <ButtonGrande onClick={handleFacebookLogin} className="social-button">
-        Entrar com Facebook (em desenvolvimento)
-      </ButtonGrande> */}
-      <ButtonGrande className="social-button">
+        Entrar com Facebook (em des)
+      </ButtonGrande>
+      {/* <ButtonGrande className="social-button">
         Entrar com Google (em desenvolvimento)
       </ButtonGrande>
       <ButtonGrande className="social-button">
         Entrar com Facebook (em desenvolvimento)
-      </ButtonGrande>
+      </ButtonGrande> */}
       <ButtonGrande onClick={navigateToSignup} className="social-button">
         Entrar com e-mail
       </ButtonGrande>
