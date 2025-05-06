@@ -26,18 +26,18 @@ window.close = function () {
   }
 };
 
-console.log('Testando sessionStorage...');
+//console.log('Testando sessionStorage...');
 try {
   sessionStorage.setItem('test', 'test');
-  console.log('sessionStorage está funcionando.');
+  //console.log('sessionStorage está funcionando.');
 } catch (error) {
   console.error('Erro no sessionStorage:', error);
 }
 
-console.log('Testando localStorage...');
+//console.log('Testando localStorage...');
 try {
   localStorage.setItem('test', 'test');
-  console.log('localStorage está funcionando.');
+  //console.log('localStorage está funcionando.');
 } catch (error) {
   console.error('Erro no localStorage:', error);
 }

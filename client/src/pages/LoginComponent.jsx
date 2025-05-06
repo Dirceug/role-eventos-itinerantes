@@ -12,16 +12,16 @@ const saveToken = (token) => {
   sessionStorage.setItem('authToken', token);
   localStorage.setItem('authToken', token);
   Cookies.set('authToken', token, { secure: true, sameSite: 'Strict' });
-  console.log('Token salvo em sessionStorage, localStorage e Cookies.');
+  //console.log('Token salvo em sessionStorage, localStorage e Cookies.');
 };
 
 const getToken = () => {
   let token = sessionStorage.getItem('authToken');
   if (!token) {
     token = localStorage.getItem('authToken');
-    console.log('Token recuperado do localStorage.');
+    //console.log('Token recuperado do localStorage.');
   } else {
-    console.log('Token recuperado do sessionStorage.');
+    //console.log('Token recuperado do sessionStorage.');
   }
   return token;
 };
@@ -31,7 +31,7 @@ function LoginComponent() {
   const { setUser } = useContext(UserContext);
 
   const handleGoogleLogin = async () => {
-    console.log('Iniciando login com Google...');
+    //console.log('Iniciando login com Google...');
     let popupMonitor = null;
     try {
       // Inicia o monitoramento do estado do popup
@@ -43,12 +43,12 @@ function LoginComponent() {
   
       // Inicia o login com o Firebase Auth
       const result = await signInWithPopup(auth, googleProvider);
-      console.log('Popup aberto com sucesso.');
+      //console.log('Popup aberto com sucesso.');
       const user = result.user;
-      console.log('Usuário autenticado com Google:', user);
+      //console.log('Usuário autenticado com Google:', user);
 
       const idToken = await user.getIdToken();
-      console.log('Token JWT obtido:', idToken);
+      //console.log('Token JWT obtido:', idToken);
       saveToken(idToken);
 
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -76,7 +76,7 @@ function LoginComponent() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log('Usuário registrado no backend:', data);
+        //console.log('Usuário registrado no backend:', data);
         setUser(data);
         navigate('/usuarios');
       } else {
@@ -95,14 +95,14 @@ function LoginComponent() {
   };
 
   const handleFacebookLogin = async () => {
-    console.log('Iniciando login com Facebook...');
+    //console.log('Iniciando login com Facebook...');
     try {
       const result = await signInWithPopup(auth, facebookProvider);
       const user = result.user;
-      console.log('Usuário autenticado com Facebook:', user);
+      //console.log('Usuário autenticado com Facebook:', user);
 
       const idToken = await user.getIdToken();
-      console.log('Token JWT obtido:', idToken);
+      //console.log('Token JWT obtido:', idToken);
       saveToken(idToken);
 
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -130,7 +130,7 @@ function LoginComponent() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log('Usuário registrado no backend:', data);
+        //console.log('Usuário registrado no backend:', data);
         setUser(data);
         navigate('/usuarios');
       } else {
@@ -150,14 +150,14 @@ function LoginComponent() {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    console.log('Iniciando login com e-mail...');
+    //console.log('Iniciando login com e-mail...');
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const user = result.user;
-      console.log('Usuário autenticado com e-mail:', user);
+      //console.log('Usuário autenticado com e-mail:', user);
 
       const idToken = await user.getIdToken();
-      console.log('Token JWT obtido:', idToken);
+      //console.log('Token JWT obtido:', idToken);
       saveToken(idToken);
 
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -185,7 +185,7 @@ function LoginComponent() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log('Usuário registrado no backend:', data);
+        //console.log('Usuário registrado no backend:', data);
         setUser(data);
         navigate('/events');
       } else {
@@ -206,18 +206,18 @@ function LoginComponent() {
 
   return (
     <div className="login">
-      <ButtonGrande onClick={handleGoogleLogin} className="social-button">
+      {/* <ButtonGrande onClick={handleGoogleLogin} className="social-button">
         Entrar com Google (em desenvolvimento)
       </ButtonGrande>
       <ButtonGrande onClick={handleFacebookLogin} className="social-button">
         Entrar com Facebook (em des)
-      </ButtonGrande>
-      {/* <ButtonGrande className="social-button">
+      </ButtonGrande> */}
+      <ButtonGrande className="social-button">
         Entrar com Google (em desenvolvimento)
       </ButtonGrande>
       <ButtonGrande className="social-button">
         Entrar com Facebook (em desenvolvimento)
-      </ButtonGrande> */}
+      </ButtonGrande>
       <ButtonGrande onClick={navigateToSignup} className="social-button">
         Entrar com e-mail
       </ButtonGrande>

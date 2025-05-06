@@ -19,7 +19,7 @@ const auth = getAuth(app);
 // Configurar persistência para sessionStorage
 setPersistence(auth, browserSessionPersistence)
   .then(() => {
-    console.log("Firebase Auth configurado para usar sessionStorage."); // Log de sucesso
+    //console.log("Firebase Auth configurado para usar sessionStorage."); // Log de sucesso
   })
   .catch((error) => {
     console.error("Erro ao configurar persistência:", error); // Log de erro
@@ -36,6 +36,6 @@ const facebookProvider = new FacebookAuthProvider();
 // Inicializar o Firestore
 const db = getFirestore(app);
 
-console.log("Firebase Client SDK inicializado com sucesso.");
+//console.log("Firebase Client SDK inicializado com sucesso.");
 
 export { auth, googleProvider, facebookProvider, db };
