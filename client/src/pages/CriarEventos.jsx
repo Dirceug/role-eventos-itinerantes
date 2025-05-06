@@ -199,28 +199,32 @@ const EventForm = () => {
     setIsEditingOrganizers((prev) => !prev);
   };
 
-  const toggleEditResponsaveisBarraca = () => {
+  const toggleEditResponsaveisBarraca = useCallback(() => {
     setIsEditingResponsaveisBarraca((prev) => !prev);
-  };
-
-  const toggleEditFuncionariosBarraca = () => {
-    setIsEditingFuncionariosBarraca((prev) => !prev);
-  };
-
-  const addResponsavelBarraca = (responsavel) => {
-    const exists = responsaveisBarraca.some((r) => r._id === responsavel._id);
-    if (!exists) {
-      setResponsaveisBarraca((prev) => [...prev, responsavel]);
-    }
-  };
+  }, []);
   
-  // Adicionar um funcionário à lista de Funcionários
-  const addFuncionarioBarraca = (funcionario) => {
-    const exists = funcionariosBarraca.some((f) => f._id === funcionario._id);
-    if (!exists) {
-      setFuncionariosBarraca((prev) => [...prev, funcionario]);
-    }
-  };
+  const toggleEditFuncionariosBarraca = useCallback(() => {
+    setIsEditingFuncionariosBarraca((prev) => !prev);
+  }, []);
+
+  const addResponsavelBarraca = useCallback((responsavel) => {
+    setResponsaveisBarraca((prev) => {
+      if (prev.some((r) => r._id === responsavel._id)) {
+        return prev; // Não adiciona se já existir
+      }
+      return [...prev, responsavel];
+    });
+  }, []);
+
+  const addFuncionarioBarraca = useCallback((funcionario) => {
+    setFuncionariosBarraca((prev) => {
+      if (prev.some((r) => r._id === funcionario._id)) {
+        return prev; // Não adiciona se já existir
+      }
+      return [...prev, funcionario];
+    });
+  }, []);
+  
 
   //Funções para buscar usuários
   const fetchUsers = async (query) => {
@@ -340,9 +344,9 @@ const EventForm = () => {
   };
 
   // Campos de endereço
-  const handleEnderecoChange = (field, value) => {
+  const handleEnderecoChange = useCallback((field, value) => {
     setEndereco((prev) => ({ ...prev, [field]: value }));
-  };
+  }, []);
 
   const handleDataEventoChange = (index, field, value) => {
     const newDataEvento = [...dataEvento];
@@ -408,7 +412,7 @@ const EventForm = () => {
   };
 
   // Adicionar uma barraca
-  const addBarraca = () => {
+  const addBarraca = useCallback(() => {
     setBarracas((prev) => [
       ...prev,
       {
@@ -419,7 +423,7 @@ const EventForm = () => {
         pratos: [],
       },
     ]);
-  };
+  }, []);
 
   // Remover uma barraca
   const removeBarraca = (index) => {
@@ -427,23 +431,20 @@ const EventForm = () => {
   };
 
   // Atualizar informações da barraca
-  const updateBarraca = (barracaIndex, field, value, pratoIndex = null) => {
+  const updateBarraca = useCallback((barracaIndex, field, value, pratoIndex = null) => {
     setBarracas((prev) => {
       const updated = [...prev];
       if (pratoIndex !== null && field.startsWith('pratos')) {
-        // Atualizar um prato específico
-        const pratoField = field.split('.')[1]; // Extraia o campo do prato, ex: "nome"
-        updated[barracaIndex].pratos[pratoIndex][pratoField] = value;
+        updated[barracaIndex].pratos[pratoIndex][field.split('.')[1]] = value;
       } else {
-        // Atualizar um campo da barraca
         updated[barracaIndex][field] = value;
       }
       return updated;
     });
-  };
+  }, []);
 
   // Adicionar um prato
-  const addPrato = (barracaIndex) => {
+  const addPrato = useCallback((barracaIndex) => {
     setBarracas((prev) => {
       const updated = [...prev];
       updated[barracaIndex].pratos.push({
@@ -457,16 +458,17 @@ const EventForm = () => {
       });
       return updated;
     });
-  };
+  }, []);
+  
 
   // Remover um prato
-  const removePrato = (barracaIndex, pratoIndex) => {
+  const removePrato = useCallback((barracaIndex, pratoIndex) => {
     setBarracas((prev) => {
       const updated = [...prev];
       updated[barracaIndex].pratos = updated[barracaIndex].pratos.filter((_, i) => i !== pratoIndex);
       return updated;
     });
-  };
+  }, []);
 
   // Remove um organizador da lista
   const removeOrganizer = (organizerId) => {
@@ -864,7 +866,7 @@ const EventForm = () => {
               {/* <button type="button" onClick={() => toggleEditOrganizersBarraca()}>Adicionar Responsável</button> */}
               <button
                 type="button"
-                onClick={() => toggleEditResponsaveisBarraca()}
+                onClick={toggleEditResponsaveisBarraca}
                 >
                 Buscar usuários
               </button>

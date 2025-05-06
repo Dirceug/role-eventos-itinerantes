@@ -148,7 +148,7 @@ const criarTransacao = async (req, res) => {
       });
 
       await pedido.save({ session });
-      console.log('Pedido criado:', pedido);
+      //console.log('Pedido criado:', pedido);
 
       // Mensagem de compra concluída
       message = `Olá ${usuario.displayName}, sua compra de ${quantidade} ${cardapio.nome} no valor de R$ ${math.abs(valorAjustado).toFixed(2)} foi enviada a ${barraca.nome}.`;
@@ -178,7 +178,7 @@ const criarTransacao = async (req, res) => {
     });
 
     const novaTransacao = await transacao.save({ session });
-    console.log('Transação criada:', novaTransacao);
+    //console.log('Transação criada:', novaTransacao);
 
     // Atualizar status da transação após salvar
     if (tipo !== 'compra') {

@@ -11,7 +11,7 @@ import '../../App.css';
 // Definindo o esquema de validação com Joi e mensagens de erro personalizadas
 const schema = Joi.object({
   displayName: Joi.string()
-    .pattern(/^[a-zA-Z]{3,} [a-zA-Z]{3,}$/)
+    .pattern(/^[a-zA-Z]{3,}( [a-zA-Z]{3,})+$/) 
     .required()
     .label('Nome')
     .messages({
@@ -104,7 +104,7 @@ function RegistrarUsuario() {
       // Registrar usuário no FirebaseAuth
       const firebaseResult = await createUserWithEmailAndPassword(auth, email, password);
       const firebaseUser = firebaseResult.user;
-      console.log('Usuário registrado no Firebase:', firebaseUser);
+      //console.log('Usuário registrado no Firebase:', firebaseUser);
 
       // Obter o token de autenticação do Firebase
       const idToken = await firebaseUser.getIdToken();
@@ -114,7 +114,7 @@ function RegistrarUsuario() {
       if (!apiUrl) {
         throw new Error('A variável de ambiente VITE_API_URL não está definida.');
       }
-      console.log("API_URL:", apiUrl )
+      //console.log("API_URL:", apiUrl )
       // Enviar dados do usuário para o backend
       const response = await fetch(`${apiUrl}/users/register`, {
         method: 'POST',
@@ -135,9 +135,9 @@ function RegistrarUsuario() {
 
       if (response.ok) {
         const userData = await response.json();
-        console.log('Usuário registrado no backend:', userData);
+        //console.log('Usuário registrado no backend:', userData);
         setUser(userData);
-        navigate('/login');
+        navigate('/logincomemail');
       } else {
         const errorData = await response.json();
         console.error('Erro ao registrar usuário no backend:', errorData);
