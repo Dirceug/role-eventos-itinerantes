@@ -4,11 +4,12 @@ import './DetalheEvento.css';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
 
+import state from '../img/state.jpeg';
+
 const Navbar = lazy(() => import('../components/layout/Navbar'));
 const CurtidasButton = lazy(() => import('../components/buttons/CurtidasButton'));
-const BackButton = lazy(() => import('../components/buttons/BackButton'));
 
-const DetalheEvento = (props) => {
+const DetalheEvento = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
@@ -44,12 +45,12 @@ const DetalheEvento = (props) => {
     return <div>Loading...</div>;
   }
 
-  const handleShareClick = (socialMedia) => {
-    alert(`Compartilhado com ${socialMedia}`);
+  const handleBackClick = () => {
+    navigate(-1); // Navega para a página anterior
   };
 
-  const handleCardapioClick = () => {
-    navigate(`/event/${eventId}/barracas`);
+  const handleShareClick = (socialMedia) => {
+    alert(`Compartilhado com ${socialMedia}`);
   };
 
   const userToken = Cookies.get('authToken');
@@ -58,18 +59,22 @@ const DetalheEvento = (props) => {
     <Suspense fallback={<div>Carregando...</div>}>
       <Navbar user={user} token={userToken} eventId={eventId} />
       <div className="container">
+        <div className="back-button-container">
+          <button className="back-button" onClick={handleBackClick}>
+            ← Voltar
+          </button>
+        </div>
         <div className="detalhe-evento-container">
           <div className="detalhe-evento-header">
             <CurtidasButton eventId={eventId} initialLikesCount={event.numeroFavoritos} />
-            <BackButton />
           </div>
           <div className="detalhe-evento-foto">
-            <img src={event.fotoUrl} alt={event.nome} />
+            <img src={state} alt={event.nome} />
           </div>
           <div className="detalhe-evento-info">
             <h2>{event.nome}</h2>
             <div className="organizador">
-            <p><strong>Organizado por: </strong>
+              <p><strong>Organizado por: </strong>
                 {event.organizadores && event.organizadores.map((organizador, index, array) => (
                   <React.Fragment key={organizador._id}>
                     {organizador.nome}
@@ -84,7 +89,7 @@ const DetalheEvento = (props) => {
               {event.dataEvento && event.dataEvento.map((data, index) => (
                 <div key={index} className="data-detalhada">
                   <p>{new Date(data.dataAbertura).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} - {new Date(data.dataAbertura).toLocaleDateString('pt-BR', { weekday: 'long' })}</p>
-                  <br/>
+                  <br />
                   <p>Abertura: {data.horaAbertura}</p>
                   <p>Fechamento: {data.horaFechamento}</p>
                 </div>
@@ -92,7 +97,7 @@ const DetalheEvento = (props) => {
             </div>
           </div>
           <div className="detalhe-evento-footer">
-            <div className="social-buttons">
+            {/* <div className="social-buttons">
               <button onClick={() => handleShareClick('Instagram')}>
                 <img src="/img/icones/instagram.png" alt="Instagram" />
               </button>
@@ -102,7 +107,7 @@ const DetalheEvento = (props) => {
               <button onClick={() => handleShareClick('WhatsApp')}>
                 <img src="/img/icones/whatsapp.png" alt="WhatsApp" />
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

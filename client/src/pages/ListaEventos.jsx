@@ -4,6 +4,7 @@ import './ListaEventos.css';
 import eventoBase from '../img/eventoBase.jpeg';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
+import state from "../img/state.png"
 
 const Navbar = lazy(() => import('../components/layout/Navbar'));
 const CurtidasButton = lazy(() => import('../components/buttons/CurtidasButton'));
@@ -59,7 +60,8 @@ const ListaEventos = () => {
           <div
             key={event._id}
             className="event"
-            style={{ backgroundImage: `url(${event.fotoUrl || eventoBase})` }}
+            // style={{ backgroundImage: `url(${event.fotoUrl || eventoBase})` }}
+            style={{ backgroundImage: `url(stateImage})` }} // Use a variável importada
             onClick={() => handleEventClick(event._id)}
           >
             <div className="event-overlay">

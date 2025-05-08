@@ -212,12 +212,12 @@ function LoginComponent() {
       <ButtonGrande onClick={handleFacebookLogin} className="social-button">
         Entrar com Facebook (em des)
       </ButtonGrande> */}
-      <ButtonGrande className="social-button">
+      {/* <ButtonGrande className="social-button">
         Entrar com Google (em desenvolvimento)
       </ButtonGrande>
       <ButtonGrande className="social-button">
         Entrar com Facebook (em desenvolvimento)
-      </ButtonGrande>
+      </ButtonGrande> */}
       <ButtonGrande onClick={navigateToSignup} className="social-button">
         Entrar com e-mail
       </ButtonGrande>

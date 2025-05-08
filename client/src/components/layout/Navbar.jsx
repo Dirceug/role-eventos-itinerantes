@@ -96,13 +96,13 @@ function Navbar({ eventId }) {
             label="Adicionar Saldo"
           />
         )}
-        {user && (
+        {/* {user && (
           <ListaUsuariosButton
             userId={user._id}
             token={userToken}
             label="Usuarios"
           />
-        )}
+        )} */}
         {user && (
           <ListaPedidosButton
             userId={user._id}
