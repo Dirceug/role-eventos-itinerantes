@@ -11,7 +11,7 @@ import '../../App.css';
 // Definindo o esquema de validação com Joi e mensagens de erro personalizadas
 const schema = Joi.object({
   displayName: Joi.string()
-    .pattern(/^[a-zA-Z]{3,}( [a-zA-Z]{3,})+$/) 
+    // .pattern(/^[a-zA-Z]{3,}( [a-zA-Z]{3,})+$/) 
     .required()
     .label('Nome')
     .messages({
@@ -29,12 +29,12 @@ const schema = Joi.object({
       'any.required': '{#label} é obrigatório.'
     }),
   password: Joi.string()
-    .min(8)
+    .min(4)
     .max(64)
-    .pattern(/(?=.*[a-z])/)
-    .pattern(/(?=.*[A-Z])/)
-    .pattern(/(?=.*\d)/)
-    .pattern(/(?=.*[@$!%*?&])/)
+    // .pattern(/(?=.*[a-z])/)
+    // .pattern(/(?=.*[A-Z])/)
+    // .pattern(/(?=.*\d)/)
+    // .pattern(/(?=.*[@$!%*?&])/)
     .required()
     .label('Senha')
     .messages({
@@ -182,7 +182,7 @@ function RegistrarUsuario() {
           error={errors.email}
         />
         <LabelInput
-          label="Senha:"
+          label="Senha:(6letras)"
           type="password"
           placeholder="********"
           value={password}

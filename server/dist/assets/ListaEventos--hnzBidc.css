@@ -1,0 +1,168 @@
+html, body, .container {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Remove a barra de rolagem horizontal */
+}
+
+.upcoming-events-container {
+  display: flex;
+  justify-content: center;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  padding: 10px;
+  background-color: #f0f0f0;
+  width: 100%;
+  height: 90%;
+}
+
+.event {
+  position: relative;
+  width: 90%;
+  margin: 5px;
+  max-width: 400px;
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  border: none;
+  overflow: hidden;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.event-overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  padding: 10px;
+}
+
+.event-title h2 {
+  margin: 0;
+  font-size: 1.2em;
+  color:#EE7F43
+}
+
+.event-description {
+  margin-top: 10px;
+}
+
+.event-description p {
+  margin: 0;
+  font-size: 1em;
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+
+.event-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  position: absolute;
+  bottom: 30px;
+  left: 10px;
+}
+
+.event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  justify-content: center;
+  margin: 5px;
+  padding: 5px;
+}
+
+.event-date:hover {
+  background-color: rgba(0, 0, 0, 1);
+  font-weight: bold;
+}
+
+.event-date .date {
+  font-size: 1em;
+}
+
+.event-date .time {
+  font-size: 0.8em;
+  margin: 0;
+}
+
+.event-barracas {
+  position: absolute;
+  bottom: 30px;
+  right: 20px;
+  color: #EE7F43;
+}
+
+.event-barracas2 {
+  position: absolute;
+  bottom: 30px;
+  right: 20px;
+  color: #EE7F43;
+  display: flex;
+}
+
+.event-barracas .cardapio-button {
+  font-size: 0.8em;
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.event-likes {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.no-events-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.no-events-text {
+  font-size: 2em;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.create-event-button {
+  background-color: #EE7F43;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.create-event-button:hover {
+  background-color: #D66A2E;
+}
