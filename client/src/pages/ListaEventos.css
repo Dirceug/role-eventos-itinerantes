@@ -116,6 +116,14 @@ html, body, .container {
   color: #EE7F43;
 }
 
+.event-barracas2 {
+  position: absolute;
+  bottom: 30px;
+  right: 20px;
+  color: #EE7F43;
+  display: flex;
+}
+
 .event-barracas .cardapio-button {
   font-size: 0.8em;
   padding: 5px;

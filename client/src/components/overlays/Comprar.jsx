@@ -97,13 +97,13 @@ const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barr
     >
       <div className="modal-content">
         <button className="close-button" onClick={onRequestClose}>X</button>
-        <img src={prato.imagem} alt={prato.nome} className="prato-imagem2" />
+        {/* <img src={prato.imagem} alt={prato.nome} className="prato-imagem2" /> */}
         <div className="prato-info">
           <h3 className="prato-nome">{prato.nome}</h3>
           <p className="prato-ingredientes">{prato.ingredientes}</p>
           <h3 className="prato-valor">R$ {prato.valor.toFixed(2)}</h3>
         </div>
-        <div className="checkbox-container">
+        {/* <div className="checkbox-container">
           <label>
             <input
               type="checkbox"
@@ -143,13 +143,13 @@ const Comprar = ({ isOpen, onRequestClose, user, prato, eventId, barracaId, barr
               onChange={(e) => setDataHoraRetirada(e.target.value)} 
             />
           </div>
-        )}
+        )} */}
         <hr />
         <div className="quantidade-container">
           <h2 className="quantidade-label">Unidades</h2>
-          <button className="quantidade-button" onClick={handleMenos} disabled={quantidade <= 1}>-</button>
+          {/* <button className="quantidade-button" onClick={handleMenos} disabled={quantidade <= 1}>-</button> */}
           <h2 className="quantidade">{quantidade}</h2>
-          <button className="quantidade-button" onClick={handleMais} disabled={quantidade >= prato.estoque || quantidade >= 10}>+</button>
+          {/* <button className="quantidade-button" onClick={handleMais} disabled={quantidade >= prato.estoque || quantidade >= 10}>+</button> */}
         </div>
         <hr />
         <div className="total-container">

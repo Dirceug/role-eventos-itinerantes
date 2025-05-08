@@ -8,6 +8,7 @@ import EditarEventoModal from '../components/overlays/EditarEventoModal';
 const Navbar = lazy(() => import('../components/layout/Navbar'));
 const CurtidasButton = lazy(() => import('../components/buttons/CurtidasButton'));
 const EditarButton = lazy(() => import('../components/buttons/EditarButton'));
+const BarracasButton = lazy(() => import('../components/buttons/CardapioButton')); // Adicionado botão "Minhas Barracas"
 
 const MeusEventos = () => {
   const [events, setEvents] = useState([]);
@@ -73,6 +74,16 @@ const MeusEventos = () => {
     window.location.href = '/eventos/novo';
   };
 
+  // Redirecionar para a página "Minhas Barracas"
+  const handleMinhasBarracasClick = (eventId) => {
+    // Certifique-se de que o eventId é válido antes de redirecionar
+    if (eventId) {
+      window.location.href = `/event/${eventId}/barracas`;
+    } else {
+      console.error('eventId is undefined');
+    }
+  };
+
   return (
     <Suspense fallback={<div>Carregando...</div>}>
       <Navbar user={user} token={Cookies.get('authToken')} />
@@ -117,11 +128,16 @@ const MeusEventos = () => {
                 <div className="event-likes" onClick={(e) => e.stopPropagation()}>
                   <CurtidasButton eventId={event._id} initialLikesCount={event.numeroFavoritos} />
                 </div>
-                <div className="event-barracas">
+                <div className="event-barracas2">
                   <EditarButton
                     label="Editar evento"
                     size="40px"
                     onClick={() => handleOpenModal(event._id)}
+                  />
+                  <BarracasButton
+                    label="Minhas Barracas"
+                    size="40px"
+                    onClick={() => handleMinhasBarracasClick(event._id)}
                   />
                 </div>
               </div>

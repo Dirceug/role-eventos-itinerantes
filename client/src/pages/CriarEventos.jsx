@@ -379,7 +379,7 @@ const EventForm = () => {
 
     const { error } = schema.validate(event, { abortEarly: false });
     if (error) {
-      console.log('Validation Errors:', error.details);
+      //console.log('Validation Errors:', error.details);
       const errorMessages = {};
       error.details.forEach((detail) => {
         errorMessages[detail.path.join('.')] = detail.message;
@@ -405,7 +405,7 @@ const EventForm = () => {
   // Adiciona um organizador à lista
   const addOrganizer = (organizer) => {
     const exists = organizadoresAdicionais.some((o) => o._id === organizer._id);
-    console.log('Organizadores Adicionais:', organizadoresAdicionais);
+    //console.log('Organizadores Adicionais:', organizadoresAdicionais);
     if (!exists) {
       setOrganizadoresAdicionais((prev) => [...prev, organizer]);
     }

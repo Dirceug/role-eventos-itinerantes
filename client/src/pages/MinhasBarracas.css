@@ -1,0 +1,86 @@
+/* Define o estilo geral da página */
+html, body, .container {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Remove a barra de rolagem horizontal */
+}
+
+/* Estilo do contêiner principal da lista de eventos */
+.lista-eventos-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  margin: 20px auto;
+  width: 100%;
+  overflow-y: auto; /* Permitir rolagem vertical para o conteúdo */
+}
+
+/* Botão de voltar, posicionado no topo */
+.back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 3.5em;
+  color: #EE7F43;
+  position: absolute;
+  top: 60px;
+  left: 20px;
+}
+
+/* Estilo do título principal */
+h1 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Lista de eventos, exibida em layout flexível */
+.eventos-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Cartão de cada evento */
+.evento-card {
+  background-color: #4CAF50; /* Verde para diferenciar dos outros cartões */
+  border-radius: 10px;
+  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5); /* Sombra forte */
+  padding: 20px;
+  width: 300px;
+  cursor: pointer;
+  border: none;
+  position: relative; /* Para posicionamento do status */
+  transition: transform 0.2s ease-in-out; /* Transição suave ao passar o mouse */
+}
+
+/* Efeito de hover nos cartões */
+.evento-card:hover {
+  transform: scale(1.05); /* Aumenta levemente o tamanho */
+  box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.7); /* Sombra mais forte */
+}
+
+/* Estilo dos títulos nos cartões */
+.evento-card h2 {
+  margin-top: 0;
+  color: white;
+}
+
+.evento-card h3 {
+  color: white;
+  text-align: left;
+}
+
+/* Estilo do status exibido no canto inferior direito */
+.status {
+  margin-top: 10px;
+  color: white;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
