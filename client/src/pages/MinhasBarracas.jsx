@@ -1,29 +1,39 @@
 import React, { useEffect, useState, useContext, lazy, Suspense } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import './MinhasBarracas.css';
 import Cookies from 'js-cookie';
 import UserContext from '../contexts/UserContext';
 
-// Lazy loading dos componentes Navbar e BackButton para melhorar o desempenho
 const Navbar = lazy(() => import('../components/layout/Navbar'));
-const BackButton = lazy(() => import('../components/buttons/BackButton'));
 
-const ListaEventosFiltrados = () => {
-  const navigate = useNavigate();
+const MinhasBarracas = () => {
   const { user } = useContext(UserContext); // Contexto para obter informações do usuário
-  const [eventos, setEventos] = useState([]);
+  const [pedidos, setPedidos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Estado de carregamento
+  const [error, setError] = useState(null); // Estado de erro
+  const [searchParams] = useSearchParams();
+  const barracaId = searchParams.get('barracaId');
+  const navigate = useNavigate(); // Para redirecionar para outro componente
 
   useEffect(() => {
-    const fetchEventos = async () => {
-      const token = Cookies.get('authToken'); // Obtém o token de autenticação
+    if (!barracaId) {
+      console.error('Nenhum barracaId foi fornecido na URL');
+      setError('Nenhuma barraca associada foi encontrada.');
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchPedidos = async () => {
+      const token = Cookies.get('authToken');
       if (!token) {
-        console.error('No token found');
+        console.error('Nenhum token de autenticação encontrado');
+        setError('Você não está autenticado. Por favor, faça login novamente.');
+        setIsLoading(false);
         return;
       }
 
       try {
-        // Faz a requisição para buscar os eventos
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/events`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/pedidos?barracaId=${barracaId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -32,65 +42,62 @@ const ListaEventosFiltrados = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`Erro HTTP! status: ${response.status}`);
         }
 
         const data = await response.json();
 
-        // Filtra os eventos onde o funcionário está associado
-        const userEventos = Array.isArray(data)
-          ? data.filter((evento) =>
-              evento.funcionarios.some(
-                (funcionario) => funcionario.identifier === user._id
-              )
-            )
-          : [];
-
-        setEventos(userEventos); // Define os eventos filtrados no estado
+        // Verifica se existem pedidos filtrados
+        if (data.length === 0) {
+          setError('Nenhum pedido encontrado para esta barraca.');
+        } else {
+          setPedidos(data);
+        }
       } catch (error) {
-        console.error('Error fetching events:', error);
+        console.error('Erro ao buscar pedidos:', error);
+        setError('Ocorreu um erro ao buscar os pedidos. Tente novamente mais tarde.');
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchEventos();
-  }, [user._id]);
+    fetchPedidos();
+  }, [barracaId]);
 
-  if (!eventos.length) {
-    return <div>Carregando ou nenhum evento encontrado...</div>;
+  if (isLoading) {
+    return <div>Carregando...</div>;
   }
 
-  const handleEventClick = (eventId) => {
-    navigate(`/event/${eventId}`); // Navega para a página do evento selecionado
-  };
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
-  const userToken = Cookies.get('authToken');
+  const handleViewPedidos = () => {
+    console.log()
+    navigate(`/pedidos-barracas`); // Redireciona para o componente PedidosBarracas
+  };
 
   return (
     <Suspense fallback={<div>Carregando...</div>}>
-      <Navbar user={user} token={userToken} />
-      <div className="container">
-        <div className="lista-eventos-container">
-          <BackButton />
-          <h1>Meus Eventos</h1>
-          <div className="eventos-list">
-            {eventos.map((evento) => (
-              <div
-                key={evento._id}
-                className="evento-card"
-                onClick={() => handleEventClick(evento._id)}
-              >
-                <h2>{evento.nome}</h2>
-                <h3>{evento.descricao}</h3>
-                <div className="status">
-                  <strong>Status:</strong> {evento.status}
-                </div>
-              </div>
-            ))}
+      <Navbar user={user} />
+      <div className="lista-pedidos-container">
+        <button className="view-pedidos-button" onClick={handleViewPedidos}>
+          Ver Todos os Pedidos
+        </button>
+        {pedidos.map(pedido => (
+          <div key={pedido._id} className="pedido-card">
+            <div className="pedido-info">
+              <h2>{pedido.descricao}</h2>
+              <p><strong>Quantidade:</strong> {pedido.quantidade}</p>
+              <p><strong>Valor Total:</strong> R${pedido.valor * pedido.quantidade}</p>
+              <p><strong>Status:</strong> {pedido.status}</p>
+              <p><strong>Última Atualização:</strong> {new Date(pedido.ultimaAtualizacao).toLocaleString('pt-BR')}</p>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </Suspense>
   );
 };
 
-export default ListaEventosFiltrados;
+export default MinhasBarracas;

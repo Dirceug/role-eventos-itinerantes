@@ -124,8 +124,8 @@ function Navbar({ eventId }) {
             <div className="navbar-menu-content" onClick={(e) => e.stopPropagation()}>
               <Link to="/perfil">Perfil</Link>
               <Link to="/adicionar-endereco">Adicionar Endereço</Link>
-              <Link to="/adicionar-dados-bancários">Adicionar Dados Bancários</Link>
-              <a href="/logout" onClick={handleLogout}>Logout</a>
+              <Link to="/meus-eventos">Meus eventos</Link>
+              {/* <a href="/logout" onClick={handleLogout}>Logout</a> */}
             </div>
           )}
         </div>

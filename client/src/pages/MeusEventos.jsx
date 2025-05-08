@@ -8,7 +8,6 @@ import EditarEventoModal from '../components/overlays/EditarEventoModal';
 const Navbar = lazy(() => import('../components/layout/Navbar'));
 const CurtidasButton = lazy(() => import('../components/buttons/CurtidasButton'));
 const EditarButton = lazy(() => import('../components/buttons/EditarButton'));
-const BarracasButton = lazy(() => import('../components/buttons/CardapioButton')); // Adicionado botão "Minhas Barracas"
 
 const MeusEventos = () => {
   const [events, setEvents] = useState([]);
@@ -74,14 +73,9 @@ const MeusEventos = () => {
     window.location.href = '/eventos/novo';
   };
 
-  // Redirecionar para a página "Minhas Barracas"
-  const handleMinhasBarracasClick = (eventId) => {
-    // Certifique-se de que o eventId é válido antes de redirecionar
-    if (eventId) {
-      window.location.href = `/event/${eventId}/barracas`;
-    } else {
-      console.error('eventId is undefined');
-    }
+  // Redirecionar para o componente "PedidosBarracas"
+  const handlePedidosClick = () => {
+    window.location.href = '/pedidos-barracas'; // Redireciona diretamente para a rota de pedidos
   };
 
   return (
@@ -129,16 +123,13 @@ const MeusEventos = () => {
                   <CurtidasButton eventId={event._id} initialLikesCount={event.numeroFavoritos} />
                 </div>
                 <div className="event-barracas2">
-                  <EditarButton
-                    label="Editar evento"
-                    size="40px"
-                    onClick={() => handleOpenModal(event._id)}
-                  />
-                  <BarracasButton
-                    label="Minhas Barracas"
-                    size="40px"
-                    onClick={() => handleMinhasBarracasClick(event._id)}
-                  />
+                  {/* Botão simples para redirecionar para PedidosBarracas */}
+                  <button
+                    className="pedidos-button"
+                    onClick={handlePedidosClick}
+                  >
+                    Pedidos
+                  </button>
                 </div>
               </div>
             </div>
